@@ -87,5 +87,5 @@ ___
 
 ## Class Diagram
 
-![Class Diagram](images/classdiagram.png "Class diagram!")
+![Class Diagram](astah_images/Class_diagram_design_pattern.JPG "Class diagram!")
 
