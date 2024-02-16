@@ -59,33 +59,14 @@ The fourth would be **Won`t-Have's**, these as the name suggests will not be in 
 
 ___
 
-### Input & Output
-
-In this section the in- and output of the application will be described.
-
-#### Input
-
-In the table below all the input (that the user has to input in order to make the application work) are described.
-
-#### Output
-
-
-#### Calculations
-
-| Case              | Calculation                        |
-| ----------------- | ---------------------------------- |
-
-___
-
 #### Remarks
 
 * Input will be validated.
 * Only the Main class will contain `System.out.println`
-* Unit Tests will be provided.
 
 ___
 
 ## Class Diagram
 
-![Class Diagram](astah_images/Class_diagram_design_pattern.JPG "Class diagram!")
+![Class Diagram](astah_images/DesignPatternsClass.png "Class diagram!")
 
