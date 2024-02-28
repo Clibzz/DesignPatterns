@@ -8,35 +8,35 @@ ___
 
 For this class, we are planning on making an online bookstore where users can browse, search and purchase books. 
 
-First, to create different types of book objects on user preferences, like fiction, horror, etc., we are going to apply the Factory Method pattern.
+The application has to have at least three different design patterns. For this demand, we chose the following:
 
-Second, to implement different payment methods, we are going to apply the Strategy pattern.
+- For the payment of books and tracking the items in the payment cart of an user, we have decided to use the memento pattern;
 
-Lastly, to notify users about new book arrivals or promotions, we are going to apply the Observer pattern.
+- For creating different types of books like physical, online and audio books, we have decided to add the factory pattern to the application; 
 
+- To implement a way for users to pay for books in different ways, the application will be using the strategy pattern.
 ___
 
-### Requirements 
+## Requirements 
 
-The requirements will be determined, by the usage of the MoSCoW-method. With the usage
-of the MoSCoW-method, the group is able to analyse and prioritize the functions in the according manner.
+The requirements will be determined by using the MoSCoW-method. By using thie method, the group is able to analyse and prioritize the functions in the according manner.
 
-#### Must Have:
+### Must Have:
 
-The first would be the **Must-Have's**, these are necessary to the product itself, in order to properly make it functional. 
+First of all, the **Must-Haves**. These are necessary to the product itself in order for it to function properly. 
 
-#### Should Have:
+### Should Have:
 
-The second would be **Should-Have's**, these aren't necessary to the product but still hold some importance.
+Secondly, the **Should-Haves**. These aren't necessary to the product, but still hold some importance.
 The main focus being, that they **Should** have been in the product, but aren't essential to make the product work.
 
-#### Could Have:
+### Could Have:
 
-The third would be **Could-Have's**, these aren't necessary nor essential. They would be nice to have, in the product as an extra.
+The third would be **Could-Haves**. These aren't necessary nor essential. They would be nice to have in the product as an extra.
 
-#### Won't Have:
+### Won't Have:
 
-The fourth would be **Won`t-Have's**, these as the name suggests will not be in the product at all.
+Lastly, the **Won`t -Haves**. These, as the name suggests, will not be in the product at all.
 
 | Nr  | Function in question                                                          | "???" Have |
 |-----|-------------------------------------------------------------------------------|------------|
@@ -45,17 +45,18 @@ The fourth would be **Won`t-Have's**, these as the name suggests will not be in 
 | 3   | Being able to choose different paying methods                                 | Must Have  |
 | 4   | Being able to send automatic notifications about books arrivals or promotions | Must Have  |
 | 5   | Being able to view the book in more detail (Like description and summary)     | Must Have  |
-| 6   | A user should be able to register                                             | Should Have |
-| 7   | A user should be able to login                                                | Should Have |
-| 8   | A user should be able to logout                                               | Should Have |
-| 9   | A user should be able to search a specific book                               | Should Have |
-| 10  | A user should be able to filter by genre                                      | Should Have |
-| 11  | A user should be able to purchase a book                                      | Should Have |
-| 12  | Should be able to change a book                                               | Should Have |
-| 13  | Should be able to delete a book                                               | Should Have |
-| 14  | A user might be able to write a review                                        | Could Have |
-| 15  | A user might be able to rate the book                                         | Could Have | 
-| 16  | A user won't be able to make a book list | Won't Have |
+| 6   | The cart of the user has to be able to be retrieved on reopening the application   | Must Have  |
+| 7   | A user should be able to register                                             | Should Have |
+| 8   | A user should be able to login                                                | Should Have |
+| 9   | A user should be able to logout                                               | Should Have |
+| 10   | A user should be able to search a specific book                               | Should Have |
+| 11  | A user should be able to filter by genre                                      | Should Have |
+| 12  | A user should be able to purchase a book                                      | Should Have |
+| 13  | Should be able to change a book                                               | Should Have |
+| 14  | Should be able to delete a book                                               | Should Have |
+| 15  | A user might be able to write a review                                        | Could Have |
+| 16  | A user might be able to rate the book                                         | Could Have | 
+| 17  | A user won't be able to make a book list | Won't Have |
 
 ___
 
