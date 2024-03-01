@@ -2,8 +2,6 @@
 
 Startdocument of **Robin van Dijk**, student number **5018927** & **Chris Klunder**, student number **5051053**.
 
-___
-
 ## Problem Description
 
 For this class, we are planning on making an online bookstore where users can browse, search and purchase books. 
@@ -15,7 +13,6 @@ The application has to have at least three different design patterns. For this d
 - For creating different types of books like physical, online and audio books, we have decided to add the factory pattern to the application; 
 
 - To implement a way for users to pay for books in different ways, the application will be using the strategy pattern.
-___
 
 ## Requirements 
 
@@ -49,7 +46,7 @@ Lastly, the **Won`t -Haves**. These, as the name suggests, will not be in the pr
 | 7   | A user should be able to register                                             | Should Have |
 | 8   | A user should be able to login                                                | Should Have |
 | 9   | A user should be able to logout                                               | Should Have |
-| 10   | A user should be able to search a specific book                               | Should Have |
+| 10  | A user should be able to search a specific book                               | Should Have |
 | 11  | A user should be able to filter by genre                                      | Should Have |
 | 12  | A user should be able to purchase a book                                      | Should Have |
 | 13  | Should be able to change a book                                               | Should Have |
@@ -67,6 +64,20 @@ ___
 
 ___
 
+## WireFrames
+
+### Login
+![Scherm1](img/login.png "Scherm1")
+### Register
+![Scherm2](img/register.png "Scherm2")
+### Bookoverview
+![Scherm3](img/overview.png "Scherm3")
+### Individual book
+![Scherm4](img/book.png "Scherm4")
+### Cart
+![Scherm5](img/cart.png "Scherm5")
+
+---
 ## Class Diagram
 
 ![Class Diagram](astah_images/DesignPatternsClass.png "Class diagram!")
