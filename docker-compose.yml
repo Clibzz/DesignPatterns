@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  webapp:
+    container_name: webapp
+    build:
+      context: ../DesignPatterns  # Adjust this path based on your project structure
+      dockerfile: ../DesignPatterns/Dockerfile
+    ports:
+      - 80:8080
+    volumes:
+      - ../DesignPatterns/src:/application/src
+      - ../DesignPatterns/target:/application/target
+    domainname: bookandsales
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqldb
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: book-sales
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Europe/Amsterdam
+    volumes:
+      - mysqldb-data:/var/lib/mysql
+      - ./database/book-sales.sql:/book-sales.sql
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin:5.2.1-apache
+    links:
+      - mysqldb
+    environment:
+      PMA_HOST: mysqldb
+      PMA_PORT: 3306
+      HIDE_PHP_VERSION: 1
+      PMA_ARBITRARY: 1
+    ports:
+      - 8080:80
+    depends_on:
+      - mysqldb
+
+volumes:
+  mysqldb-data: {}
