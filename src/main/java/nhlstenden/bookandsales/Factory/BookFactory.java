@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales;
+package nhlstenden.bookandsales.Factory;
 
 public class BookFactory {
     private double price;
@@ -13,7 +13,7 @@ public class BookFactory {
         this.pageAmount = pageAmount;
     }
 
-    public BookProduct createBookProduct(double price, String artist, String publisher, int pageAmount) {
-
-    }
+//    public BookProduct createBookProduct(double price, String artist, String publisher, int pageAmount) {
+//
+//    }
 }

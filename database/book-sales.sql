@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysqldb:3306
--- Gegenereerd op: 15 mrt 2024 om 13:41
--- Serverversie: 8.0.36
--- PHP-versie: 8.2.16
+-- Generation Time: Mar 15, 2024 at 07:05 PM
+-- Server version: 8.0.36
+-- PHP Version: 8.2.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -26,7 +26,7 @@ USE `book-sales`;
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `book`
+-- Table structure for table `book`
 --
 
 DROP TABLE IF EXISTS `book`;
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `book` (
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `book_type`
+-- Table structure for table `book_type`
 --
 
 DROP TABLE IF EXISTS `book_type`;
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `book_type` (
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `payment_cart`
+-- Table structure for table `payment_cart`
 --
 
 DROP TABLE IF EXISTS `payment_cart`;
@@ -77,25 +77,27 @@ CREATE TABLE IF NOT EXISTS `payment_cart` (
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `review`
+-- Table structure for table `review`
 --
 
 DROP TABLE IF EXISTS `review`;
 CREATE TABLE IF NOT EXISTS `review` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
   `book_id` int NOT NULL,
   `title` varchar(150) NOT NULL,
   `rating` double(1,1) NOT NULL,
   `text` longtext NOT NULL,
   `image` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `review_book` (`book_id`) USING BTREE
+  UNIQUE KEY `review_book` (`book_id`) USING BTREE,
+  KEY `fk_review_user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `user`
+-- Table structure for table `user`
 --
 
 DROP TABLE IF EXISTS `user`;
@@ -109,26 +111,27 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Beperkingen voor geëxporteerde tabellen
+-- Constraints for dumped tables
 --
 
 --
--- Beperkingen voor tabel `book`
+-- Constraints for table `book`
 --
 ALTER TABLE `book`
   ADD CONSTRAINT `fk_book_book_type` FOREIGN KEY (`book_type_id`) REFERENCES `book_type` (`id`);
 
 --
--- Beperkingen voor tabel `payment_cart`
+-- Constraints for table `payment_cart`
 --
 ALTER TABLE `payment_cart`
   ADD CONSTRAINT `fk_payment_cart_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
--- Beperkingen voor tabel `review`
+-- Constraints for table `review`
 --
 ALTER TABLE `review`
-  ADD CONSTRAINT `fk_review_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`);
+  ADD CONSTRAINT `fk_review_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  ADD CONSTRAINT `fk_review_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

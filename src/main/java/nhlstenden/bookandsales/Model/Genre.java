@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales;
+package nhlstenden.bookandsales.Model;
 
 public enum Genre {
     HORROR,

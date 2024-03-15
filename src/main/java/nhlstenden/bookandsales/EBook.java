@@ -15,7 +15,7 @@ public class EBook {
         this.hasAutomaticReading = hasAutomaticReading;
     }
 
-    public Genre distributeGenre() {
-
-    }
+//    public Genre distributeGenre() {
+//
+//    }
 }

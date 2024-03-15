@@ -1,6 +1,7 @@
 package nhlstenden.bookandsales;
 
 import java.util.HashSet;
+import nhlstenden.bookandsales.Model.*;
 
 public class Overview {
     private HashSet<EBook> eBookList;
