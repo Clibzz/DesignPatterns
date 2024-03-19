@@ -22,10 +22,6 @@ public class Book {
         this.hasHardCover = hasHardCover;
     }
 
-    public Book(int id) {
-        this.id = id;
-    }
-
     public int getId() {
         return this.id;
     }

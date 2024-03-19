@@ -1,21 +1,24 @@
 package nhlstenden.bookandsales;
 
-public class AudioBook {
+import nhlstenden.bookandsales.Model.Genre;
+
+public class AudioBook extends Book {
     private double price;
     private String artist;
     private String publisher;
     private int pageAmount;
-    private String voiceActor;
+    private boolean hasVoiceActor;
 
-    public AudioBook(double price, String artist, String publisher, int pageAmount, String voiceActor) {
+    public AudioBook(double price, String artist, String publisher, int pageAmount, boolean hasVoiceActor) {
         this.price = price;
         this.artist = artist;
         this.publisher = publisher;
         this.pageAmount = pageAmount;
-        this.voiceActor = voiceActor;
+        this.hasVoiceActor = hasVoiceActor;
     }
 
-//    public Genre distributeGenre() {
-//
-//    }
+    @Override
+    public void create() {
+
+    }
 }

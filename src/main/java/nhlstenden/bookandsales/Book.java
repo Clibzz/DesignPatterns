@@ -2,20 +2,22 @@ package nhlstenden.bookandsales;
 
 import nhlstenden.bookandsales.Model.Genre;
 
-public class EBook implements BookProduct{
+public class Book implements BookProduct {
     private double price;
     private String artist;
     private String publisher;
     private int pageAmount;
-    private boolean hasAutomaticReading;
+    private boolean hasHardCover;
 
-    public EBook(double price, String artist, String publisher, int pageAmount, boolean hasAutomaticReading) {
+    public Book(double price, String artist, String publisher, int pageAmount, boolean hasHardCover) {
         this.price = price;
         this.artist = artist;
         this.publisher = publisher;
         this.pageAmount = pageAmount;
-        this.hasAutomaticReading = hasAutomaticReading;
+        this.hasHardCover = hasHardCover;
     }
+
+    public Book() {}
 
     @Override
     public void create() {
