@@ -40,7 +40,6 @@ Lastly, the **Won`t -Haves**. These, as the name suggests, will not be in the pr
 | 1   | Being able to add a book                                                      | Must Have  |
 | 2   | Being able to see an overview of all books                                    | Must Have  |
 | 3   | Being able to choose different paying methods                                 | Must Have  |
-| 4   | Being able to send automatic notifications about books arrivals or promotions | Must Have  |
 | 5   | Being able to view the book in more detail (Like description and summary)     | Must Have  |
 | 6   | The cart of the user has to be able to be retrieved on reopening the application   | Must Have  |
 | 7   | A user should be able to register                                             | Should Have |
