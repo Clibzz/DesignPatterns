@@ -1,12 +1,20 @@
 package nhlstenden.bookandsales.Model;
 
+import jakarta.persistence.Id;
+import org.springframework.lang.NonNull;
+
 import java.time.LocalDate;
 
 public class User {
+
+    @Id
     private int id;
+    @NonNull
     private String firstName;
+    @NonNull
     private String lastName;
     private LocalDate dateOfBirth;
+    @NonNull
     private String address;
 
     public User(String firstName, String lastName, LocalDate dateOfBirth, String address) {

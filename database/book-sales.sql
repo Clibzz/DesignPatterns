@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysqldb:3306
--- Generation Time: Mar 15, 2024 at 07:05 PM
--- Server version: 8.0.36
--- PHP Version: 8.2.16
+-- Gegenereerd op: 20 mrt 2024 om 13:22
+-- Serverversie: 8.0.36
+-- PHP-versie: 8.2.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -26,7 +26,7 @@ USE `book-sales`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `book`
+-- Tabelstructuur voor tabel `book`
 --
 
 DROP TABLE IF EXISTS `book`;
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `book` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `book_type`
+-- Tabelstructuur voor tabel `book_type`
 --
 
 DROP TABLE IF EXISTS `book_type`;
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `book_type` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `payment_cart`
+-- Tabelstructuur voor tabel `payment_cart`
 --
 
 DROP TABLE IF EXISTS `payment_cart`;
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `payment_cart` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `review`
+-- Tabelstructuur voor tabel `review`
 --
 
 DROP TABLE IF EXISTS `review`;
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `review` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Tabelstructuur voor tabel `user`
 --
 
 DROP TABLE IF EXISTS `user`;
@@ -107,27 +107,28 @@ CREATE TABLE IF NOT EXISTS `user` (
   `last_name` varchar(255) NOT NULL,
   `date_of_birth` date DEFAULT NULL,
   `address` varchar(255) NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Constraints for dumped tables
+-- Beperkingen voor geëxporteerde tabellen
 --
 
 --
--- Constraints for table `book`
+-- Beperkingen voor tabel `book`
 --
 ALTER TABLE `book`
   ADD CONSTRAINT `fk_book_book_type` FOREIGN KEY (`book_type_id`) REFERENCES `book_type` (`id`);
 
 --
--- Constraints for table `payment_cart`
+-- Beperkingen voor tabel `payment_cart`
 --
 ALTER TABLE `payment_cart`
   ADD CONSTRAINT `fk_payment_cart_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
--- Constraints for table `review`
+-- Beperkingen voor tabel `review`
 --
 ALTER TABLE `review`
   ADD CONSTRAINT `fk_review_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
