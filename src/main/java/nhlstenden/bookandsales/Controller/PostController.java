@@ -20,7 +20,7 @@ public class PostController
 
         postService.registerNewUser(firstName, lastName, LocalDate.now(), address, password);
 
-        return "success";
+        return "register";
     }
 
 }

@@ -15,4 +15,9 @@ public class MapController
         return "register";
     }
 
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login";
+    }
+
 }

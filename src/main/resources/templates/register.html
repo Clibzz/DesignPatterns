@@ -22,22 +22,22 @@
                 <form th:action="@{/post-new-user}" method="post">
                     <label for="first-name" class="text-light font-weight-bold">First name:</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="first-name" name="first_name">
+                        <input type="text" class="form-control" id="first-name" name="first_name" required>
                     </div>
 
                     <label for="last-name" class="text-light font-weight-bold">Last name:</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="last-name" name="last_name">
+                        <input type="text" class="form-control" id="last-name" name="last_name" required>
                     </div>
 
                     <label for="address" class="text-light font-weight-bold">Address:</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="address" name="address">
+                        <input type="text" class="form-control" id="address" name="address" required>
                     </div>
 
                     <label for="password" class="text-light font-weight-bold">Password</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="password" name="password">
+                        <input type="password" class="form-control" id="password" name="password" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-5 float-right">Register</button>
