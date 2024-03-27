@@ -18,9 +18,11 @@
                 <div class="col-md-4"></div>
                 <div class="col-md-4 bg-secondary rounded">
                     <h1 class="p-3 font-weight-bold text-light text-center mt-3">Login</h1>
-                    <p th:text="${error}"></p>
+                    <div th:if="${error}" class="alert alert-danger">
+                        <p class="p-0">The username or password is invalid, please try again!</p>
+                    </div>
 
-                    <form th:action="@{/login-user}" method="post">
+                    <form th:action="@{/login}" method="post">
                         <label for="first-name" class="text-light font-weight-bold">First name:</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="first-name" name="first_name" required>

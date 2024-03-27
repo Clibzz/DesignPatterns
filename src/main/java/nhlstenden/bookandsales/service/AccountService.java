@@ -18,19 +18,20 @@ public class AccountService
         this.sqlConnection = DatabaseUtil.getConnection();
     }
 
-    public void registerNewUser(String firstName, String lastName, LocalDate dateOfBirth, String address, String password) throws SQLException
+    public void registerNewUser(int roleId, String firstName, String lastName, LocalDate dateOfBirth, String address, String password) throws SQLException
     {
 
-        String query = "INSERT INTO user(`first_name`, `last_name`, `date_of_birth`, `address`, `password`)" +
-                "VALUES (?,?,?,?,?)";
+        String query = "INSERT INTO user(`role_id`, `first_name`, `last_name`, `date_of_birth`, `address`, `password`)" +
+                "VALUES (?,?,?,?,?,?)";
 
         PreparedStatement statement = sqlConnection.prepareStatement(query);
 
-        statement.setString(1, firstName);
-        statement.setString(2, lastName);
-        statement.setDate(3, Date.valueOf(dateOfBirth));
-        statement.setString(4, address);
-        statement.setString(5, password);
+        statement.setInt(1, roleId);
+        statement.setString(2, firstName);
+        statement.setString(3, lastName);
+        statement.setDate(4, Date.valueOf(dateOfBirth));
+        statement.setString(5, address);
+        statement.setString(6, password);
 
         statement.executeUpdate();
     }
@@ -52,13 +53,14 @@ public class AccountService
         if (resultSet.next())
         {
             int id = resultSet.getInt(1);
-            String firstName = resultSet.getString(2);
-            String lastName = resultSet.getString(3);
-            LocalDate dateOfBirth = resultSet.getDate(4).toLocalDate();
-            String address = resultSet.getString(5);
-            String password = resultSet.getString(6);
+            int role_id = resultSet.getInt(2);
+            String firstName = resultSet.getString(3);
+            String lastName = resultSet.getString(4);
+            LocalDate dateOfBirth = resultSet.getDate(5).toLocalDate();
+            String address = resultSet.getString(6);
+            String password = resultSet.getString(7);
 
-            userModel = new User(id, firstName, lastName, dateOfBirth, address, password);
+            userModel = new User(id, role_id, firstName, lastName, dateOfBirth, address, password);
         }
 
         resultSet.close();

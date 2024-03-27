@@ -1,22 +1,16 @@
 package nhlstenden.bookandsales.Controller;
 
-import nhlstenden.bookandsales.Memento;
-import nhlstenden.bookandsales.PaymentStrategy;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
+@Controller
 public class PaymentController
 {
-//        public Memento takeSnapshot() {
-//
-//        }
-        public void restore(Memento memento) {
-
+        @GetMapping("/cart")
+        public String getCart(Model model)
+        {
+                model.addAttribute("message", "Cart");
+                return "cart";
         }
-
-        public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
-
-        }
-
-//        public PaymentStrategy executePaymentStrategy() {
-//
-//        }
 }

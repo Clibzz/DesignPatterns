@@ -15,8 +15,10 @@
             <nav class="d-flex">
                 <ul class="list-group d-flex flex-row">
                     <li class="mr-3 list-group-item"><a href="/login">Home</a></li>
-                    <li class="mr-3 list-group-item"><a href="/addBook">Add Book</a></li>
+                    <li class="mr-3 list-group-item" th:if="${roleId == 1}"><a href="/addBook">Add Book</a></li>
                     <li class="mr-3 list-group-item"><a href="/overview">Book overview</a></li>
+                    <li class="mr-3 list-group-item"><a href="/reviews">Review overview</a></li>
+                    <li class="mr-3 list-group-item"><a href="/cart">Cart</a></li>
                 </ul>
             </nav>
 

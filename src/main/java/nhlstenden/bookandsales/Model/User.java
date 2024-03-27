@@ -10,6 +10,8 @@ public class User {
     @Id
     private int id;
     @NonNull
+    private int roleId;
+    @NonNull
     private String firstName;
     @NonNull
     private String lastName;
@@ -19,8 +21,9 @@ public class User {
     @NonNull
     private String password;
 
-    public User(int id, String firstName, String lastName, LocalDate dateOfBirth, String address, String password) {
+    public User(int id, int roleId, String firstName, String lastName, LocalDate dateOfBirth, String address, String password) {
         this.setId(id);
+        this.setRoleId(roleId);
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setDateOfBirth(dateOfBirth);
@@ -34,6 +37,16 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getRoleId()
+    {
+        return this.roleId;
+    }
+
+    public void setRoleId(int roleId)
+    {
+        this.roleId = roleId;
     }
 
     public String getFirstName() {

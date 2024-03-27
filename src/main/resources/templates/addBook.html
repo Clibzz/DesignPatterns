@@ -15,7 +15,7 @@
                 <h1 class="p-3 font-weight-bold text-light text-center mt-3">Add book</h1>
 
                 <div th:if="${success}" class="alert alert-success">
-                    Book added successfully!
+                    <p>Book added successfully!</p>
                 </div>
 
                 <form th:action="@{/post-new-book}" method="post">

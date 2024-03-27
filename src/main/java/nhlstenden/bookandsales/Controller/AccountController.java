@@ -3,6 +3,7 @@ package nhlstenden.bookandsales.Controller;
 import nhlstenden.bookandsales.Model.User;
 import nhlstenden.bookandsales.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,15 +37,16 @@ public class AccountController
 
     @PostMapping("/post-new-user")
     public String postNewUser(@RequestParam("first_name") String firstName, @RequestParam("last_name") String lastName
-            , @RequestParam("address") String address, @RequestParam("password") String password) throws SQLException
+            , @RequestParam("date_of_birth") LocalDate dateOfBirth, @RequestParam("address") String address,
+                              @RequestParam("password") String password) throws SQLException
     {
-
-        this.accountService.registerNewUser(firstName, lastName, LocalDate.now(), address, password);
+        int roleId = 2;
+        this.accountService.registerNewUser(roleId, firstName, lastName, dateOfBirth, address, password);
 
         return "redirect:/login";
     }
 
-    @PostMapping("/login-user")
+    @PostMapping("/login")
     public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model) throws SQLException
     {
 
@@ -52,13 +54,13 @@ public class AccountController
 
         if (loginInfo != null)
         {
-            return "redirect:/overview";
+            model.addAttribute("roleId", loginInfo.getRoleId());
+            return "overview";
         }
         else
         {
-            model.addAttribute("error", "Invalid username or password");
-
-            return "redirect:/login";
+            model.addAttribute("error", "true");
+            return "login";
         }
     }
 
