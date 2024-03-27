@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `book` (
   `page_amount` int NOT NULL,
   `has_hard_cover` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `book_book_type` (`book_type_id`)
+  KEY `book_book_type` (`book_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `payment_cart` (
   `user_id` int NOT NULL,
   `cart_details` json NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `payment_cart_user` (`user_id`)
+  KEY `payment_cart_user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `review` (
   `text` longtext NOT NULL,
   `image` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `review_book` (`book_id`) USING BTREE,
+  KEY `review_book` (`book_id`) USING BTREE,
   KEY `fk_review_user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

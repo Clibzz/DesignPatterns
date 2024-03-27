@@ -1,6 +1,11 @@
 package nhlstenden.bookandsales.Model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class BookType {
+    @Id
     private int id;
     private String type;
     private String attributeType;
@@ -10,6 +15,11 @@ public class BookType {
         this.type = type;
         this.attributeType = attributeType;
         this.hasAttribute = hasAttribute;
+    }
+
+    public BookType()
+    {
+
     }
 
     public int getId() {
