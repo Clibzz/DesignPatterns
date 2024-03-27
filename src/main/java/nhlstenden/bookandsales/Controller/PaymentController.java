@@ -3,7 +3,8 @@ package nhlstenden.bookandsales.Controller;
 import nhlstenden.bookandsales.Memento;
 import nhlstenden.bookandsales.PaymentStrategy;
 
-public class PaymentCartController {
+public class PaymentController
+{
 //        public Memento takeSnapshot() {
 //
 //        }
