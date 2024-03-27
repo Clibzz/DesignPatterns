@@ -10,6 +10,7 @@ public class Book {
     private BookType bookTypeId;
     @NonNull
     private Genre genre;
+    @NonNull
     private double price;
     @NonNull
     private String author;
@@ -17,7 +18,9 @@ public class Book {
     private String publisher;
     @NonNull
     private String title;
+    @NonNull
     private int pageAmount;
+    @NonNull
     private boolean hasHardCover;
 
     public Book(int id, BookType bookTypeId, Genre genre, double price, String author, String publisher, String title, int pageAmount, boolean hasHardCover) {
@@ -30,6 +33,11 @@ public class Book {
         this.title = title;
         this.pageAmount = pageAmount;
         this.hasHardCover = hasHardCover;
+    }
+
+    public Book()
+    {
+
     }
 
     public int getId() {

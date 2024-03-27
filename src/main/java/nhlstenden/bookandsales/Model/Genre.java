@@ -5,5 +5,10 @@ public enum Genre {
     COMEDY,
     ROMANCE,
     SCIFI,
-    FANTASY
+    FANTASY;
+
+    public String ToString()
+    {
+        return this.ToString();
+    }
 }
