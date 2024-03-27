@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales.Service;
+package nhlstenden.bookandsales.service;
 
 import nhlstenden.bookandsales.Model.User;
 import nhlstenden.bookandsales.util.DatabaseUtil;

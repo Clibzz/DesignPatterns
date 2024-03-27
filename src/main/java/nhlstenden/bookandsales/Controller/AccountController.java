@@ -1,7 +1,7 @@
 package nhlstenden.bookandsales.Controller;
 
 import nhlstenden.bookandsales.Model.User;
-import nhlstenden.bookandsales.Service.AccountService;
+import nhlstenden.bookandsales.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

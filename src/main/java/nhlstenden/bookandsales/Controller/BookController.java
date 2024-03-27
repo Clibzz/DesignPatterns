@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.sql.SQLException;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;
-import nhlstenden.bookandsales.Service.BookService;
+import nhlstenden.bookandsales.service.BookService;
 import org.springframework.stereotype.Controller;
 import nhlstenden.bookandsales.service.BookTypeService;
 import org.springframework.ui.Model;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.*;
 import java.util.ArrayList;
 
 @Controller

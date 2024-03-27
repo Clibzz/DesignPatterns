@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales.Service;
+package nhlstenden.bookandsales.service;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.BookType;
 import nhlstenden.bookandsales.Model.Genre;
