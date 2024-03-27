@@ -18,7 +18,7 @@ public class BookService
         this.sqlConnection = DatabaseUtil.getConnection();
     }
 
-    public boolean addNewBook(String bookType, Genre genre, double price, String author, String publisher, String title, int pageAmount, boolean hasHardCover) throws SQLException
+    public void addNewBook(String bookType, Genre genre, double price, String author, String publisher, String title, int pageAmount, boolean hasHardCover) throws SQLException
     {
         String selectQuery = "SELECT * FROM `book_type` WHERE `type` = '" + bookType + "'";
         Statement selectStatement = sqlConnection.createStatement();
@@ -41,9 +41,6 @@ public class BookService
             statement.setBoolean(8, hasHardCover);
 
             statement.executeUpdate();
-            return true;
         }
-        return false;
-
     }
 }

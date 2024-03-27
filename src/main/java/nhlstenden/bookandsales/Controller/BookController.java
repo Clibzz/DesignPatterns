@@ -1,5 +1,6 @@
 package nhlstenden.bookandsales.Controller;
 
+import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;
 import nhlstenden.bookandsales.service.BookTypeService;
 import nhlstenden.bookandsales.service.BookService;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.Statement;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -19,15 +19,16 @@ public class BookController {
     @GetMapping("/addBook")
     public String addBook(Model model) throws SQLException
     {
-        model.addAttribute("bookTypes", this.getBookTypes());
+        model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
+        model.addAttribute("bookForm", new Book());
         return "addBook";
     }
 
-    public ArrayList<String> getBookTypes() throws SQLException
+    public ArrayList<String> getBookTypeTypes() throws SQLException
     {
         BookTypeService bookTypeService = new BookTypeService();
-        return bookTypeService.getBookTypes();
+        return bookTypeService.getBookTypeTypes();
     }
 
     @GetMapping("/overview")
@@ -40,20 +41,26 @@ public class BookController {
     public String postNewBook(@RequestParam("book_type_id") String bookType, @RequestParam("genre") Genre genre,
                               @RequestParam("price") double price, @RequestParam("author") String author,
                               @RequestParam("publisher") String publisher, @RequestParam("title") String title,
-                              @RequestParam("page_amount") int pageAmount, @RequestParam("has_hard_cover") boolean hasHardCover, Model model) throws SQLException
+                              @RequestParam("page_amount") int pageAmount, @RequestParam("has_hard_cover") boolean hasHardCover,
+                              Model model) throws SQLException
     {
         BookService bookService = new BookService();
 
-        boolean success =  bookService.addNewBook(bookType, genre, price, author, publisher, title, pageAmount, hasHardCover);
+        bookService.addNewBook(bookType, genre, price, author, publisher, title, pageAmount, hasHardCover);
 
-        if (success)
-        {
-            model.addAttribute("message", "Success!");
-        }
-        else
-        {
-            model.addAttribute("message", "Select valid book_type_id");
-        }
+        model.addAttribute("success", true);
+        model.addAttribute("bookTypes", this.getBookTypeTypes());
+        model.addAttribute("enumValues", Genre.values());
+        model.addAttribute("bookForm", new Book());
+
+        model.addAttribute("bookType", bookType);
+        model.addAttribute("genre", genre);
+        model.addAttribute("price", price);
+        model.addAttribute("author", author);
+        model.addAttribute("publisher", publisher);
+        model.addAttribute("title", title);
+        model.addAttribute("pageAmount", pageAmount);
+        model.addAttribute("hasHardCover", hasHardCover);
 
         return "addBook";
     }

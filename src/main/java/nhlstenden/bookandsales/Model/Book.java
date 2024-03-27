@@ -34,6 +34,11 @@ public class Book {
         this.hasHardCover = hasHardCover;
     }
 
+    public Book()
+    {
+
+    }
+
     public int getId() {
         return this.id;
     }

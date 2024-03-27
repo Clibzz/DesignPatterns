@@ -18,51 +18,64 @@
             <div class="col-md-4 bg-secondary rounded">
                 <h1 class="p-3 font-weight-bold text-light text-center mt-3">Add book</h1>
 
+                <div th:if="${success}" class="alert alert-success">
+                    Book added successfully!
+                </div>
+
                 <form th:action="@{/post-new-book}" method="post">
                     <label for="book_type_id" class="text-light font-weight-bold">BookType</label>
                     <div class="input-group mb-3">
                         <select id="book_type_id" name="book_type_id" class="form-control">
-                            <option th:each="bookType : ${bookTypes}" th:value="${bookType}" th:text="${bookType}"></option>
+                            <option th:each="bookTypeOption : ${bookTypes}"
+                                    th:value="${bookTypeOption}"
+                                    th:text="${bookTypeOption}"
+                                    th:selected="${bookType == bookTypeOption}"></option>
                         </select>
                     </div>
 
                     <label for="genre" class="text-light font-weight-bold">Genre</label>
                     <div class="input-group mb-3">
                         <select id="genre" name="genre" class="form-control">
-                            <option th:each="genre : ${enumValues}" th:value="${genre}" th:text="${#strings.capitalize(genre.name().toLowerCase())}"></option>
+                            <option th:each="genreOption : ${enumValues}"
+                                    th:value="${genreOption}"
+                                    th:text="${#strings.capitalize(genreOption.name().toLowerCase())}"
+                                    th:selected="${genre == genreOption}"></option>
                         </select>
                     </div>
 
                     <label for="price" class="text-light font-weight-bold">Price</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="price" name="price">
+                        <input type="text" class="form-control" id="price" name="price" th:value="${price}">
                     </div>
-
 
                     <label for="author" class="text-light font-weight-bold">Author</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="author" name="author">
+                        <input type="text" class="form-control" id="author" name="author" th:value="${author}">
                     </div>
 
                     <label for="publisher" class="text-light font-weight-bold">Publisher</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="publisher" name="publisher">
+                        <input type="text" class="form-control" id="publisher" name="publisher" th:value="${publisher}">
                     </div>
 
                     <label for="title" class="text-light font-weight-bold">Title</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="title" name="title">
+                        <input type="text" class="form-control" id="title" name="title" th:value="${title}">
                     </div>
 
-                    <label for="page_amount" class="text-light font-weight-bold">Page-amount</label>
+                    <label for="page_amount" class="text-light font-weight-bold">Amount of pages</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="page_amount" name="page_amount">
+                        <input type="text" class="form-control" id="page_amount" name="page_amount" th:value="${pageAmount}">
                     </div>
 
-                    <label for="has_hard_cover" class="text-light font-weight-bold">Has-hard-cover</label>
+                    <label for="has_hard_cover" class="text-light font-weight-bold">Does this book have a hard cover?</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="has_hard_cover" name="has_hard_cover">
+                        <select class="form-control" id="has_hard_cover" name="has_hard_cover">
+                            <option value="true" th:selected="${hasHardCover == true}">True</option>
+                            <option value="false" th:selected="${hasHardCover == false}">False</option>
+                        </select>
                     </div>
+
 
                     <button type="submit" class="btn btn-primary mb-5 float-right">Add book</button>
                 </form>
