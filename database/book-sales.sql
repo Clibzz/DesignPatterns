@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `book` (
   `id` int NOT NULL AUTO_INCREMENT,
   `book_type_id` int NOT NULL,
   `genre` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `price` double(2,2) NOT NULL,
+  `price` double NOT NULL,
   `author` varchar(255) NOT NULL,
   `publisher` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,

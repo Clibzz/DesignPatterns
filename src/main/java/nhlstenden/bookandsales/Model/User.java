@@ -16,12 +16,16 @@ public class User {
     private LocalDate dateOfBirth;
     @NonNull
     private String address;
+    @NonNull
+    private String password;
 
-    public User(String firstName, String lastName, LocalDate dateOfBirth, String address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.address = address;
+    public User(int id, String firstName, String lastName, LocalDate dateOfBirth, String address, String password) {
+        this.setId(id);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setDateOfBirth(dateOfBirth);
+        this.setAddress(address);
+        this.setPassword(password);
     }
 
     public int getId() {
@@ -62,5 +66,13 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
