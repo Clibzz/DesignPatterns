@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="row bg-primary text-light font-weight-bold p-3">
+        <div class="col-lg-3">
+            <h1>Book & Sales</h1>
+        </div>
+        <div class="col-lg-9 d-flex">
+            <nav class="d-flex">
+                <ul class="list-group d-flex flex-row">
+                    <li class="mr-3 list-group-item"><a href="/login">Home</a></li>
+                    <li class="mr-3 list-group-item"><a href="/addBook">Add Book</a></li>
+                    <li class="mr-3 list-group-item"><a href="/overview">Book overview</a></li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</header>
+</body>
+</html>
