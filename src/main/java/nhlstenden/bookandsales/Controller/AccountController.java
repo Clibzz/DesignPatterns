@@ -1,14 +1,13 @@
 package nhlstenden.bookandsales.Controller;
 
 import nhlstenden.bookandsales.Model.User;
-import nhlstenden.bookandsales.service.AccountService;
+import nhlstenden.bookandsales.Service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -51,9 +50,12 @@ public class AccountController
 
         User loginInfo = this.accountService.getLoginInfo(userName, userPassword);
 
-        if (loginInfo != null) {
+        if (loginInfo != null)
+        {
             return "redirect:/overview";
-        } else {
+        }
+        else
+        {
             model.addAttribute("error", "Invalid username or password");
 
             return "redirect:/login";

@@ -6,7 +6,8 @@ public class BookType {
     private String attributeType;
     private boolean hasAttribute;
 
-    public BookType(String type, String attributeType, boolean hasAttribute) {
+    public BookType(int id, String type, String attributeType, boolean hasAttribute) {
+        this.id = id;
         this.type = type;
         this.attributeType = attributeType;
         this.hasAttribute = hasAttribute;

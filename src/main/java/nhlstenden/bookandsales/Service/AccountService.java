@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales.service;
+package nhlstenden.bookandsales.Service;
 
 import nhlstenden.bookandsales.Model.User;
 import nhlstenden.bookandsales.util.DatabaseUtil;
@@ -49,7 +49,8 @@ public class AccountService
 
         User userModel = null;
 
-        if (resultSet.next()) {
+        if (resultSet.next())
+        {
             int id = resultSet.getInt(1);
             String firstName = resultSet.getString(2);
             String lastName = resultSet.getString(3);

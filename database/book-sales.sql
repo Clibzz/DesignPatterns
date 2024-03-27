@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysqldb:3306
--- Gegenereerd op: 20 mrt 2024 om 13:22
+-- Gegenereerd op: 27 mrt 2024 om 13:50
 -- Serverversie: 8.0.36
 -- PHP-versie: 8.2.16
 
@@ -57,7 +57,19 @@ CREATE TABLE IF NOT EXISTS `book_type` (
   `attribute_type` varchar(100) NOT NULL,
   `has_attribute` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `book_type`
+--
+
+INSERT INTO `book_type` (`id`, `type`, `attribute_type`, `has_attribute`) VALUES
+(1, 'NormalBook', 'HardCover', 0),
+(2, 'NormalBook', 'HardCover', 1),
+(3, 'EBook', 'AutomaticReading', 0),
+(4, 'EBook', 'AutomaticReading', 1),
+(5, 'AudioBook', 'VoiceActor', 0),
+(6, 'AudioBook', 'VoiceActor', 1);
 
 -- --------------------------------------------------------
 

@@ -1,17 +1,27 @@
 package nhlstenden.bookandsales.Model;
 
+import jakarta.persistence.Id;
+import org.springframework.lang.NonNull;
+
 public class Book {
+    @Id
     private int id;
+    @NonNull
     private BookType bookTypeId;
+    @NonNull
     private Genre genre;
     private double price;
+    @NonNull
     private String author;
+    @NonNull
     private String publisher;
+    @NonNull
     private String title;
     private int pageAmount;
     private boolean hasHardCover;
 
-    public Book(BookType bookTypeId, Genre genre, double price, String author, String publisher, String title, int pageAmount, boolean hasHardCover) {
+    public Book(int id, BookType bookTypeId, Genre genre, double price, String author, String publisher, String title, int pageAmount, boolean hasHardCover) {
+        this.id = id;
         this.bookTypeId = bookTypeId;
         this.genre = genre;
         this.price = price;
@@ -20,10 +30,6 @@ public class Book {
         this.title = title;
         this.pageAmount = pageAmount;
         this.hasHardCover = hasHardCover;
-    }
-
-    public Book(int id) {
-        this.id = id;
     }
 
     public int getId() {
