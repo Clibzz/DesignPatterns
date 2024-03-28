@@ -1,5 +1,6 @@
 package nhlstenden.bookandsales.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import nhlstenden.bookandsales.Model.User;
 import nhlstenden.bookandsales.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,20 @@ public class AccountController
     @GetMapping("/register")
     public String registerPage(Model model)
     {
+        model.addAttribute("page", "register");
         return "register";
     }
 
     @GetMapping("/login")
     public String loginPage(Model model) {
+        model.addAttribute("page", "login");
         return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        return "redirect:/login";
     }
 
     @PostMapping("/post-new-user")
@@ -55,13 +64,13 @@ public class AccountController
     @PostMapping("/login")
     public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model) throws SQLException
     {
-
-        User loginInfo = this.accountService.getLoginInfo(userName, userPassword);
+        User loginInfo = this.accountService.getLoginInfo(userName, userPassword, model);
 
         if (loginInfo != null)
         {
             model.addAttribute("roleId", loginInfo.getRoleId());
-            return "overview";
+            model.addAttribute("user", loginInfo);
+            return "redirect:/overview";
         }
         else
         {

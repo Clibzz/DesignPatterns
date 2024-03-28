@@ -2,28 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Header</title>
+    <title></title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
-<header>
-    <div class="row bg-primary text-light font-weight-bold p-3">
-        <div class="col-lg-3">
-            <h1>Book & Sales</h1>
-        </div>
-        <div class="col-lg-9 d-flex">
-            <nav class="d-flex">
-                <ul class="list-group d-flex flex-row">
-                    <li class="mr-3 list-group-item"><a href="/login">Home</a></li>
-                    <li class="mr-3 list-group-item" th:if="${roleId == 1}"><a href="/addBook">Add Book</a></li>
-                    <li class="mr-3 list-group-item"><a href="/overview">Book overview</a></li>
-                    <li class="mr-3 list-group-item"><a href="/reviews">Review overview</a></li>
-                    <li class="mr-3 list-group-item"><a href="/cart">Cart</a></li>
-                </ul>
-            </nav>
+    <header>
+        <div class="row bg-primary text-light font-weight-bold p-3">
+            <div class="col-lg-3">
+                <h1>
+                    <a th:if="${page != 'register' and page != 'login'}" href="/overview" class="text-white">Book & Sales</a>
+                    <span th:unless="${page != 'register' and page != 'login'}">Book & Sales</span>
+                </h1>
+            </div>
 
+            <div class="col-lg-9 d-flex" th:if="${page != 'register' and page != 'login'}">
+                <nav class="d-flex">
+                    <ul class="list-group d-flex flex-row">
+                        <li class="mr-3 list-group-item" th:if="${roleId == 1}"><a href="/addBook">Add Book</a></li>
+                        <li class="mr-3 list-group-item"><a href="/overview">Book overview</a></li>
+                        <li class="mr-3 list-group-item"><a href="/reviews">Review overview</a></li>
+                        <li class="mr-3 list-group-item"><a href="/cart">Cart</a></li>
+                        <li class="mr-3 list-group-item"><a href="/logout">Log out</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 </body>
 </html>
