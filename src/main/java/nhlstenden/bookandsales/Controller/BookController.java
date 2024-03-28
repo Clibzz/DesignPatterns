@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @Controller
 public class BookController {
 
-    private BookService bookService;
+    private final BookService bookService;
 
     public BookController(BookService bookService) {
         this.bookService = bookService;
@@ -55,16 +55,12 @@ public class BookController {
 
     @PostMapping("/post-new-book")
     public String postNewBook(@RequestParam("book_type_id") String bookType, @RequestParam("genre") Genre genre,
-                              @RequestParam("price") double price, @RequestParam("author") String author,
+                              @RequestParam("price") Object price, @RequestParam("author") String author,
                               @RequestParam("publisher") String publisher, @RequestParam("title") String title,
-                              @RequestParam("page_amount") int pageAmount, @RequestParam("has_hard_cover") boolean hasHardCover,
+                              @RequestParam("page_amount") Object pageAmount, @RequestParam("has_hard_cover") boolean hasHardCover,
                               Model model) throws SQLException
     {
         BookService bookService = new BookService();
-
-        bookService.addNewBook(bookType, genre, price, author, publisher, title, pageAmount, hasHardCover);
-
-        model.addAttribute("success", true);
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
         model.addAttribute("bookForm", new Book());
@@ -78,6 +74,27 @@ public class BookController {
         model.addAttribute("pageAmount", pageAmount);
         model.addAttribute("hasHardCover", hasHardCover);
 
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (!(price instanceof Double))
+        {
+            errors.add("Price is incorrect, please enter a valid amount");
+        }
+
+        if (!(pageAmount instanceof Integer))
+        {
+            errors.add("Page amount is incorrect, please enter a valid amount");
+        }
+
+        if (!errors.isEmpty())
+        {
+            model.addAttribute("errors", errors);
+        }
+        else
+        {
+            bookService.addNewBook(bookType, genre, (Double) price, author, publisher, title, (Integer) pageAmount, hasHardCover);
+            model.addAttribute("success", true);
+        }
         return "addBook";
     }
 }

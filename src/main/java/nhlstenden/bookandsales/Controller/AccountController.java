@@ -3,7 +3,6 @@ package nhlstenden.bookandsales.Controller;
 import nhlstenden.bookandsales.Model.User;
 import nhlstenden.bookandsales.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,12 +37,19 @@ public class AccountController
     @PostMapping("/post-new-user")
     public String postNewUser(@RequestParam("first_name") String firstName, @RequestParam("last_name") String lastName
             , @RequestParam("date_of_birth") LocalDate dateOfBirth, @RequestParam("address") String address,
-                              @RequestParam("password") String password) throws SQLException
+                              @RequestParam("password") String password, Model model) throws SQLException
     {
         int roleId = 2;
-        this.accountService.registerNewUser(roleId, firstName, lastName, dateOfBirth, address, password);
-
-        return "redirect:/login";
+        if (dateOfBirth.isBefore(LocalDate.now()))
+        {
+            this.accountService.registerNewUser(roleId, firstName, lastName, dateOfBirth, address, password);
+            return "redirect:/login";
+        }
+        else
+        {
+            model.addAttribute("dateError", "true");
+            return "register";
+        }
     }
 
     @PostMapping("/login")
