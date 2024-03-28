@@ -15,11 +15,11 @@
                 <div class="col-md-4 bg-secondary rounded">
                     <h1 class="p-3 font-weight-bold text-light text-center mt-3">Login</h1>
                     <div th:if="${error}" class="alert alert-danger">
-                        <p>The username or password is invalid, please try again!</p>
+                        <p th:text="${error}"></p>
                     </div>
 
                     <form th:action="@{/login}" method="post">
-                        <label for="first-name" class="text-light font-weight-bold">First name:</label>
+                        <label for="first-name" class="text-light font-weight-bold">First name</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="first-name" name="first_name" required>
                         </div>
@@ -29,9 +29,11 @@
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
 
-                        <button type="submit" class="btn btn-primary mb-5 float-right">Login</button>
+                        <div>
+                            <button type="submit" class="btn btn-primary mb-5 float-right">Login</button>
+                            <a href="/register" class="btn btn-info mb-5 mr-2 float-right">&lt;Register</a>
+                        </div>
                     </form>
-
                 </div>
                 <div class="col-md-4"></div>
             </div>

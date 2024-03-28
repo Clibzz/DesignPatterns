@@ -1,7 +1,8 @@
 package nhlstenden.bookandsales.Controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
+import jakarta.servlet.http.HttpSession;
 import nhlstenden.bookandsales.Model.User;
 import nhlstenden.bookandsales.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -17,7 +19,7 @@ import java.time.LocalDate;
 @Controller
 public class AccountController
 {
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @Autowired
     public AccountController(AccountService accountService)
@@ -39,8 +41,9 @@ public class AccountController
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        request.getSession().invalidate();
+    public String logout(HttpSession session) {
+        session.invalidate();
+
         return "redirect:/login";
     }
 
@@ -63,19 +66,20 @@ public class AccountController
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model) throws SQLException
+    public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException
     {
-        User loginInfo = this.accountService.getLoginInfo(userName, userPassword, model);
+        User loginInfo = this.accountService.getLoginInfo(userName, userPassword);
 
         if (loginInfo != null)
         {
-            model.addAttribute("roleId", loginInfo.getRoleId());
+            session.setAttribute("isLoggedIn", true);
+            session.setAttribute("roleId", loginInfo.getRoleId());
             return "redirect:/overview";
         }
         else
         {
-            model.addAttribute("error", "true");
-            return "login";
+            redirectAttributes.addFlashAttribute("error", "The username or password is incorrect, please try again!");
+            return "redirect:/login";
         }
     }
 

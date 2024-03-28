@@ -18,11 +18,13 @@
             <div class="col-lg-9 d-flex" th:if="${page != 'register' and page != 'login'}">
                 <nav class="d-flex">
                     <ul class="list-group d-flex flex-row">
-                        <li class="mr-3 list-group-item" th:if="${roleId == 1}"><a href="/addBook">Add Book</a></li>
-                        <li class="mr-3 list-group-item"><a href="/overview">Book overview</a></li>
-                        <li class="mr-3 list-group-item"><a href="/reviews">Review overview</a></li>
-                        <li class="mr-3 list-group-item"><a href="/cart">Cart</a></li>
-                        <li class="mr-3 list-group-item"><a href="/logout">Log out</a></li>
+                        <li class="mr-3 rounded list-group-item" th:if="${session.roleId == 1}"><a href="/addBook">Add Book</a></li>
+                        <li class="mr-3 rounded list-group-item"><a href="/overview">Book overview</a></li>
+                        <li class="mr-3 rounded list-group-item"><a href="/reviews">Review overview</a></li>
+                        <li class="mr-3 rounded list-group-item"><a href="/cart">Cart</a></li>
+                        <li class="bg-danger mr-3 rounded list-group-item align-items-end">
+                            <a class="text-white" href="/logout">Log out</a>
+                        </li>
                     </ul>
                 </nav>
             </div>

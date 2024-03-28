@@ -28,13 +28,15 @@ public class BookController {
     @GetMapping("/addBook")
     public String addBook(Model model, HttpSession session) throws SQLException
     {
-        if (session.getAttribute("isLoggedIn") == null || !(boolean) session.getAttribute("isLoggedIn"))
+        if (isLoggedIn(session))
         {
             model.addAttribute("bookTypes", this.getBookTypeTypes());
             model.addAttribute("enumValues", Genre.values());
             model.addAttribute("bookForm", new Book());
+
             return "addBook";
         }
+
         return "redirect:/login";
     }
 
@@ -44,18 +46,33 @@ public class BookController {
         return bookTypeService.getBookTypeTypes();
     }
 
-    @GetMapping("/overview")
-    public String overview(Model model)
+    private boolean isLoggedIn(HttpSession session)
     {
-        return "overview";
+        return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
+    }
+
+    @GetMapping("/overview")
+    public String overview(HttpSession session)
+    {
+        if (isLoggedIn(session))
+        {
+            return "overview";
+        }
+
+        return "redirect:/login";
     }
 
     @GetMapping("/overview/{bookTypeId}")
-    public String chooseOverview(Model model, @PathVariable int bookTypeId) throws SQLException
+    public String chooseOverview(@PathVariable int bookTypeId, HttpSession session) throws SQLException
     {
-        bookService.getBookList(bookTypeId);
+        if (isLoggedIn(session))
+        {
+            bookService.getBookList(bookTypeId);
 
-        return "redirect:/overview/{bookTypeId}";
+            return "redirect:/overview/{bookTypeId}";
+        }
+
+        return "redirect:/login";
     }
 
     @PostMapping("/post-new-book")

@@ -1,5 +1,6 @@
 package nhlstenden.bookandsales.Controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,9 +9,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PaymentController
 {
         @GetMapping("/cart")
-        public String getCart(Model model)
+        public String getCart(HttpSession session, Model model)
         {
-                model.addAttribute("message", "Cart");
-                return "cart";
+                if (isLoggedIn(session))
+                {
+                        model.addAttribute("message", "Cart");
+                        return "cart";
+                }
+                return "redirect:/login";
+        }
+
+        private boolean isLoggedIn(HttpSession session)
+        {
+                return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
         }
 }
