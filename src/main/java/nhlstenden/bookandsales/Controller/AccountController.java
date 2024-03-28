@@ -64,7 +64,7 @@ public class AccountController
     @PostMapping("/login")
     public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model) throws SQLException
     {
-        User loginInfo = this.accountService.getLoginInfo(userName, userPassword, model);
+        User loginInfo = this.accountService.getLoginInfo(userName, userPassword);
 
         if (loginInfo != null)
         {
