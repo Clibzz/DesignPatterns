@@ -17,6 +17,11 @@
                 <div th:if="${success}" class="alert alert-success">
                     <p>Book added successfully!</p>
                 </div>
+                <div th:if="${errors != null}" class="alert alert-danger">
+                    <div th:each="error : ${errors}" class="mb-1">
+                        <p class="mb-0" th:text="${error}"></p>
+                    </div>
+                </div>
 
                 <form th:action="@{/post-new-book}" method="post">
                     <label for="book_type_id" class="text-light font-weight-bold">BookType</label>
