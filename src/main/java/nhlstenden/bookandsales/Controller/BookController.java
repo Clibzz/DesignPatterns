@@ -1,5 +1,6 @@
 package nhlstenden.bookandsales.Controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.sql.SQLException;
@@ -25,12 +26,16 @@ public class BookController {
     }
 
     @GetMapping("/addBook")
-    public String addBook(Model model) throws SQLException
+    public String addBook(Model model, HttpSession session) throws SQLException
     {
-        model.addAttribute("bookTypes", this.getBookTypeTypes());
-        model.addAttribute("enumValues", Genre.values());
-        model.addAttribute("bookForm", new Book());
-        return "addBook";
+        if (session.getAttribute("isLoggedIn") == null || !(boolean) session.getAttribute("isLoggedIn"))
+        {
+            model.addAttribute("bookTypes", this.getBookTypeTypes());
+            model.addAttribute("enumValues", Genre.values());
+            model.addAttribute("bookForm", new Book());
+            return "addBook";
+        }
+        return "redirect:/login";
     }
 
     public ArrayList<String> getBookTypeTypes() throws SQLException

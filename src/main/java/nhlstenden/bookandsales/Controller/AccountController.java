@@ -1,6 +1,7 @@
 package nhlstenden.bookandsales.Controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import nhlstenden.bookandsales.Model.User;
 import nhlstenden.bookandsales.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,12 +65,11 @@ public class AccountController
     @PostMapping("/login")
     public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model) throws SQLException
     {
-        User loginInfo = this.accountService.getLoginInfo(userName, userPassword);
+        User loginInfo = this.accountService.getLoginInfo(userName, userPassword, model);
 
         if (loginInfo != null)
         {
             model.addAttribute("roleId", loginInfo.getRoleId());
-            model.addAttribute("user", loginInfo);
             return "redirect:/overview";
         }
         else
