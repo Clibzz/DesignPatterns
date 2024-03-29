@@ -17,24 +17,26 @@
             <div class="col-md-4"></div>
             <div class="col-md-4 bg-secondary rounded">
                 <h1 class="p-3 font-weight-bold text-light text-center mt-3">Register</h1>
-
+                <div th:if="${dateError}" class="alert alert-danger">
+                    <p class="p-0">The date of birth is invalid, please select a valid date!</p>
+                </div>
                 <form th:action="@{/post-new-user}" method="post">
-                    <label for="first-name" class="text-light font-weight-bold">First name:</label>
+                    <label for="first-name" class="text-light font-weight-bold">First name</label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="first-name" name="first_name" required>
                     </div>
 
-                    <label for="last-name" class="text-light font-weight-bold">Last name:</label>
+                    <label for="last-name" class="text-light font-weight-bold">Last name</label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="last-name" name="last_name" required>
                     </div>
 
-                    <label for="address" class="text-light font-weight-bold">Address:</label>
+                    <label for="address" class="text-light font-weight-bold">Address</label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="address" name="address" required>
                     </div>
 
-                    <label for="date_of_birth" class="text-light font-weight-bold">Address:</label>
+                    <label for="date_of_birth" class="text-light font-weight-bold">Date of birth</label>
                     <div class="input-group mb-3">
                         <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
                     </div>
