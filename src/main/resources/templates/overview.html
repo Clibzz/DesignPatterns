@@ -35,6 +35,10 @@
                     <ul>
                         <li th:each="item : ${bookList}" th:text="${item.getAuthor()}"></li>
                     </ul>
+<!--                    <p th:each="images : ${bookList}" th:text="${pathImage}"></p>-->
+<!--                    <p th:each="fiffa : ${bookList}" th:text="${fiffa.getId()}"></p>-->
+<!--                    <p th:each="liffa : ${bookList}" th:text="${liffa.getImage()}"></p>-->
+                    <img th:each="images : ${bookList}" th:src="${pathImage} + ${images.getId()}/${images.getImage()}" />
                 </div>
                 <div class="col-md-1"></div>
             </div>
