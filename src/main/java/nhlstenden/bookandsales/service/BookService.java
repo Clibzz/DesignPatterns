@@ -3,8 +3,11 @@ import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.BookType;
 import nhlstenden.bookandsales.Model.Genre;
 import nhlstenden.bookandsales.util.DatabaseUtil;
+import org.hibernate.annotations.processing.SQL;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.*;
@@ -20,7 +23,7 @@ public class BookService
         this.sqlConnection = DatabaseUtil.getConnection();
     }
 
-    public void addNewBook(String bookType, Genre genre, double price, String author, String publisher, String title, int pageAmount, boolean hasHardCover) throws SQLException
+    public void addNewBook(String bookType, Genre genre, double price, String author, String publisher, String title, int pageAmount, MultipartFile image) throws SQLException
     {
         String selectQuery = "SELECT * FROM `book_type` WHERE `type` = '" + bookType + "'";
         Statement selectStatement = sqlConnection.createStatement();
@@ -28,7 +31,7 @@ public class BookService
 
         if (resultSet.next())
         {
-            String query = "INSERT INTO book(`book_type_id`, `genre`, `price`, `author`, `publisher`, `title`, `page_amount`, `has_hard_cover`)" +
+            String query = "INSERT INTO book(`book_type_id`, `genre`, `price`, `author`, `publisher`, `title`, `page_amount`, `image`)" +
                     "VALUES (?,?,?,?,?,?,?,?)";
 
             PreparedStatement statement = sqlConnection.prepareStatement(query);
@@ -40,7 +43,7 @@ public class BookService
             statement.setString(5, publisher);
             statement.setString(6, title);
             statement.setInt(7, pageAmount);
-            statement.setBoolean(8, hasHardCover);
+            statement.setString(8, image.getOriginalFilename());
 
             statement.executeUpdate();
         }
@@ -71,9 +74,9 @@ public class BookService
             String publisher = resultSet.getString(6);
             String title = resultSet.getString(7);
             int pageAmount = resultSet.getInt(8);
-            boolean hasHardCover = resultSet.getBoolean(9);
+            String image = resultSet.getString(9);
 
-            bookModel = new Book(id, getBookTypeById(bookTypeId), genre, price, author, publisher, title, pageAmount, hasHardCover);
+            bookModel = new Book(id, getBookTypeById(bookTypeId), genre, price, author, publisher, title, pageAmount, image);
 
             bookList.add(bookModel);
         }
@@ -105,5 +108,40 @@ public class BookService
         }
 
         return bookTypeModel;
+    }
+
+    public Book getBookById(int bookId) throws SQLException
+    {
+        String query = "SELECT * FROM `book` WHERE `id` = ?";
+
+        PreparedStatement statement = this.sqlConnection.prepareStatement(query);
+        statement.setInt(1, bookId);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next())
+        {
+            int id = resultSet.getInt(1);
+            int bookTypeId = resultSet.getInt(2);
+            Genre genre = Genre.valueOf(resultSet.getString(3));
+            double price = resultSet.getDouble(4);
+            String author = resultSet.getString(5);
+            String publisher = resultSet.getString(6);
+            String title = resultSet.getString(7);
+            int pageAmount = resultSet.getInt(8);
+            String image = resultSet.getString(9);
+            return new Book(id, this.getBookTypeById(bookTypeId), genre, price, author, publisher, title, pageAmount, image);
+        }
+        return null;
+    }
+
+    public int getLastInsertedId() throws SQLException
+    {
+        String query = "SELECT LAST_INSERT_ID()";
+        PreparedStatement statement = this.sqlConnection.prepareStatement(query);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next())
+        {
+            return resultSet.getInt(1);
+        }
+        return 0;
     }
 }

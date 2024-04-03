@@ -23,7 +23,7 @@
                     </div>
                 </div>
 
-                <form th:action="@{/post-new-book}" method="post">
+                <form th:action="@{/post-new-book}" method="post" enctype="multipart/form-data">
                     <label for="book_type_id" class="text-light font-weight-bold">BookType</label>
                     <div class="input-group mb-3">
                         <select id="book_type_id" name="book_type_id" class="form-control">
@@ -69,14 +69,10 @@
                         <input type="text" class="form-control" id="page_amount" name="page_amount" th:value="${pageAmount}">
                     </div>
 
-                    <label for="has_hard_cover" class="text-light font-weight-bold">Does this book have a hard cover?</label>
+                    <label for="image" class="text-light font-weight-bold">Image</label>
                     <div class="input-group mb-3">
-                        <select class="form-control" id="has_hard_cover" name="has_hard_cover">
-                            <option value="true" th:selected="${hasHardCover == true}">True</option>
-                            <option value="false" th:selected="${hasHardCover == false}">False</option>
-                        </select>
+                        <input type="file" class="form-control" id="image" name="image" th:value="${image}">
                     </div>
-
 
                     <button type="submit" class="btn btn-primary mb-5 float-right">Add book</button>
                 </form>

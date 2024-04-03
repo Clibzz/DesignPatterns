@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Book Details</title>
-    <link th:href="@{/css/addBook.css}" rel="stylesheet">
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-</head>
-<body>
-<div th:replace="~{components/header :: header}"></div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Book Details</title>
+        <link th:href="@{/css/addBook.css}" rel="stylesheet">
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    </head>
+
+    <body>
+        <div th:replace="~{components/header :: header}"></div>
+        <div th:if="${book != null}">
+            <h2>Book Details</h2>
+            <div>
+                <p>Title: <span th:text="${book.title}"></span></p>
+                <p>Genre: <span th:text="${book.genre}"></span></p>
+                <p>Price: <span th:text="${book.price}"></span></p>
+                <p>Author: <span th:text="${book.author}"></span></p>
+                <p>Publisher: <span th:text="${book.publisher}"></span></p>
+                <p>PageAmount: <span th:text="${book.pageAmount}"></span></p>
+                <p>Image: <span th:text="${book.image}"></span></p>
+                <img th:src="@{${imagePath}}" alt="Thumbnail">
+            </div>
+        </div>
+    </body>
 </html>

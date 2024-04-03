@@ -1,8 +1,13 @@
 package nhlstenden.bookandsales.Controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;
@@ -13,15 +18,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 
 @Controller
-public class BookController {
+public class BookController
+{
 
     private final BookService bookService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService)
+    {
         this.bookService = bookService;
     }
 
@@ -40,7 +48,7 @@ public class BookController {
         return "redirect:/login";
     }
 
-    public ArrayList<String> getBookTypeTypes() throws SQLException
+    private ArrayList<String> getBookTypeTypes() throws SQLException
     {
         BookTypeService bookTypeService = new BookTypeService();
         return bookTypeService.getBookTypeTypes();
@@ -75,14 +83,13 @@ public class BookController {
         return "redirect:/login";
     }
 
-    @PostMapping("/post-new-book")
+    @PostMapping(path = "/post-new-book")
     public String postNewBook(@RequestParam("book_type_id") String bookType, @RequestParam("genre") Genre genre,
-                              @RequestParam("price") Object price, @RequestParam("author") String author,
+                              @RequestParam("price") double price, @RequestParam("author") String author,
                               @RequestParam("publisher") String publisher, @RequestParam("title") String title,
-                              @RequestParam("page_amount") Object pageAmount, @RequestParam("has_hard_cover") boolean hasHardCover,
-                              Model model) throws SQLException
+                              @RequestParam("page_amount") Integer pageAmount, @RequestParam("image") MultipartFile image,
+                              Model model) throws SQLException, IOException
     {
-        BookService bookService = new BookService();
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
         model.addAttribute("bookForm", new Book());
@@ -94,29 +101,39 @@ public class BookController {
         model.addAttribute("publisher", publisher);
         model.addAttribute("title", title);
         model.addAttribute("pageAmount", pageAmount);
-        model.addAttribute("hasHardCover", hasHardCover);
 
-        ArrayList<String> errors = new ArrayList<>();
-
-        if (!(price instanceof Double))
+        this.bookService.addNewBook(bookType, genre, price, author, publisher, title, pageAmount, image);
+        String uploadDirectory = getBaseImagePath(model) + this.bookService.getLastInsertedId() + File.separator;
+        File targetFile = new File(uploadDirectory + image.getOriginalFilename());
+        if (!targetFile.exists())
         {
-            errors.add("Price is incorrect, please enter a valid amount");
-        }
-
-        if (!(pageAmount instanceof Integer))
-        {
-            errors.add("Page amount is incorrect, please enter a valid amount");
-        }
-
-        if (!errors.isEmpty())
-        {
-            model.addAttribute("errors", errors);
-        }
-        else
-        {
-            bookService.addNewBook(bookType, genre, (Double) price, author, publisher, title, (Integer) pageAmount, hasHardCover);
-            model.addAttribute("success", true);
+            if (targetFile.mkdirs())
+            {
+                image.transferTo(targetFile);
+                model.addAttribute("success", true);
+                System.out.println("Directory created successfully: " + targetFile);
+            } else
+            {
+                System.err.println("Failed to create directory: " + targetFile);
+            }
         }
         return "addBook";
+    }
+
+    @GetMapping("/bookDetails/{bookId}")
+    public String getBookById(@PathVariable int bookId, Model model) throws SQLException
+    {
+        Book book = this.bookService.getBookById(bookId);
+        model.addAttribute("book", book);
+        String imagePath = getBaseImagePath(model) + book.getImage();
+        model.addAttribute("imagePath", imagePath);
+        return "bookDetails";
+    }
+
+    private String getBaseImagePath(Model model)
+    {
+        String basePath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "BookAndSales" + File.separator + "Books" + File.separator;
+        model.addAttribute("basePath", basePath);
+        return basePath;
     }
 }

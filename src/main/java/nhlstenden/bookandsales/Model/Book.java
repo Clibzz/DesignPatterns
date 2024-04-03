@@ -21,9 +21,9 @@ public class Book {
     @NonNull
     private int pageAmount;
     @NonNull
-    private boolean hasHardCover;
+    private String image;
 
-    public Book(int id, BookType bookTypeId, Genre genre, double price, String author, String publisher, String title, int pageAmount, boolean hasHardCover) {
+    public Book(int id, BookType bookTypeId, Genre genre, double price, String author, String publisher, String title, int pageAmount, String image) {
         this.id = id;
         this.bookTypeId = bookTypeId;
         this.genre = genre;
@@ -32,7 +32,7 @@ public class Book {
         this.publisher = publisher;
         this.title = title;
         this.pageAmount = pageAmount;
-        this.hasHardCover = hasHardCover;
+        this.image = image;
     }
 
     public Book()
@@ -104,11 +104,11 @@ public class Book {
         this.pageAmount = pageAmount;
     }
 
-    public boolean getHasHardCover() {
-        return this.hasHardCover;
+    public String getImage() {
+        return this.image;
     }
 
-    public void setHasHardCover(boolean hasHardCover) {
-        this.hasHardCover = hasHardCover;
+    public void setImage(String image) {
+        this.image = image;
     }
 }
