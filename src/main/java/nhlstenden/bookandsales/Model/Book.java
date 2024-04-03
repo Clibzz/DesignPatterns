@@ -9,6 +9,8 @@ public class Book {
     @NonNull
     private BookType bookTypeId;
     @NonNull
+    private String description;
+    @NonNull
     private Genre genre;
     @NonNull
     private double price;
@@ -23,9 +25,10 @@ public class Book {
     @NonNull
     private String image;
 
-    public Book(int id, BookType bookTypeId, Genre genre, double price, String author, String publisher, String title, int pageAmount, String image) {
+    public Book(int id, BookType bookTypeId, String description, Genre genre, double price, String author, String publisher, String title, int pageAmount, String image) {
         this.id = id;
         this.bookTypeId = bookTypeId;
+        this.description = description;
         this.genre = genre;
         this.price = price;
         this.author = author;
@@ -52,15 +55,26 @@ public class Book {
         return this.bookTypeId;
     }
 
-    public void setBookTypeId(BookType bookTypeId) {
+    public void setBookTypeId(@NonNull BookType bookTypeId) {
         this.bookTypeId = bookTypeId;
+    }
+
+    @NonNull
+    public String getDescription()
+    {
+        return this.description;
+    }
+
+    public void setDescription(@NonNull String description)
+    {
+        this.description = description;
     }
 
     public Genre getGenre() {
         return this.genre;
     }
 
-    public void setGenre(Genre genre) {
+    public void setGenre(@NonNull Genre genre) {
         this.genre = genre;
     }
 
@@ -76,7 +90,7 @@ public class Book {
         return this.author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(@NonNull String author) {
         this.author = author;
     }
 
@@ -84,7 +98,7 @@ public class Book {
         return this.publisher;
     }
 
-    public void setPublisher(String publisher) {
+    public void setPublisher(@NonNull String publisher) {
         this.publisher = publisher;
     }
 
@@ -92,7 +106,7 @@ public class Book {
         return this.title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@NonNull String title) {
         this.title = title;
     }
 
@@ -108,7 +122,7 @@ public class Book {
         return this.image;
     }
 
-    public void setImage(String image) {
+    public void setImage(@NonNull String image) {
         this.image = image;
     }
 }

@@ -84,17 +84,18 @@ public class BookController
     }
 
     @PostMapping(path = "/post-new-book")
-    public String postNewBook(@RequestParam("book_type_id") String bookType, @RequestParam("genre") Genre genre,
-                              @RequestParam("price") double price, @RequestParam("author") String author,
-                              @RequestParam("publisher") String publisher, @RequestParam("title") String title,
-                              @RequestParam("page_amount") Integer pageAmount, @RequestParam("image") MultipartFile image,
-                              Model model) throws SQLException, IOException
+    public String postNewBook(@RequestParam("book_type_id") String bookType, @RequestParam("description") String description,
+                              @RequestParam("genre") Genre genre, @RequestParam("price") double price,
+                              @RequestParam("author") String author, @RequestParam("publisher") String publisher,
+                              @RequestParam("title") String title, @RequestParam("page_amount") Integer pageAmount,
+                              @RequestParam("image") MultipartFile image, Model model) throws SQLException, IOException
     {
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
         model.addAttribute("bookForm", new Book());
 
         model.addAttribute("bookType", bookType);
+        model.addAttribute("description", description);
         model.addAttribute("genre", genre);
         model.addAttribute("price", price);
         model.addAttribute("author", author);
@@ -102,7 +103,7 @@ public class BookController
         model.addAttribute("title", title);
         model.addAttribute("pageAmount", pageAmount);
 
-        this.bookService.addNewBook(bookType, genre, price, author, publisher, title, pageAmount, image);
+        this.bookService.addNewBook(bookType, description, genre, price, author, publisher, title, pageAmount, image);
         String uploadDirectory = getBaseImagePath(model) + this.bookService.getLastInsertedId() + File.separator;
         File targetFile = new File(uploadDirectory + image.getOriginalFilename());
         if (!targetFile.exists())

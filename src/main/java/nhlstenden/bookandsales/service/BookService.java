@@ -23,7 +23,7 @@ public class BookService
         this.sqlConnection = DatabaseUtil.getConnection();
     }
 
-    public void addNewBook(String bookType, Genre genre, double price, String author, String publisher, String title, int pageAmount, MultipartFile image) throws SQLException
+    public void addNewBook(String bookType, String description, Genre genre, double price, String author, String publisher, String title, int pageAmount, MultipartFile image) throws SQLException
     {
         String selectQuery = "SELECT * FROM `book_type` WHERE `type` = '" + bookType + "'";
         Statement selectStatement = sqlConnection.createStatement();
@@ -31,19 +31,20 @@ public class BookService
 
         if (resultSet.next())
         {
-            String query = "INSERT INTO book(`book_type_id`, `genre`, `price`, `author`, `publisher`, `title`, `page_amount`, `image`)" +
-                    "VALUES (?,?,?,?,?,?,?,?)";
+            String query = "INSERT INTO book(`book_type_id`, `description`, `genre`, `price`, `author`, `publisher`, `title`, `page_amount`, `image`)" +
+                    "VALUES (?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement statement = sqlConnection.prepareStatement(query);
 
             statement.setInt(1, resultSet.getInt("id"));
-            statement.setString(2, genre.name());
-            statement.setDouble(3, price);
-            statement.setString(4, author);
-            statement.setString(5, publisher);
-            statement.setString(6, title);
-            statement.setInt(7, pageAmount);
-            statement.setString(8, image.getOriginalFilename());
+            statement.setString(2, description);
+            statement.setString(3, genre.name());
+            statement.setDouble(4, price);
+            statement.setString(5, author);
+            statement.setString(6, publisher);
+            statement.setString(7, title);
+            statement.setInt(8, pageAmount);
+            statement.setString(9, image.getOriginalFilename());
 
             statement.executeUpdate();
         }
@@ -68,15 +69,16 @@ public class BookService
         {
             int id = resultSet.getInt(1);
             int bookTypeId = resultSet.getInt(2);
-            Genre genre = Genre.valueOf(resultSet.getString(3));
-            double price = resultSet.getDouble(4);
-            String author = resultSet.getString(5);
-            String publisher = resultSet.getString(6);
-            String title = resultSet.getString(7);
-            int pageAmount = resultSet.getInt(8);
-            String image = resultSet.getString(9);
+            String description = resultSet.getString(3);
+            Genre genre = Genre.valueOf(resultSet.getString(4));
+            double price = resultSet.getDouble(5);
+            String author = resultSet.getString(6);
+            String publisher = resultSet.getString(7);
+            String title = resultSet.getString(8);
+            int pageAmount = resultSet.getInt(9);
+            String image = resultSet.getString(10);
 
-            bookModel = new Book(id, getBookTypeById(bookTypeId), genre, price, author, publisher, title, pageAmount, image);
+            bookModel = new Book(id, getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image);
 
             bookList.add(bookModel);
         }
@@ -121,14 +123,15 @@ public class BookService
         {
             int id = resultSet.getInt(1);
             int bookTypeId = resultSet.getInt(2);
-            Genre genre = Genre.valueOf(resultSet.getString(3));
-            double price = resultSet.getDouble(4);
-            String author = resultSet.getString(5);
-            String publisher = resultSet.getString(6);
-            String title = resultSet.getString(7);
-            int pageAmount = resultSet.getInt(8);
-            String image = resultSet.getString(9);
-            return new Book(id, this.getBookTypeById(bookTypeId), genre, price, author, publisher, title, pageAmount, image);
+            String description = resultSet.getString(3);
+            Genre genre = Genre.valueOf(resultSet.getString(4));
+            double price = resultSet.getDouble(5);
+            String author = resultSet.getString(6);
+            String publisher = resultSet.getString(7);
+            String title = resultSet.getString(8);
+            int pageAmount = resultSet.getInt(9);
+            String image = resultSet.getString(10);
+            return new Book(id, this.getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image);
         }
         return null;
     }
