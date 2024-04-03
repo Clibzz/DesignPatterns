@@ -118,7 +118,7 @@ INSERT INTO `review` (`id`, `user_id`, `book_id`, `title`, `rating`, `text`, `im
 (7, 1, 7, 'Timeless Romantic Classic', 4.3, 'Pride and Prejudice is a classic romance novel that continues to enchant readers with its timeless tale of love, misunderstandings, and societal norms. A true masterpiece!', 'pride_and_prejudice.jpg'),
 (8, 1, 8, 'Out-of-This-World Sci-Fi', 4.9, 'The Martian is an exhilarating sci-fi thriller that kept me glued to the pages until the very end. Andy Weir\'s attention to scientific detail adds a level of realism that makes the story even more compelling.', 'the_martian.jpg'),
 (9, 1, 9, 'Fantasy Epic Adventure', 4.7, 'The Hobbit is an epic fantasy adventure that takes readers on a journey through Middle-earth filled with danger, courage, and magic. A timeless classic that every fantasy lover should read!', 'the_hobbit.jpg'),
-(10, 1, 10, 'Hilarious Comedy-Drama', 4.4, 'Bridget Jones\'s Diary is a delightful comedy-drama that offers a witty and relatable glimpse into the life of its titular character. A fun and entertaining read!', 'bridget_jones_diary.jpg');
+(10, 1, 10, 'Hilarious Comedy-Drama', 4.4, 'Bridget Jones\s Diary is a delightful comedy-drama that offers a witty and relatable glimpse into the life of its titular character. A fun and entertaining read!', 'bridget_jones_diary.jpg');
 
 -- --------------------------------------------------------
 
