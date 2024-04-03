@@ -16,13 +16,15 @@
                     <h1 class="font-weight-bold">Overview</h1>
                 </div>
                 <div class="col-md-2 pt-3">
-                    <label for="book-type" class="text-secondary font-weight-bold">Select book type:</label>
-                    <select class="form-select mb-3" id="book-type">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <form th:action="@{'/overview'}" method="post">
+                        <label for="book-type" class="text-secondary font-weight-bold">Select book type:</label>
+                        <select class="form-control mb-3" id="book-type" name="bookTypeId" onchange="this.form.submit()">
+                            <option selected>choose book type:</option>
+                            <option th:each="bookTypeOption : ${bookTypes}"
+                                    th:value="${bookTypeOption.getId()}"
+                                    th:text="${bookTypeOption.getType()}"></option>
+                        </select>
+                    </form>
                 </div>
 
                 <div class="col-md-1"></div>
@@ -30,7 +32,9 @@
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10 pt-3 pl-3 bg-secondary text-light">
-
+                    <ul>
+                        <li th:each="item : ${bookList}" th:text="${item.getAuthor()}"></li>
+                    </ul>
                 </div>
                 <div class="col-md-1"></div>
             </div>

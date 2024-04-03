@@ -1,7 +1,6 @@
 package nhlstenden.bookandsales.Controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.sql.SQLException;
 import nhlstenden.bookandsales.Model.Book;
@@ -20,9 +19,11 @@ import java.util.ArrayList;
 public class BookController {
 
     private final BookService bookService;
+    private final BookTypeService bookTypeService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, BookTypeService bookTypeService) {
         this.bookService = bookService;
+        this.bookTypeService = bookTypeService;
     }
 
     @GetMapping("/addBook")
@@ -42,8 +43,7 @@ public class BookController {
 
     public ArrayList<String> getBookTypeTypes() throws SQLException
     {
-        BookTypeService bookTypeService = new BookTypeService();
-        return bookTypeService.getBookTypeTypes();
+        return this.bookTypeService.getBookTypeTypes();
     }
 
     private boolean isLoggedIn(HttpSession session)
@@ -52,24 +52,32 @@ public class BookController {
     }
 
     @GetMapping("/overview")
-    public String overview(HttpSession session)
+    public String overview(Model model, HttpSession session) throws SQLException
     {
         if (isLoggedIn(session))
         {
+            model.addAttribute("bookTypes", this.bookTypeService.getBookTypes());
+
             return "overview";
         }
 
         return "redirect:/login";
     }
 
-    @GetMapping("/overview/{bookTypeId}")
-    public String chooseOverview(@PathVariable int bookTypeId, HttpSession session) throws SQLException
+    @PostMapping("/overview")
+    public String chooseOverview(@RequestParam("bookTypeId") int bookTypeId, Model model, HttpSession session) throws SQLException
     {
+
         if (isLoggedIn(session))
         {
-            bookService.getBookList(bookTypeId);
+            model.addAttribute("bookTypeId", bookTypeId);
+            model.addAttribute("bookTypes", this.bookTypeService.getBookTypes());
 
-            return "redirect:/overview/{bookTypeId}";
+            this.bookService.getBookList(bookTypeId);
+
+            model.addAttribute("bookList", this.bookService.getBookList(bookTypeId));
+
+            return "overview";
         }
 
         return "redirect:/login";
@@ -77,12 +85,12 @@ public class BookController {
 
     @PostMapping("/post-new-book")
     public String postNewBook(@RequestParam("book_type_id") String bookType, @RequestParam("genre") Genre genre,
-                              @RequestParam("price") Object price, @RequestParam("author") String author,
+                              @RequestParam("price") double price, @RequestParam("author") String author,
                               @RequestParam("publisher") String publisher, @RequestParam("title") String title,
-                              @RequestParam("page_amount") Object pageAmount, @RequestParam("has_hard_cover") boolean hasHardCover,
+                              @RequestParam("page_amount") int pageAmount, @RequestParam("has_hard_cover") boolean hasHardCover,
                               Model model) throws SQLException
     {
-        BookService bookService = new BookService();
+
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
         model.addAttribute("bookForm", new Book());
@@ -98,12 +106,12 @@ public class BookController {
 
         ArrayList<String> errors = new ArrayList<>();
 
-        if (!(price instanceof Double))
+        if (price < 0)
         {
             errors.add("Price is incorrect, please enter a valid amount");
         }
 
-        if (!(pageAmount instanceof Integer))
+        if (pageAmount < 0)
         {
             errors.add("Page amount is incorrect, please enter a valid amount");
         }
@@ -114,7 +122,7 @@ public class BookController {
         }
         else
         {
-            bookService.addNewBook(bookType, genre, (Double) price, author, publisher, title, (Integer) pageAmount, hasHardCover);
+            this.bookService.addNewBook(bookType, genre, price, author, publisher, title, pageAmount, hasHardCover);
             model.addAttribute("success", true);
         }
         return "addBook";
