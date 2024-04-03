@@ -1,13 +1,10 @@
 package nhlstenden.bookandsales.Controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;
