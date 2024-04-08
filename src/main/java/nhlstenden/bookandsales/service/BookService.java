@@ -63,9 +63,7 @@ public class BookService
 
         ResultSet resultSet = statement.executeQuery();
 
-        Book bookModel = null;
-
-        if (resultSet.next())
+        while (resultSet.next())
         {
             int id = resultSet.getInt(1);
             int bookTypeId = resultSet.getInt(2);
@@ -78,9 +76,9 @@ public class BookService
             int pageAmount = resultSet.getInt(9);
             String image = resultSet.getString(10);
 
-            bookModel = new Book(id, getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image);
+//            bookModel = new Book(id, getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image);
 
-            bookList.add(bookModel);
+            bookList.add(new Book(id, getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image));
         }
 
         return bookList;

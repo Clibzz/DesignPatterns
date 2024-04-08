@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;
@@ -78,12 +80,11 @@ public class BookController
             model.addAttribute("bookTypeId", bookTypeId);
             model.addAttribute("bookTypes", this.bookTypeService.getBookTypes());
 
-            this.bookService.getBookList(bookTypeId);
-
             String imagePath = getBaseImagePath(model);
 
             model.addAttribute("pathImage", imagePath);
             model.addAttribute("bookList", this.bookService.getBookList(bookTypeId));
+            System.out.println(this.bookService.getBookList(bookTypeId));
 
             return "overview";
         }
@@ -112,8 +113,10 @@ public class BookController
         model.addAttribute("pageAmount", pageAmount);
 
         this.bookService.addNewBook(bookType, description, genre, price, author, publisher, title, pageAmount, image);
+
         String uploadDirectory = getBaseImagePath(model) + this.bookService.getLastInsertedId() + File.separator;
         File targetFile = new File(uploadDirectory + image.getOriginalFilename());
+
         if (!targetFile.exists())
         {
             if (targetFile.mkdirs())
@@ -141,7 +144,9 @@ public class BookController
 
     private String getBaseImagePath(Model model)
     {
-        String basePath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "BookAndSales" + File.separator + "Books" + File.separator;
+        String basePath = System.getProperty("user.dir") + File.separator + "src" +
+                          File.separator + "main" + File.separator + "resources" +
+                          File.separator + "static" + File.separator + "images" + File.separator;
         model.addAttribute("basePath", basePath);
         return basePath;
     }
