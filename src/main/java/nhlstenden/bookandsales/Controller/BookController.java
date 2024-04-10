@@ -4,8 +4,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;

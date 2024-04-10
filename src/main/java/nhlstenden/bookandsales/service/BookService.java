@@ -3,11 +3,9 @@ import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.BookType;
 import nhlstenden.bookandsales.Model.Genre;
 import nhlstenden.bookandsales.util.DatabaseUtil;
-import org.hibernate.annotations.processing.SQL;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.*;
@@ -75,8 +73,6 @@ public class BookService
             String title = resultSet.getString(8);
             int pageAmount = resultSet.getInt(9);
             String image = resultSet.getString(10);
-
-//            bookModel = new Book(id, getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image);
 
             bookList.add(new Book(id, getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image));
         }

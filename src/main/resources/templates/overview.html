@@ -32,16 +32,6 @@
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10 pt-3 pl-3 bg-secondary text-light">
-<!--                    <ul >-->
-<!--                        <li th:each="item : ${bookList}" th:text="${item.getId()}"></li>-->
-<!--                    </ul>-->
-<!--                    <div th:each="image : ${bookList}">-->
-<!--                        <img th:each="image : ${bookList}" th:src="'/' + images + '/' + ${image.getId()} + '/' + ${image.getImage()}" />-->
-<!--                    </div>-->
-<!--                    <p th:each="images : ${bookList}" th:text="@{${pathImage} + ${images.getId()} + '\\' + ${images.getImage()}}"></p>-->
-<!--                    <p th:each="fiffa : ${bookList}" th:text="${fiffa.getId()}"></p>-->
-<!--                    <p th:each="liffa : ${bookList}" th:text="${liffa.getImage()}"></p>-->
-<!--                    <img th:each="images : ${bookList}" th:src="${pathImage} + ${images.getId()} + '\\' + ${images.getImage()}" />-->
                     <div class="row">
                         <div th:each="book : ${bookList}" class="m-2 bg-light">
                             <img class="img-fluid m-2" style="width: 200px; height: 200px;" th:src="'/' + images + '/' + ${book.getId()} + '/' + ${book.getImage()}" />

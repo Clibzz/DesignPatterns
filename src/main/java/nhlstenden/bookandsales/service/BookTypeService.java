@@ -1,13 +1,9 @@
 package nhlstenden.bookandsales.service;
 
-
-import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.BookType;
 import nhlstenden.bookandsales.util.DatabaseUtil;
-import org.hibernate.annotations.processing.SQL;
 import org.springframework.stereotype.Service;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
