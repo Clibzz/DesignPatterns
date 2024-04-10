@@ -1,9 +1,15 @@
 package nhlstenden.bookandsales.Factory;
 
-public class EBookFactory {
+import nhlstenden.bookandsales.Model.Genre;
+
+public class EBookFactory extends BookFactory
+{
     private boolean hasAutomaticReading;
 
-//    public BookProduct createBookProduct(double price, String artist, String publisher, int pageAmount, boolean hasAutomaticReading) {
-//
-//    }
+    @Override
+    public BookProduct createBookProduct(String title, double price, String author, String publisher,
+                                         int pageAmount, Genre genre, boolean hasAutomaticReading, String description, String image)
+    {
+        return new EBook(title, price, author, publisher, pageAmount, genre, hasAutomaticReading, description, image);
+    }
 }
