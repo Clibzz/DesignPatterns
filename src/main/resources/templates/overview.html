@@ -33,7 +33,7 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-10 pt-3 pl-3 bg-secondary text-light">
                     <div class="row">
-                        <div th:each="book : ${bookList}" class="m-2 bg-light" onclick="loadBookDetails()" id="bookId" th:value="${book.getId()}">
+                        <div th:each="book : ${bookList}" class="m-2 rounded bookCover" onclick="loadBookDetails()" id="bookId" th:value="${book.getId()}">
                             <img class="img-fluid m-2" style="width: 200px; height: 200px;" th:src="'/' + images + '/' + ${book.getId()} + '/' + ${book.getImage()}" />
                             <p th:text="Author + ': ' + ${book.getAuthor()}" class="text-dark ml-2"></p>
                             <p th:text="Genre + ': ' + ${book.getGenre()}" class="text-dark ml-2"></p>
