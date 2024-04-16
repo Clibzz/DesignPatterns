@@ -12,20 +12,20 @@
         <div class="row mt-5">
             <div class="col-md-2"></div>
             <div class="col-md-8 bg-secondary rounded">
-                <div th:if="${book != null}">
-                    <p class="h1 text-center" th:text="${book.title}"></p>
+                <div th:if="${bookProduct != null}">
+                    <p class="h1 text-center" th:text="${bookProduct.title}"></p>
                     <div class="row">
                         <div class="col-md-2 text-center border-danger border mx-3">
-                            <img th:src="@{${imagePath}}" alt="Thumbnail">
+                            <img th:src="'/' + images + '/' + ${bookProduct.getId()} + '/' + ${bookProduct.getImage()}" alt="Thumbnail">
                         </div>
 
-                        <p>Description: <span th:text="${book.description}"></span></p>
-                        <p>Genre: <span th:text="${book.genre}"></span></p>
-                        <p>Price: <span th:text="${book.price}"></span></p>
-                        <p>Author: <span th:text="${book.author}"></span></p>
-                        <p>Publisher: <span th:text="${book.publisher}"></span></p>
-                        <p>PageAmount: <span th:text="${book.pageAmount}"></span></p>
-                        <p>Image: <span th:text="${book.image}"></span></p>
+                        <p>Description: <span th:text="${bookProduct.description}"></span></p>
+                        <p>Genre: <span th:text="${bookProduct.genre}"></span></p>
+                        <p>Price: <span th:text="${bookProduct.price}"></span></p>
+                        <p>Author: <span th:text="${bookProduct.author}"></span></p>
+                        <p>Publisher: <span th:text="${bookProduct.publisher}"></span></p>
+                        <p>PageAmount: <span th:text="${bookProduct.pageAmount}"></span></p>
+                        <p>Image: <span th:text="${bookProduct.image}"></span></p>
 
                     </div>
                 </div>

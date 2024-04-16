@@ -111,7 +111,7 @@ public class BookService
         return bookTypeModel;
     }
 
-    public Book getBookById(int bookId) throws SQLException
+    public BookProduct getBookById(int bookId) throws SQLException
     {
         String query = "SELECT * FROM `book` WHERE `id` = ?";
 
@@ -130,7 +130,11 @@ public class BookService
             String title = resultSet.getString(8);
             int pageAmount = resultSet.getInt(9);
             String image = resultSet.getString(10);
-            return new Book(id, this.getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image);
+
+            this.setBookFactoryType(bookTypeId);
+
+            return this.bookFactory.createBookProduct(id, this.getBookTypeById(bookTypeId), title, price, author, publisher, pageAmount, genre, this.getBookTypeById(bookTypeId).getHasAttribute(), description, image);
+//            return new Book(id, this.getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image);
         }
         return null;
     }

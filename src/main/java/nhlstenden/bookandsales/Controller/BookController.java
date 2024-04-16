@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+
+import nhlstenden.bookandsales.Factory.BookProduct;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;
 import nhlstenden.bookandsales.service.BookService;
@@ -38,7 +40,6 @@ public class BookController
         {
             model.addAttribute("bookTypes", this.getBookTypeTypes());
             model.addAttribute("enumValues", Genre.values());
-            model.addAttribute("bookForm", new Book());
 
             return "addBook";
         }
@@ -77,10 +78,6 @@ public class BookController
         {
             model.addAttribute("bookTypeId", bookTypeId);
             model.addAttribute("bookTypes", this.bookTypeService.getBookTypes());
-
-            String imagePath = getBaseImagePath(model);
-
-            model.addAttribute("pathImage", imagePath);
             model.addAttribute("bookList", this.bookService.getBookList(bookTypeId));
 
             return "overview";
@@ -98,7 +95,6 @@ public class BookController
     {
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
-        model.addAttribute("bookForm", new Book());
 
         model.addAttribute("bookType", bookType);
         model.addAttribute("description", description);
@@ -132,10 +128,8 @@ public class BookController
     @GetMapping("/bookDetails/{bookId}")
     public String getBookById(@PathVariable int bookId, Model model) throws SQLException
     {
-        Book book = this.bookService.getBookById(bookId);
-        model.addAttribute("book", book);
-        String imagePath = getBaseImagePath(model) + book.getImage();
-        model.addAttribute("imagePath", imagePath);
+        BookProduct bookProduct = this.bookService.getBookById(bookId);
+        model.addAttribute("bookProduct", bookProduct);
         return "bookDetails";
     }
 
