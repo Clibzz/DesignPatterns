@@ -1,4 +1,6 @@
 package nhlstenden.bookandsales.service;
+import nhlstenden.bookandsales.Controller.BookController;
+import nhlstenden.bookandsales.Factory.*;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.BookType;
 import nhlstenden.bookandsales.Model.Genre;
@@ -15,10 +17,12 @@ import java.util.ArrayList;
 public class BookService
 {
     private final Connection sqlConnection;
+    private BookFactory bookFactory;
 
     public BookService() throws SQLException
     {
         this.sqlConnection = DatabaseUtil.getConnection();
+        this.bookFactory = null;
     }
 
     public void addNewBook(String bookType, String description, Genre genre, double price, String author, String publisher, String title, int pageAmount, MultipartFile image) throws SQLException
@@ -48,10 +52,10 @@ public class BookService
         }
     }
 
-    public ArrayList<Book> getBookList(int chosenBookTypeId) throws SQLException
+    public ArrayList<BookProduct> getBookList(int chosenBookTypeId) throws SQLException
     {
 
-        ArrayList<Book> bookList = new ArrayList<>();
+        ArrayList<BookProduct> bookList = new ArrayList<>();
 
         String query = "SELECT * FROM book WHERE book_type_id = ?";
 
@@ -74,7 +78,8 @@ public class BookService
             int pageAmount = resultSet.getInt(9);
             String image = resultSet.getString(10);
 
-            bookList.add(new Book(id, getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image));
+            this.setBookFactoryType(bookTypeId);
+            bookList.add(this.bookFactory.createBookProduct(id, getBookTypeById(bookTypeId), title, price, author, publisher, pageAmount, genre, getBookTypeById(bookTypeId).getHasAttribute(), description, image));
         }
 
         return bookList;
@@ -140,5 +145,21 @@ public class BookService
             return resultSet.getInt(1);
         }
         return 0;
+    }
+
+    public void setBookFactoryType(int typeId)
+    {
+        switch (typeId)
+        {
+            case 1:
+                this.bookFactory = new EBookFactory();
+                break;
+            case 2:
+                this.bookFactory = new AudioBookFactory();
+                break;
+            case 3:
+                this.bookFactory = new NormalBooKFactory();
+                break;
+        }
     }
 }

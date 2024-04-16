@@ -6,9 +6,4 @@ public enum Genre {
     ROMANCE,
     SCIFI,
     FANTASY;
-
-    public String ToString()
-    {
-        return this.ToString();
-    }
 }

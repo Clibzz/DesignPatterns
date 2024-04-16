@@ -1,9 +1,12 @@
 package nhlstenden.bookandsales.Factory;
 
+import nhlstenden.bookandsales.Model.BookType;
 import nhlstenden.bookandsales.Model.Genre;
 
 public class NormalBook implements BookProduct
 {
+    private int id;
+    private BookType bookType;
     private String title;
     private double price;
     private String author;
@@ -14,9 +17,11 @@ public class NormalBook implements BookProduct
     private String description;
     private String image;
 
-    public NormalBook(String title, double price, String author, String publisher,
+    public NormalBook(int id, BookType bookType, String title, double price, String author, String publisher,
                  int pageAmount, Genre genre, boolean hasHardCover, String description, String image)
     {
+        this.setId(id);
+        this.setBookType(bookType);
         this.setTitle(title);
         this.setPrice(price);
         this.setAuthor(author);
@@ -26,6 +31,42 @@ public class NormalBook implements BookProduct
         this.setHasHardCover(hasHardCover);
         this.setDescription(description);
         this.setImage(image);
+    }
+
+    @Override
+    public int getId()
+    {
+        return this.id;
+    }
+
+    public void setId(int id)
+    {
+        if (!(id < 0))
+        {
+            this.id = id;
+        }
+        else
+        {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public BookType getBookType()
+    {
+        return this.bookType;
+    }
+
+    public void setBookType(BookType bookType)
+    {
+        if (bookType != null)
+        {
+            this.bookType = bookType;
+        }
+        else
+        {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
@@ -126,7 +167,7 @@ public class NormalBook implements BookProduct
 
     public void setGenre(Genre genre)
     {
-        if (!(genre.ToString().isEmpty()))
+        if (!(genre.toString().isEmpty()))
         {
             this.genre = genre;
         }

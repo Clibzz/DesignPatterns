@@ -82,7 +82,6 @@ public class BookController
 
             model.addAttribute("pathImage", imagePath);
             model.addAttribute("bookList", this.bookService.getBookList(bookTypeId));
-            System.out.println(this.bookService.getBookList(bookTypeId));
 
             return "overview";
         }
