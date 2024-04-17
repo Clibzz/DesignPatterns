@@ -1,9 +1,12 @@
 package nhlstenden.bookandsales.Factory;
 
+import nhlstenden.bookandsales.Model.BookType;
 import nhlstenden.bookandsales.Model.Genre;
 
 public interface BookProduct
 {
+    int getId();
+    BookType getBookType();
     String getTitle();
     double getPrice();
     String getAuthor();

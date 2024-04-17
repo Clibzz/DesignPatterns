@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+
+import nhlstenden.bookandsales.Factory.BookProduct;
 import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;
 import nhlstenden.bookandsales.service.BookService;
@@ -25,10 +27,12 @@ public class BookController
 
     private final BookService bookService;
     private final BookTypeService bookTypeService;
+    private boolean hasBookTypeBeenChosen;
 
     public BookController(BookService bookService, BookTypeService bookTypeService) {
         this.bookService = bookService;
         this.bookTypeService = bookTypeService;
+        this.hasBookTypeBeenChosen = false;
     }
 
     @GetMapping("/addBook")
@@ -38,7 +42,6 @@ public class BookController
         {
             model.addAttribute("bookTypes", this.getBookTypeTypes());
             model.addAttribute("enumValues", Genre.values());
-            model.addAttribute("bookForm", new Book());
 
             return "addBook";
         }
@@ -62,6 +65,8 @@ public class BookController
         if (isLoggedIn(session))
         {
             model.addAttribute("bookTypes", this.bookTypeService.getBookTypes());
+            model.addAttribute("bookRegardlessOfTypeList", this.bookService.getAllBooksRegardlessOfType());
+            model.addAttribute("hasBookTypeBeenChosen", false);
 
             return "overview";
         }
@@ -77,12 +82,8 @@ public class BookController
         {
             model.addAttribute("bookTypeId", bookTypeId);
             model.addAttribute("bookTypes", this.bookTypeService.getBookTypes());
-
-            String imagePath = getBaseImagePath(model);
-
-            model.addAttribute("pathImage", imagePath);
             model.addAttribute("bookList", this.bookService.getBookList(bookTypeId));
-            System.out.println(this.bookService.getBookList(bookTypeId));
+            model.addAttribute("hasBookTypeBeenChosen", true);
 
             return "overview";
         }
@@ -99,7 +100,6 @@ public class BookController
     {
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
-        model.addAttribute("bookForm", new Book());
 
         model.addAttribute("bookType", bookType);
         model.addAttribute("description", description);
@@ -131,13 +131,17 @@ public class BookController
     }
 
     @GetMapping("/bookDetails/{bookId}")
-    public String getBookById(@PathVariable int bookId, Model model) throws SQLException
+    public String getBookById(@PathVariable int bookId, Model model, HttpSession session) throws SQLException
     {
-        Book book = this.bookService.getBookById(bookId);
-        model.addAttribute("book", book);
-        String imagePath = getBaseImagePath(model) + book.getImage();
-        model.addAttribute("imagePath", imagePath);
-        return "bookDetails";
+        if (isLoggedIn(session))
+        {
+            BookProduct bookProduct = this.bookService.getBookById(bookId);
+            model.addAttribute("bookProduct", bookProduct);
+
+            return "bookDetails";
+        }
+
+        return "redirect:/login";
     }
 
     private String getBaseImagePath(Model model)
