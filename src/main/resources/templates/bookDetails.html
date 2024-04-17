@@ -15,18 +15,20 @@
                 <div th:if="${book != null}">
                     <p class="h1 text-center" th:text="${book.title}"></p>
                     <div class="row">
-                        <div class="col-md-2 text-center border-danger border mx-3">
-                            <img th:src="@{${imagePath}}" alt="Thumbnail">
-                        </div>
-
-                        <p>Description: <span th:text="${book.description}"></span></p>
-                        <p>Genre: <span th:text="${book.genre}"></span></p>
-                        <p>Price: <span th:text="${book.price}"></span></p>
-                        <p>Author: <span th:text="${book.author}"></span></p>
-                        <p>Publisher: <span th:text="${book.publisher}"></span></p>
-                        <p>PageAmount: <span th:text="${book.pageAmount}"></span></p>
-                        <p>Image: <span th:text="${book.image}"></span></p>
-
+                        <form method="post" action="/addToCart">
+                            <input type="hidden" id="bookId" name="bookId" th:value="${bookId}">
+                            <div class="col-md-2 text-center border-danger border mx-3">
+                                <img th:src="@{${imagePath}}" alt="Thumbnail">
+                            </div>
+                            <p>Description: <span th:text="${book.description}"></span></p>
+                            <p>Genre: <span th:text="${book.genre}"></span></p>
+                            <p>Price: <span th:text="${book.price}"></span></p>
+                            <p>Author: <span th:text="${book.author}"></span></p>
+                            <p>Publisher: <span th:text="${book.publisher}"></span></p>
+                            <p>PageAmount: <span th:text="${book.pageAmount}"></span></p>
+                            <p>Image: <span th:text="${book.image}"></span></p>
+                            <input name="addToCart" id="addToCart" type="submit" th:onclick="|window.location.href='/addToCart'|">
+                        </form>
                     </div>
                 </div>
             </div>
