@@ -1,13 +1,18 @@
 package nhlstenden.bookandsales.Model;
 
-public class PaymentCart {
+public class PaymentCart implements Cloneable {
     private int id;
     private int userId;
-    private String cartDetails;
+    private StringBuilder cartDetails;
 
-    public PaymentCart(int userId, String cartDetails) {
+    public PaymentCart(int userId, StringBuilder cartDetails) {
         this.userId = userId;
         this.cartDetails = cartDetails;
+    }
+
+    public PaymentCart()
+    {
+        this.setCartDetails(new StringBuilder("_______PaymentCart_______"));
     }
 
     public int getId() {
@@ -26,11 +31,26 @@ public class PaymentCart {
         this.userId = userId;
     }
 
-    public String getCartDetails() {
+    public StringBuilder getCartDetails() {
         return this.cartDetails;
     }
 
-    public void setCartDetails(String cartDetails) {
+    public void setCartDetails(StringBuilder cartDetails) {
         this.cartDetails = cartDetails;
+    }
+
+    public void appendCartDetails(Book book)
+    {
+        this.cartDetails.append(book);
+    }
+
+    public PaymentCartMemento save()
+    {
+        return new PaymentCartMemento(this.cartDetails.toString());
+    }
+
+    public void restore(PaymentCartMemento memento)
+    {
+        this.cartDetails = new StringBuilder(memento.getCartDetails());
     }
 }
