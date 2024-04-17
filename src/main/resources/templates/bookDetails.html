@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Book Details</title>
-        <link th:href="@{/css/addBook.css}" rel="stylesheet">
-        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <title>Book Details</title>
+    <link th:href="@{/css/addBook.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
 
-    <body>
-        <div th:replace="~{components/header :: header}"></div>
-        <div class="row mt-5">
-            <div class="col-md-2"></div>
-            <div class="col-md-8 bg-secondary rounded">
-                <div th:if="${bookProduct != null}">
-                    <p class="h1 text-center" th:text="${bookProduct.title}"></p>
-                    <div class="row">
-                        <div class="col-md-2 text-center border-danger border mx-3">
-                            <img th:src="'/' + images + '/' + ${bookProduct.getId()} + '/' + ${bookProduct.getImage()}" alt="Thumbnail">
-                        </div>
-
-                        <p>Description: <span th:text="${bookProduct.description}"></span></p>
-                        <p>Genre: <span th:text="${bookProduct.genre}"></span></p>
-                        <p>Price: <span th:text="${bookProduct.price}"></span></p>
-                        <p>Author: <span th:text="${bookProduct.author}"></span></p>
-                        <p>Publisher: <span th:text="${bookProduct.publisher}"></span></p>
-                        <p>PageAmount: <span th:text="${bookProduct.pageAmount}"></span></p>
-                        <p>Image: <span th:text="${bookProduct.image}"></span></p>
-
+<body>
+<div th:replace="~{components/header :: header}"></div>
+<div class="row mt-5">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 bg-secondary rounded">
+        <div th:if="${bookProduct != null}">
+            <p class="h1 text-center" th:text="${bookProduct.title}"></p>
+            <div class="row">
+                <form method="post" action="/addToCart">
+                    <input type="hidden" id="bookId" name="bookId" th:value="${bookId}">
+                    <div class="col-md-2 text-center border-danger border mx-3">
+                        <img th:src="'/' + images + '/' + ${bookProduct.getId()} + '/' + ${bookProduct.getImage()}" alt="Thumbnail">
                     </div>
-                </div>
+                    <p>Description: <span th:text="${bookProduct.description}"></span></p>
+                    <p>Genre: <span th:text="${bookProduct.genre}"></span></p>
+                    <p>Price: <span th:text="${bookProduct.price}"></span></p>
+                    <p>Author: <span th:text="${bookProduct.author}"></span></p>
+                    <p>Publisher: <span th:text="${bookProduct.publisher}"></span></p>
+                    <p>PageAmount: <span th:text="${bookProduct.pageAmount}"></span></p>
+                    <p>Image: <span th:text="${bookProduct.image}"></span></p>
+                    <input name="addToCart" id="addToCart" type="submit" th:onclick="|window.location.href='/addToCart'|">
+                </form>
             </div>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

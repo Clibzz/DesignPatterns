@@ -1,4 +1,7 @@
 function loadBookDetails() {
-    let bookId = document.getElementById("bookId").getAttribute("value");
-    window.location.href = "/bookDetails/" + bookId;
+    let bookList = document.getElementsByClassName("bookCover");
+
+    Array.prototype.forEach.call(bookList, function(chosenBook) {
+        window.location.href = "/bookDetails/" + chosenBook.getAttribute("value");
+    });
 }

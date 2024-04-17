@@ -52,6 +52,40 @@ public class BookService
         }
     }
 
+    public ArrayList<BookProduct> getAllBooksRegardlessOfType() throws SQLException
+    {
+
+        ArrayList<BookProduct> bookListRegardlessOfType = new ArrayList<>();
+
+        String query = "SELECT * FROM book";
+
+        PreparedStatement statement = this.sqlConnection.prepareStatement(query);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next())
+        {
+            int id = resultSet.getInt(1);
+            int bookTypeId = resultSet.getInt(2);
+            String description = resultSet.getString(3);
+            Genre genre = Genre.valueOf(resultSet.getString(4));
+            double price = resultSet.getDouble(5);
+            String author = resultSet.getString(6);
+            String publisher = resultSet.getString(7);
+            String title = resultSet.getString(8);
+            int pageAmount = resultSet.getInt(9);
+            String image = resultSet.getString(10);
+
+            this.setBookFactoryType(bookTypeId);
+            bookListRegardlessOfType.add(this.bookFactory.createBookProduct(id, this.getBookTypeById(bookTypeId),
+                                        title, price, author, publisher, pageAmount, genre,
+                                        this.getBookTypeById(bookTypeId).getHasAttribute(),
+                                        description, image ));
+        }
+
+        return bookListRegardlessOfType;
+    }
+
     public ArrayList<BookProduct> getBookList(int chosenBookTypeId) throws SQLException
     {
 
@@ -79,7 +113,9 @@ public class BookService
             String image = resultSet.getString(10);
 
             this.setBookFactoryType(bookTypeId);
-            bookList.add(this.bookFactory.createBookProduct(id, getBookTypeById(bookTypeId), title, price, author, publisher, pageAmount, genre, getBookTypeById(bookTypeId).getHasAttribute(), description, image));
+            bookList.add(this.bookFactory.createBookProduct(id, getBookTypeById(bookTypeId),
+                        title, price, author, publisher, pageAmount, genre, getBookTypeById(bookTypeId).getHasAttribute(),
+                        description, image));
         }
 
         return bookList;
@@ -133,8 +169,10 @@ public class BookService
 
             this.setBookFactoryType(bookTypeId);
 
-            return this.bookFactory.createBookProduct(id, this.getBookTypeById(bookTypeId), title, price, author, publisher, pageAmount, genre, this.getBookTypeById(bookTypeId).getHasAttribute(), description, image);
-//            return new Book(id, this.getBookTypeById(bookTypeId), description, genre, price, author, publisher, title, pageAmount, image);
+            return this.bookFactory.createBookProduct(id, this.getBookTypeById(bookTypeId), title,
+                                                    price, author, publisher, pageAmount, genre,
+                                                    this.getBookTypeById(bookTypeId).getHasAttribute(),
+                                                    description, image);
         }
         return null;
     }
