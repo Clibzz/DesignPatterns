@@ -1,17 +1,15 @@
 package nhlstenden.bookandsales.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-
 import nhlstenden.bookandsales.Factory.BookProduct;
-import nhlstenden.bookandsales.Model.Book;
 import nhlstenden.bookandsales.Model.Genre;
 import nhlstenden.bookandsales.service.BookService;
-import org.springframework.stereotype.Controller;
 import nhlstenden.bookandsales.service.BookTypeService;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Controller
@@ -151,5 +156,53 @@ public class BookController
                           File.separator + "static" + File.separator + "images" + File.separator;
         model.addAttribute("basePath", basePath);
         return basePath;
+    }
+
+    private JSONArray readJsonFromCart(HttpSession session) throws IOException, JSONException
+    {
+        Path path = Paths.get(session.getAttribute("username") + ".json");
+        String content = String.join("\n", Files.readAllLines(path));
+        return new JSONArray(content);
+    }
+
+    private JSONArray readJsonFromAllCarts(Path path) throws IOException, JSONException
+    {
+        String content = String.join("\n", Files.readAllLines(path));
+        return new JSONArray(content);
+    }
+
+    private void writeObjectToAllCartsJson(JSONObject object) throws JSONException, IOException
+    {
+        Path path = Paths.get("carts.json");
+        JSONArray data = this.readJsonFromAllCarts(path);
+        data.put(object);
+        try (FileWriter writer = new FileWriter(path.toFile(), false))
+        {
+            writer.write(data.toString(4));
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/addToCart")
+    public String addToCart(@RequestParam("bookId") int bookId, HttpSession session) throws SQLException, IOException, JSONException
+    {
+        BookProduct book = this.bookService.getBookById(bookId);
+        Path path = Paths.get(session.getAttribute("username") + ".json");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JSONArray jsonArray = this.readJsonFromCart(session);
+
+        JSONObject jsonObj = new JSONObject(objectMapper.writeValueAsString(book));
+        jsonObj.put("userId", session.getAttribute("userId"));
+        this.writeObjectToAllCartsJson(jsonObj);
+        jsonArray.put(jsonObj);
+        try (FileWriter writer = new FileWriter(path.toFile(), false))
+        {
+            writer.write(jsonArray.toString(4));
+        }
+        return "bookDetails";
     }
 }

@@ -74,6 +74,8 @@ public class AccountController
         {
             session.setAttribute("isLoggedIn", true);
             session.setAttribute("roleId", loginInfo.getRoleId());
+            session.setAttribute("userId", loginInfo.getId());
+            session.setAttribute("username", loginInfo.getFirstName());
             return "redirect:/overview";
         }
         else
