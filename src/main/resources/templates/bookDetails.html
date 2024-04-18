@@ -5,6 +5,7 @@
     <title>Book Details</title>
     <link th:href="@{/css/addBook.css}" rel="stylesheet">
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/bookDetails.js}"></script>
 </head>
 
 <body>
@@ -43,6 +44,27 @@
                         </form>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <p class="h3">Leave a review</p>
+                <form th:action="@{/addReview}" method="post">
+                    <label for="review-title" class="font-weight-bold">Review title</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="review-title" name="review_title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-description" class="font-weight-bold">Description</label>
+                        <textarea class="form-control" id="review-description" name="review_description" rows="3" required></textarea>
+                    </div>
+                    <div>
+                        <input type="hidden" id="hiddenBookId" name="hiddenBookId" th:value="${bookId}">
+                        <button type="submit" class="btn btn-primary mb-5 float-right">add review</button>
+                    </div>
+                </form>
             </div>
             <div class="col-lg-2"></div>
         </div>
