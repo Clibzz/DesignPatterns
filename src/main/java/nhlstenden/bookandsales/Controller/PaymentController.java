@@ -1,6 +1,5 @@
 package nhlstenden.bookandsales.Controller;
 
-import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpSession;
 import nhlstenden.bookandsales.Model.PaymentCartHistory;
 import nhlstenden.bookandsales.Model.PaymentCartMemento;
@@ -9,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.FileWriter;

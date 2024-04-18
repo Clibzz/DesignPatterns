@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import nhlstenden.bookandsales.Factory.BookProduct;
 import nhlstenden.bookandsales.Model.Genre;
+import nhlstenden.bookandsales.Model.PaymentCart;
+import nhlstenden.bookandsales.Model.PaymentCartHistory;
 import nhlstenden.bookandsales.service.BookService;
 import nhlstenden.bookandsales.service.BookTypeService;
 import org.json.JSONArray;
@@ -190,19 +192,25 @@ public class BookController
     {
         BookProduct book = this.bookService.getBookById(bookId);
         Path path = Paths.get(session.getAttribute("username") + ".json");
-
         ObjectMapper objectMapper = new ObjectMapper();
-
         JSONArray jsonArray = this.readJsonFromCart(session);
 
         JSONObject jsonObj = new JSONObject(objectMapper.writeValueAsString(book));
         jsonObj.put("userId", session.getAttribute("userId"));
         this.writeObjectToAllCartsJson(jsonObj);
         jsonArray.put(jsonObj);
+
         try (FileWriter writer = new FileWriter(path.toFile(), false))
         {
             writer.write(jsonArray.toString(4));
         }
+
+        PaymentCart paymentCart = new PaymentCart();
+        paymentCart.setCartDetails(jsonArray.toString());
+        PaymentCartHistory history = new PaymentCartHistory();
+        paymentCart.appendCartDetails(book);
+        history.saveState(paymentCart.save());
+
         return "bookDetails";
     }
 }
