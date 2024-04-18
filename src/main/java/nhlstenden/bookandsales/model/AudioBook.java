@@ -1,7 +1,6 @@
-package nhlstenden.bookandsales.Factory;
+package nhlstenden.bookandsales.model;
 
-import nhlstenden.bookandsales.Model.BookType;
-import nhlstenden.bookandsales.Model.Genre;
+import nhlstenden.bookandsales.factory.BookProduct;
 
 public class AudioBook implements BookProduct
 {

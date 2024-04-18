@@ -1,7 +1,7 @@
 package nhlstenden.bookandsales;
 
 import java.util.HashSet;
-import nhlstenden.bookandsales.Model.*;
+import nhlstenden.bookandsales.model.*;
 
 public class BookStore {
     private HashSet<PaymentCart> paymentCartList;

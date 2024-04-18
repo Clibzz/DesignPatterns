@@ -1,9 +1,10 @@
-package nhlstenden.bookandsales.Factory;
+package nhlstenden.bookandsales.factory;
 
-import nhlstenden.bookandsales.Model.BookType;
-import nhlstenden.bookandsales.Model.Genre;
+import nhlstenden.bookandsales.model.BookType;
+import nhlstenden.bookandsales.model.Genre;
+import nhlstenden.bookandsales.model.NormalBook;
 
-public class NormalBooKFactory extends BookFactory
+public class NormalBookFactory extends BookFactory
 {
 
     private boolean hasHardCover;

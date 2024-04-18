@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales.Model;
+package nhlstenden.bookandsales.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

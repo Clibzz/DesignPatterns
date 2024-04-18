@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales.Controller;
+package nhlstenden.bookandsales.controller;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -6,9 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import nhlstenden.bookandsales.Factory.BookProduct;
-import nhlstenden.bookandsales.Model.Book;
-import nhlstenden.bookandsales.Model.Genre;
+import nhlstenden.bookandsales.factory.BookProduct;
+import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.service.BookService;
 import org.springframework.stereotype.Controller;
 import nhlstenden.bookandsales.service.BookTypeService;
@@ -27,12 +26,10 @@ public class BookController
 
     private final BookService bookService;
     private final BookTypeService bookTypeService;
-    private boolean hasBookTypeBeenChosen;
 
     public BookController(BookService bookService, BookTypeService bookTypeService) {
         this.bookService = bookService;
         this.bookTypeService = bookTypeService;
-        this.hasBookTypeBeenChosen = false;
     }
 
     @GetMapping("/addBook")

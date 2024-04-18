@@ -1,6 +1,6 @@
 package nhlstenden.bookandsales;
 
-import nhlstenden.bookandsales.Model.*;
+import nhlstenden.bookandsales.model.*;
 import java.util.HashSet;
 
 public class CareTaker {

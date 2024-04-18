@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales.Model;
+package nhlstenden.bookandsales.model;
 
 public class PaymentCart {
     private int id;
