@@ -3,6 +3,7 @@ import nhlstenden.bookandsales.factory.*;
 import nhlstenden.bookandsales.model.BookType;
 import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.util.DatabaseUtil;
+import org.hibernate.annotations.processing.SQL;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -201,5 +202,22 @@ public class BookService
                 this.bookFactory = new NormalBookFactory();
                 break;
         }
+    }
+
+    public void deleteBookFromStore(int bookId) throws SQLException
+    {
+        this.deleteReviewsFromBook(bookId);
+        String query = "DELETE FROM `book` WHERE `id` = ?";
+        PreparedStatement statement = this.sqlConnection.prepareStatement(query);
+        statement.setInt(1, bookId);
+        statement.execute();
+    }
+
+    public void deleteReviewsFromBook(int bookId) throws SQLException
+    {
+        String query = "DELETE FROM `review` WHERE `book_id` = ?";
+        PreparedStatement statement = this.sqlConnection.prepareStatement(query);
+        statement.setInt(1, bookId);
+        statement.execute();
     }
 }

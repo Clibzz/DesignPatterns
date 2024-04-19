@@ -22,7 +22,14 @@
                         <div class="border-bottom border-secondary">
                             <p class="h3 text-left" th:text="${bookProduct.title}"></p>
                             <p class="text-left" th:text="@{'By ' + ${bookProduct.author}}"></p>
-                            <p class="text-left">Write a review</p>
+                            <div class="d-flex align-items-center justify-content-between my-1">
+                                <p class="text-left mb-0">Write a review</p>
+                                <form method="post" action="/deleteBook" class="w-25">
+                                    <input type="hidden" name="bookId" th:value="${bookId}">
+                                    <button class="btn btn-danger w-100"  name="deleteBook" id="deleteBook" type="submit" th:onclick="|window.location.href='/deleteBook'|">Delete Book</button>
+                                </form>
+                            </div>
+
                         </div>
                         <div class="text-left mt-1">
                             <p class="h3" th:text="@{'$' + ${bookProduct.price}}"></p>

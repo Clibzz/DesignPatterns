@@ -14,6 +14,7 @@ import nhlstenden.bookandsales.model.PaymentCart;
 import nhlstenden.bookandsales.model.PaymentCartHistory;
 import nhlstenden.bookandsales.service.BookService;
 import nhlstenden.bookandsales.service.BookTypeService;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 @Controller
 public class BookController
@@ -252,5 +254,24 @@ public class BookController
         this.writeDataToAllCartsFile(this.updateItemArray(fullCartsArray, bookId, session, book));
         this.updateCartState(jsonArray, book);
         return "cart";
+    }
+
+    @PostMapping("/deleteBook")
+    public String deleteBookFromStore(@RequestParam("bookId") int bookId, Model model) throws SQLException, IOException
+    {
+        this.bookService.deleteBookFromStore(bookId);
+        this.removeBookFolder(bookId, model);
+        return "redirect:/overview";
+    }
+
+    private void removeBookFolder(@RequestParam("bookId") int bookId, Model model) throws IOException, SQLException
+    {
+        String uploadDirectory = getBaseImagePath(model) + bookId + File.separator;
+        File directory = new File(uploadDirectory);
+        if (directory.exists())
+        {
+            FileUtils.deleteDirectory(directory);
+            System.out.println("Directory " + bookId + " deleted successfully.");
+        }
     }
 }
