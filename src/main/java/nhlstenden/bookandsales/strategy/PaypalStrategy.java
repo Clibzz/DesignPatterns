@@ -4,27 +4,29 @@ import java.util.HashMap;
 
 public class PaypalStrategy implements PaymentStrategy
 {
-    private String userName;
+    private String username;
     private String password;
     private final HashMap<String, String> paypalUserList;
+    private double balance;
 
-    public PaypalStrategy(String userName, String password)
+    public PaypalStrategy(String username, String password)
     {
-        this.setUserName(userName);
+        this.setUsername(username);
         this.setPassword(password);
         this.paypalUserList = new HashMap<>();
+        this.balance = this.getMoneyAmountPaypalUser();
     }
 
-    public String getUserName()
+    public String getUsername()
     {
-        return this.userName;
+        return this.username;
     }
 
-    public void setUserName(String userName)
+    public void setUsername(String username)
     {
-        if (!(userName.isEmpty()))
+        if (!(username.isEmpty()))
         {
-            this.userName = userName;
+            this.username = username;
         }
         else
         {
@@ -58,64 +60,58 @@ public class PaypalStrategy implements PaymentStrategy
         return this.paypalUserList;
     }
 
+    public double getBalance()
+    {
+        return this.balance;
+    }
+
+    public void setBalance(double balance)
+    {
+        this.balance = balance;
+    }
+
     public double getMoneyAmountPaypalUser()
     {
         double amountOnPaypal = 0;
 
-        if (this.getPaypalUserList().containsKey(this.getUserName()) &&
-            this.getPaypalUserList().get(this.getUserName()).equals(this.getPassword()))
+        if (this.getPaypalUserList().containsKey(this.getUsername()) &&
+            this.getPaypalUserList().get(this.getUsername()).equals(this.getPassword()))
         {
-            if (this.getUserName().equals("robin") && this.getPassword().equals("test"))
+            if (this.getUsername().equals("robin") && this.getPassword().equals("test"))
             {
                 amountOnPaypal = 1500.00;
             }
 
-            if (this.getUserName().equals("voyanda") && this.getPassword().equals("scrub"))
+            if (this.getUsername().equals("voyanda") && this.getPassword().equals("scrub"))
             {
                 amountOnPaypal = 2000.00;
             }
 
-            if (this.getUserName().equals("admin") && this.getPassword().equals("password"))
+            if (this.getUsername().equals("admin") && this.getPassword().equals("password"))
             {
                 amountOnPaypal = 10000.00;
             }
         }
         else
         {
-            throw new IllegalArgumentException("username is wrong, password is wrong or both are wrong");
+            throw new IllegalArgumentException("The login details are incorrect, please try again!");
         }
 
         return amountOnPaypal;
     }
 
     @Override
-    public void paymentMethod(double amount)
+    public boolean payForCurrentCart(double amount)
     {
-        boolean hasPayed = false;
-        double tempAmount;
-
-        if (!(this.getMoneyAmountPaypalUser() < amount))
+        if (this.balance >= amount)
         {
-            tempAmount = (this.getMoneyAmountPaypalUser() - amount);
-            if (tempAmount < this.getMoneyAmountPaypalUser())
-            {
-                hasPayed = true;
-            }
+            this.setBalance(this.balance - amount);
+
+            return true;
         }
         else
         {
-            throw new IllegalArgumentException("transaction failed, not enough saldo on account");
-        }
-
-        if (hasPayed)
-        {
-            amount = 0;
-        }
-
-        if (amount == 0)
-        {
-            System.out.println("successfully made the purchase");
+            throw new IllegalArgumentException("Transaction failed, not enough money on this account");
         }
     }
-
 }

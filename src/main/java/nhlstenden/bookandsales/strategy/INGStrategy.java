@@ -119,6 +119,7 @@ public class INGStrategy implements PaymentStrategy
         if (this.balance >= amount)
         {
             this.setBalance(this.getMoneyAmountINGUser() - amount);
+            
             return true;
         }
         else

@@ -196,7 +196,7 @@ public class PaymentController
                 this.paymentService.setPaymentStrategy(new INGStrategy(bankNumber, username, password));
                 if (this.paymentService.checkout(this.getTotalPayAmountInCart(session)))
                 {
-                        removeUserItemsFromAllCartsJson(session);
+                        this.removeUserItemsFromAllCartsJson(session);
                 }
 
                 return "redirect:/cart";
@@ -223,9 +223,12 @@ public class PaymentController
 
                 model.addAttribute("booksFromUser", this.getBooksInCart(session));
                 this.paymentService.setPaymentStrategy(new PaypalStrategy(paypalUser, paypalPassword));
-                this.paymentService.checkout(this.getTotalPayAmountInCart(session));
+                if (this.paymentService.checkout(this.getTotalPayAmountInCart(session)))
+                {
+                        this.removeUserItemsFromAllCartsJson(session);
+                }
 
-                return "cart";
+                return "redirect:/cart";
         }
 
         @PostMapping("/giftcard-strategy")
@@ -254,7 +257,6 @@ public class PaymentController
         @GetMapping("/payment-complete")
         public String paymentComplete(Model model)
         {
-
                 return "cart";
         }
 
