@@ -8,11 +8,13 @@ public class GiftCardStrategy implements PaymentStrategy
 
     private String giftCode;
     private HashMap<String, Double> giftCodeList;
+    private double balance;
 
     public GiftCardStrategy(String giftCode)
     {
         this.setGiftCode(giftCode);
         this.giftCodeList = new HashMap<>();
+        this.setGiftCardBalance();
     }
 
     public String getGiftCode()
@@ -32,6 +34,22 @@ public class GiftCardStrategy implements PaymentStrategy
         }
     }
 
+    public void setGiftCardBalance()
+    {
+        for (Map.Entry<String, Double> set : this.getGiftCodeList().entrySet())
+        {
+            if (set.getKey().equals(this.getGiftCode()))
+            {
+                this.balance = set.getValue();
+            }
+        }
+    }
+
+    public void setBalance(double balance)
+    {
+        this.balance = balance;
+    }
+
     public HashMap<String, Double> getGiftCodeList()
     {
         this.giftCodeList.put("lyiqEcFzFjT1", 25.0);
@@ -45,21 +63,27 @@ public class GiftCardStrategy implements PaymentStrategy
     }
 
     @Override
-    public void paymentMethod(double amount)
+    public boolean payForCurrentCart(double amount)
     {
-        double amountLeftToPay = 0;
+        double giftcardAmount = 0;
 
         for (Map.Entry<String, Double> set : this.getGiftCodeList().entrySet())
         {
             if (set.getKey().equals(this.getGiftCode()))
             {
-                amountLeftToPay += (amount - set.getValue());
+                giftcardAmount = set.getValue();
             }
         }
 
-        if (amountLeftToPay < 0)
+        if ((giftcardAmount - amount) >= 0)
         {
-            throw new IllegalArgumentException();
+            this.setBalance(giftcardAmount - amount);
+            
+            return true;
+        }
+        else
+        {
+            throw new IllegalArgumentException("Gift card balance does not meet the required amount");
         }
     }
 }

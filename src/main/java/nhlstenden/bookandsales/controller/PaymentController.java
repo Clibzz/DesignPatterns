@@ -249,9 +249,12 @@ public class PaymentController
 
                 model.addAttribute("booksFromUser", this.getBooksInCart(session));
                 this.paymentService.setPaymentStrategy(new GiftCardStrategy(giftCard));
-                this.paymentService.checkout(this.getTotalPayAmountInCart(session));
+                if (this.paymentService.checkout(this.getTotalPayAmountInCart(session)))
+                {
+                        this.removeUserItemsFromAllCartsJson(session);
+                }
 
-                return "cart";
+                return "redirect:/cart";
         }
 
         @GetMapping("/payment-complete")
