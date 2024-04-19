@@ -2,10 +2,12 @@ package nhlstenden.bookandsales.service;
 
 import nhlstenden.bookandsales.model.User;
 import nhlstenden.bookandsales.util.DatabaseUtil;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.stream.StreamSupport;
 
 @Service
 public class AccountService
@@ -20,31 +22,27 @@ public class AccountService
 
     public void registerNewUser(int roleId, String firstName, String lastName, LocalDate dateOfBirth, String address, String password) throws SQLException
     {
-
         String query = "INSERT INTO user(`role_id`, `first_name`, `last_name`, `date_of_birth`, `address`, `password`)" +
                 "VALUES (?,?,?,?,?,?)";
 
         PreparedStatement statement = sqlConnection.prepareStatement(query);
-
         statement.setInt(1, roleId);
         statement.setString(2, firstName);
         statement.setString(3, lastName);
         statement.setDate(4, Date.valueOf(dateOfBirth));
         statement.setString(5, address);
         statement.setString(6, password);
-
         statement.executeUpdate();
     }
 
-    public User getLoginInfo(String userName, String userPassword) throws SQLException
+    public User getLoginInfo(String userName, String password) throws SQLException
     {
 
-        String query = "SELECT * FROM user WHERE first_name = ? AND password = ?";
+        String query = "SELECT * FROM user WHERE first_name = ?";
 
         PreparedStatement statement = this.sqlConnection.prepareStatement(query);
 
         statement.setString(1, userName);
-        statement.setString(2, userPassword);
 
         ResultSet resultSet = statement.executeQuery();
 
@@ -52,7 +50,12 @@ public class AccountService
 
         if (resultSet.next())
         {
-            userModel = getUser(resultSet);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+            if (passwordEncoder.matches(password, resultSet.getString("password")))
+            {
+                userModel = getUser(resultSet);
+            }
         }
 
         resultSet.close();
@@ -71,8 +74,8 @@ public class AccountService
         LocalDate dateOfBirth = resultSet.getDate(5).toLocalDate();
         String address = resultSet.getString(6);
         String password = resultSet.getString(7);
-
         userModel = new User(id, role_id, firstName, lastName, dateOfBirth, address, password);
+
         return userModel;
     }
 

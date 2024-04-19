@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import nhlstenden.bookandsales.model.User;
 import nhlstenden.bookandsales.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +61,8 @@ public class AccountController
         int roleId = 2;
         if (dateOfBirth.isBefore(LocalDate.now()))
         {
-            this.accountService.registerNewUser(roleId, firstName, lastName, dateOfBirth, address, password);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            this.accountService.registerNewUser(roleId, firstName, lastName, dateOfBirth, address, passwordEncoder.encode(password));
             return "redirect:/login";
         }
         else

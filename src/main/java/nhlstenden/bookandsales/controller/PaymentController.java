@@ -127,6 +127,13 @@ public class PaymentController
                 return booksInCart;
         }
 
+        private boolean isEmptycart(HttpSession session) throws IOException, JSONException
+        {
+                Path path = Paths.get(session.getAttribute("username") + ".json");
+                JSONArray jsonArray = new JSONArray(Files.readString(path));
+                return jsonArray.length() > 0;
+        }
+
         @GetMapping("/cart")
         public String getCartOfUser(HttpSession session, Model model) throws JSONException, IOException
         {
@@ -172,18 +179,6 @@ public class PaymentController
                 return "redirect:/login";
         }
 
-        @PostMapping("/ing-strategy")
-        public String ING(@RequestParam("paymentType") String paymentType,
-                          HttpSession session,
-                          Model model) throws JSONException, IOException
-        {
-
-                model.addAttribute("paymentStrategy", paymentType);
-                model.addAttribute("booksFromUser", this.getBooksInCart(session));
-
-                return "cart";
-        }
-
         @PostMapping("/ing-pay")
         public String INGPay(@RequestParam("username") String username,
                           @RequestParam("password") String password,
@@ -202,18 +197,6 @@ public class PaymentController
                 return "redirect:/cart";
         }
 
-        @PostMapping("/paypal-strategy")
-        public String paypal(@RequestParam("paymentType") String paymentType,
-                             HttpSession session,
-                             Model model) throws JSONException, IOException
-        {
-
-                model.addAttribute("paymentStrategy", paymentType);
-                model.addAttribute("booksFromUser", this.getBooksInCart(session));
-
-                return "cart";
-        }
-
         @PostMapping("/paypal-pay")
         public String paypalPay(@RequestParam("paypalUser") String paypalUser,
                              @RequestParam("paypalPassword") String paypalPassword,
@@ -229,17 +212,6 @@ public class PaymentController
                 }
 
                 return "redirect:/cart";
-        }
-
-        @PostMapping("/giftcard-strategy")
-        public String giftcard(@RequestParam("paymentType") String paymentType,
-                               HttpSession session, Model model) throws JSONException, IOException
-        {
-
-                model.addAttribute("paymentStrategy", paymentType);
-                model.addAttribute("booksFromUser", this.getBooksInCart(session));
-
-                return "cart";
         }
 
         @PostMapping("/giftcard-pay")

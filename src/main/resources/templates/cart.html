@@ -23,8 +23,10 @@
                     <div class="p-3" style="background-color: #f2f2f1;">
                         <p class="h4 text-left text-dark">Items from Book&Sales</p>
                     </div>
-                    <p class="text-left" th:text="${booksUser.title}"></p>
+                    <p class="text-left font-weight-bold" th:text="${booksUser.title}"></p>
                     <p class="text-left" th:text="${booksUser.author}"></p>
+                    <p class="text-left" th:text="${amount}"></p>
+
                     <div class="row">
                         <div class="col-sm-6 mb-3">
                             <img class="img-fluid" style="width: 100px; height: 150px;" th:src="'/' + images + '/' + ${booksUser.id} + '/' + ${booksUser.image}" />
