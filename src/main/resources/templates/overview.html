@@ -33,11 +33,16 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-10 pt-3 pl-3 bg-secondary text-light">
                     <div class="row">
+                        <div class="alert alert-danger" role="alert" th:if="${isEmptyStore}">
+                            There currently are no books available
+                        </div>
 
-                        <div th:each="allBooks : ${bookRegardlessOfTypeList}" th:if="${!hasBookTypeBeenChosen}" onclick="loadBookDetails()" class="m-2 rounded bookCover" th:value="${allBooks.getId()}">
-                            <img class="img-fluid m-2" style="width: 200px; height: 200px;" th:src="'/' + images + '/' + ${allBooks.getId()} + '/' + ${allBooks.getImage()}" />
-                            <p th:text="${allBooks.getTitle()}" class="text-dark text-center"></p>
-                            <p th:text="${allBooks.getAuthor()}" class="text-dark text-center"></p>
+                        <div th:unless="${isEmptyStore}">
+                            <div th:each="allBooks : ${bookRegardlessOfTypeList}" th:if="${!hasBookTypeBeenChosen}" onclick="loadBookDetails()" class="m-2 rounded bookCover" th:value="${allBooks.getId()}">
+                                <img class="img-fluid m-2" style="width: 200px; height: 200px;" th:src="'/' + images + '/' + ${allBooks.getId()} + '/' + ${allBooks.getImage()}" />
+                                <p th:text="${allBooks.getTitle()}" class="text-dark text-center"></p>
+                                <p th:text="${allBooks.getAuthor()}" class="text-dark text-center"></p>
+                            </div>
                         </div>
 
                         <div th:each="book : ${bookList}" onclick="loadBookDetails()" class="m-2 rounded bookCover" th:value="${book.getId()}">
@@ -45,7 +50,6 @@
                             <p th:text="${book.getTitle()}" class="text-dark text-center"></p>
                             <p th:text="${book.getAuthor()}" class="text-dark text-center"></p>
                         </div>
-
                     </div>
                 </div>
                 <div class="col-md-1"></div>

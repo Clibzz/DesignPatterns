@@ -80,6 +80,11 @@ public class BookController
         return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
     }
 
+    private boolean isEmptyStore(ArrayList<BookProduct> products)
+    {
+        return products.isEmpty();
+    }
+
     @GetMapping("/overview")
     public String overview(Model model, HttpSession session) throws SQLException
     {
@@ -88,6 +93,7 @@ public class BookController
             model.addAttribute("bookTypes", this.bookTypeService.getBookTypes());
             model.addAttribute("bookRegardlessOfTypeList", this.bookService.getAllBooksRegardlessOfType());
             model.addAttribute("hasBookTypeBeenChosen", false);
+            model.addAttribute("isEmptyStore", this.isEmptyStore(this.bookService.getAllBooksRegardlessOfType()));
 
             return "overview";
         }
@@ -172,6 +178,7 @@ public class BookController
                           File.separator + "main" + File.separator + "resources" +
                           File.separator + "static" + File.separator + "images" + File.separator;
         model.addAttribute("basePath", basePath);
+
         return basePath;
     }
 
@@ -179,6 +186,7 @@ public class BookController
     {
         Path path = Paths.get(session.getAttribute("username") + ".json");
         String content = String.join("\n", Files.readAllLines(path));
+
         return new JSONArray(content);
     }
 
@@ -186,6 +194,7 @@ public class BookController
     {
         Path path = Paths.get("carts.json");
         String content = String.join("\n", Files.readAllLines(path));
+
         return new JSONArray(content);
     }
 
