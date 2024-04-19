@@ -9,8 +9,6 @@ public class Book {
     @NonNull
     private BookType bookTypeId;
     @NonNull
-    private String description;
-    @NonNull
     private Genre genre;
     @NonNull
     private double price;
@@ -23,19 +21,18 @@ public class Book {
     @NonNull
     private int pageAmount;
     @NonNull
-    private String image;
+    private boolean hasHardCover;
 
-    public Book(int id, BookType bookTypeId, String description, Genre genre, double price, String author, String publisher, String title, int pageAmount, String image) {
+    public Book(int id, BookType bookTypeId, Genre genre, double price, String author, String publisher, String title, int pageAmount, boolean hasHardCover) {
         this.id = id;
         this.bookTypeId = bookTypeId;
-        this.description = description;
         this.genre = genre;
         this.price = price;
         this.author = author;
         this.publisher = publisher;
         this.title = title;
         this.pageAmount = pageAmount;
-        this.image = image;
+        this.hasHardCover = hasHardCover;
     }
 
     public Book()
@@ -55,26 +52,15 @@ public class Book {
         return this.bookTypeId;
     }
 
-    public void setBookTypeId(@NonNull BookType bookTypeId) {
+    public void setBookTypeId(BookType bookTypeId) {
         this.bookTypeId = bookTypeId;
-    }
-
-    @NonNull
-    public String getDescription()
-    {
-        return this.description;
-    }
-
-    public void setDescription(@NonNull String description)
-    {
-        this.description = description;
     }
 
     public Genre getGenre() {
         return this.genre;
     }
 
-    public void setGenre(@NonNull Genre genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 
@@ -90,7 +76,7 @@ public class Book {
         return this.author;
     }
 
-    public void setAuthor(@NonNull String author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
@@ -98,7 +84,7 @@ public class Book {
         return this.publisher;
     }
 
-    public void setPublisher(@NonNull String publisher) {
+    public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
@@ -106,7 +92,7 @@ public class Book {
         return this.title;
     }
 
-    public void setTitle(@NonNull String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -118,11 +104,11 @@ public class Book {
         this.pageAmount = pageAmount;
     }
 
-    public String getImage() {
-        return this.image;
+    public boolean getHasHardCover() {
+        return this.hasHardCover;
     }
 
-    public void setImage(@NonNull String image) {
-        this.image = image;
+    public void setHasHardCover(boolean hasHardCover) {
+        this.hasHardCover = hasHardCover;
     }
 }

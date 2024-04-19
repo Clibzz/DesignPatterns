@@ -66,15 +66,15 @@ ___
 ## WireFrames
 
 ### Login
-![Scherm1](mock-ups/login.png "Scherm1")
+![Scherm1](img/login.png "Scherm1")
 ### Register
-![Scherm2](mock-ups/register.png "Scherm2")
+![Scherm2](img/register.png "Scherm2")
 ### Bookoverview
-![Scherm3](mock-ups/overview.png "Scherm3")
+![Scherm3](img/overview.png "Scherm3")
 ### Individual book
-![Scherm4](mock-ups/book.png "Scherm4")
+![Scherm4](img/book.png "Scherm4")
 ### Cart
-![Scherm5](mock-ups/cart.png "Scherm5")
+![Scherm5](img/cart.png "Scherm5")
 
 ---
 ## Class Diagram

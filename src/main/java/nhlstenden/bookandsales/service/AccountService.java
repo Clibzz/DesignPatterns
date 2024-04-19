@@ -52,7 +52,15 @@ public class AccountService
 
         if (resultSet.next())
         {
-            userModel = getUser(resultSet);
+            int id = resultSet.getInt(1);
+            int role_id = resultSet.getInt(2);
+            String firstName = resultSet.getString(3);
+            String lastName = resultSet.getString(4);
+            LocalDate dateOfBirth = resultSet.getDate(5).toLocalDate();
+            String address = resultSet.getString(6);
+            String password = resultSet.getString(7);
+
+            userModel = new User(id, role_id, firstName, lastName, dateOfBirth, address, password);
         }
 
         resultSet.close();
@@ -61,34 +69,4 @@ public class AccountService
         return userModel;
     }
 
-    public static User getUser(ResultSet resultSet) throws SQLException
-    {
-        User userModel;
-        int id = resultSet.getInt(1);
-        int role_id = resultSet.getInt(2);
-        String firstName = resultSet.getString(3);
-        String lastName = resultSet.getString(4);
-        LocalDate dateOfBirth = resultSet.getDate(5).toLocalDate();
-        String address = resultSet.getString(6);
-        String password = resultSet.getString(7);
-
-        userModel = new User(id, role_id, firstName, lastName, dateOfBirth, address, password);
-        return userModel;
-    }
-
-    public User getUserById(int userId) throws SQLException
-    {
-        String query = "SELECT * FROM `user` WHERE `id` = ?";
-        PreparedStatement statement = this.sqlConnection.prepareStatement(query);
-        statement.setInt(1, userId);
-        ResultSet resultSet = statement.executeQuery(query);
-        User user = null;
-
-        while (resultSet.next())
-        {
-            user = AccountService.getUser(resultSet);
-        }
-
-        return user;
-    }
 }

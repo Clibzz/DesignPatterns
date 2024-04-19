@@ -1,8 +1,5 @@
 package nhlstenden.bookandsales.Controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-
-import jakarta.servlet.http.HttpSession;
 import nhlstenden.bookandsales.Model.User;
 import nhlstenden.bookandsales.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -19,7 +15,7 @@ import java.time.LocalDate;
 @Controller
 public class AccountController
 {
-    private final AccountService accountService;
+    private AccountService accountService;
 
     @Autowired
     public AccountController(AccountService accountService)
@@ -30,21 +26,12 @@ public class AccountController
     @GetMapping("/register")
     public String registerPage(Model model)
     {
-        model.addAttribute("page", "register");
         return "register";
     }
 
     @GetMapping("/login")
     public String loginPage(Model model) {
-        model.addAttribute("page", "login");
         return "login";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-
-        return "redirect:/login";
     }
 
     @PostMapping("/post-new-user")
@@ -66,22 +53,20 @@ public class AccountController
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException
+    public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model) throws SQLException
     {
+
         User loginInfo = this.accountService.getLoginInfo(userName, userPassword);
 
         if (loginInfo != null)
         {
-            session.setAttribute("isLoggedIn", true);
-            session.setAttribute("roleId", loginInfo.getRoleId());
-            session.setAttribute("userId", loginInfo.getId());
-            session.setAttribute("username", loginInfo.getFirstName());
-            return "redirect:/overview";
+            model.addAttribute("roleId", loginInfo.getRoleId());
+            return "overview";
         }
         else
         {
-            redirectAttributes.addFlashAttribute("error", "The username or password is incorrect, please try again!");
-            return "redirect:/login";
+            model.addAttribute("error", "true");
+            return "login";
         }
     }
 

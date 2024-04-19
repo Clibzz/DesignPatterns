@@ -1,12 +1,19 @@
 package nhlstenden.bookandsales.Factory;
 
-import nhlstenden.bookandsales.Model.BookType;
-import nhlstenden.bookandsales.Model.Genre;
+public class BookFactory {
+    private double price;
+    private String artist;
+    private String publisher;
+    private int pageAmount;
 
-public abstract class BookFactory
-{
-    public BookFactory() {}
+    public BookFactory(double price, String artist, String publisher, int pageAmount) {
+        this.price = price;
+        this.artist = artist;
+        this.publisher = publisher;
+        this.pageAmount = pageAmount;
+    }
 
-    public abstract BookProduct createBookProduct(int id, BookType bookType, String title, double price, String author, String publisher,
-                                                  int pageAmount, Genre genre, boolean bookCondition, String description, String image);
+//    public BookProduct createBookProduct(double price, String artist, String publisher, int pageAmount) {
+//
+//    }
 }

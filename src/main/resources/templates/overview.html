@@ -16,15 +16,13 @@
                     <h1 class="font-weight-bold">Overview</h1>
                 </div>
                 <div class="col-md-2 pt-3">
-                    <form th:action="@{'/overview'}" method="post">
-                        <label for="book-type" class="text-secondary font-weight-bold">Select book type:</label>
-                        <select class="form-control mb-3" id="book-type" name="bookTypeId" onchange="this.form.submit()">
-                            <option selected>choose book type:</option>
-                            <option th:each="bookTypeOption : ${bookTypes}"
-                                    th:value="${bookTypeOption.getId()}"
-                                    th:text="${bookTypeOption.getType()}"></option>
-                        </select>
-                    </form>
+                    <label for="book-type" class="text-secondary font-weight-bold">Select book type:</label>
+                    <select class="form-select mb-3" id="book-type">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
                 </div>
 
                 <div class="col-md-1"></div>
@@ -32,21 +30,7 @@
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10 pt-3 pl-3 bg-secondary text-light">
-                    <div class="row">
 
-                        <div th:each="allBooks : ${bookRegardlessOfTypeList}" th:if="${!hasBookTypeBeenChosen}" onclick="loadBookDetails()" class="m-2 rounded bookCover" th:value="${allBooks.getId()}">
-                            <img class="img-fluid m-2" style="width: 200px; height: 200px;" th:src="'/' + images + '/' + ${allBooks.getId()} + '/' + ${allBooks.getImage()}" />
-                            <p th:text="${allBooks.getTitle()}" class="text-dark text-center"></p>
-                            <p th:text="${allBooks.getAuthor()}" class="text-dark text-center"></p>
-                        </div>
-
-                        <div th:each="book : ${bookList}" onclick="loadBookDetails()" class="m-2 rounded bookCover" th:value="${book.getId()}">
-                            <img class="img-fluid m-2" style="width: 200px; height: 200px;" th:src="'/' + images + '/' + ${book.getId()} + '/' + ${book.getImage()}" />
-                            <p th:text="${book.getTitle()}" class="text-dark text-center"></p>
-                            <p th:text="${book.getAuthor()}" class="text-dark text-center"></p>
-                        </div>
-
-                    </div>
                 </div>
                 <div class="col-md-1"></div>
             </div>
