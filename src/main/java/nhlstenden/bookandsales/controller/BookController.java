@@ -148,10 +148,6 @@ public class BookController
             {
                 image.transferTo(targetFile);
                 model.addAttribute("success", true);
-                System.out.println("Directory created successfully: " + targetFile);
-            } else
-            {
-                System.err.println("Failed to create directory: " + targetFile);
             }
         }
         return "addBook";
@@ -292,7 +288,6 @@ public class BookController
         if (directory.exists())
         {
             FileUtils.deleteDirectory(directory);
-            System.out.println("Directory " + bookId + " deleted successfully.");
         }
     }
 }
