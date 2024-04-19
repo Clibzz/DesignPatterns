@@ -39,7 +39,7 @@ public class PaymentController
                 return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
         }
 
-        private void createCartJsonOfUser(HttpSession session) throws IOException, JSONException
+        private void fillCartJsonOfUser(HttpSession session) throws IOException, JSONException
         {
                 Path path = Paths.get(session.getAttribute("username") + ".json");
                 JSONArray jsonData = this.getAllCarts();
@@ -67,13 +67,7 @@ public class PaymentController
         {
                 if (this.isLoggedIn(session))
                 {
-                        Path path = Paths.get("carts.json");
-                        if (!Files.exists(path))
-                        {
-                                Files.createFile(path);
-                                Files.write(path, Collections.singletonList("[]"));
-                        }
-                        this.createCartJsonOfUser(session);
+                        this.fillCartJsonOfUser(session);
                         return "cart";
                 }
                 return "redirect:/login";
