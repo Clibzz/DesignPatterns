@@ -268,7 +268,7 @@ public class BookController
         this.writeDataToAllCartsFile(this.updateItemArray(fullCartsArray, bookId, session, book));
         this.updateCartState(jsonArray, book);
 
-        return "overview";
+        return "redirect:/overview";
     }
 
     private void removeBookFolder(@RequestParam("bookId") int bookId, Model model) throws IOException, SQLException
