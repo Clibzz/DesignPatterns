@@ -1,4 +1,4 @@
-package nhlstenden.bookandsales.Controller;
+package nhlstenden.bookandsales.controller;
 
 import jakarta.servlet.http.HttpSession;
 import nhlstenden.bookandsales.model.User;

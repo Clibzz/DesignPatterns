@@ -10,6 +10,8 @@ import java.sql.SQLException;
 
 import nhlstenden.bookandsales.factory.BookProduct;
 import nhlstenden.bookandsales.model.Genre;
+import nhlstenden.bookandsales.model.PaymentCart;
+import nhlstenden.bookandsales.model.PaymentCartHistory;
 import nhlstenden.bookandsales.service.BookService;
 import nhlstenden.bookandsales.service.BookTypeService;
 import org.json.JSONArray;
@@ -23,13 +25,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Controller

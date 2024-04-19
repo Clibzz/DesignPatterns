@@ -1,6 +1,6 @@
 package nhlstenden.bookandsales.model;
 
-import nhlstenden.bookandsales.Factory.BookProduct;
+import nhlstenden.bookandsales.factory.BookProduct;
 
 public class PaymentCart implements Cloneable {
     private int id;
