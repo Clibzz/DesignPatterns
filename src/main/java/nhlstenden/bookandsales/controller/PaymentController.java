@@ -6,7 +6,6 @@ import nhlstenden.bookandsales.model.BookType;
 import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.model.PaymentCartHistory;
 import nhlstenden.bookandsales.model.PaymentCartMemento;
-import nhlstenden.bookandsales.service.BookService;
 import nhlstenden.bookandsales.service.PaymentService;
 import nhlstenden.bookandsales.strategy.GiftCardStrategy;
 import nhlstenden.bookandsales.strategy.INGStrategy;
@@ -27,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Controller
 public class PaymentController
@@ -127,11 +125,17 @@ public class PaymentController
                 return booksInCart;
         }
 
-        private boolean isEmptycart(HttpSession session) throws IOException, JSONException
+        private boolean isNotEmptyCart(HttpSession session) throws IOException, JSONException
         {
                 Path path = Paths.get(session.getAttribute("username") + ".json");
                 JSONArray jsonArray = new JSONArray(Files.readString(path));
+
                 return jsonArray.length() > 0;
+        }
+
+        private void setIsNotEmptyCartVariable(Model model, HttpSession session) throws JSONException, IOException
+        {
+                model.addAttribute("isNotEmptyCart", this.isNotEmptyCart(session));
         }
 
         @GetMapping("/cart")
@@ -140,10 +144,10 @@ public class PaymentController
                 if (this.isLoggedIn(session))
                 {
                         this.fillCartJsonOfUser(session);
-
                         model.addAttribute("booksFromUser", this.getBooksInCart(session));
-
+                        this.setIsNotEmptyCartVariable(model, session);
                         this.fillCartJsonOfUser(session);
+
                         return "cart";
                 }
                 return "redirect:/login";
@@ -172,6 +176,7 @@ public class PaymentController
                         this.fillCartJsonOfUser(session);
                         model.addAttribute("paymentStrategy", paymentType);
                         model.addAttribute("booksFromUser", this.getBooksInCart(session));
+                        this.setIsNotEmptyCartVariable(model, session);
 
                         return "cart";
                 }
