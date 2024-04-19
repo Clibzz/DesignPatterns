@@ -34,7 +34,6 @@ import java.util.ArrayList;
 @Controller
 public class BookController
 {
-
     private final BookService bookService;
     private final BookTypeService bookTypeService;
     private final ReviewService reviewService;

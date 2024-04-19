@@ -13,7 +13,6 @@ import java.util.ArrayList;
 @Service
 public class ReviewService
 {
-
     private Connection sqlConnection;
 
     public ReviewService() throws SQLException
@@ -35,7 +34,6 @@ public class ReviewService
         statement.setDouble(4, rating);
         statement.setString(5, description);
         statement.setString(6, image);
-
         statement.executeUpdate();
     }
 
@@ -50,14 +48,11 @@ public class ReviewService
                        "WHERE review.book_id = ?";
 
         PreparedStatement statement = this.sqlConnection.prepareStatement(query);
-
         statement.setInt(1, bookId);
-
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next())
         {
-
             int id = resultSet.getInt(1);
             int userId = resultSet.getInt(2);
             int reviewBookId = resultSet.getInt(3);

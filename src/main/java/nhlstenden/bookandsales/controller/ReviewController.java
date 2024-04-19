@@ -12,7 +12,6 @@ import java.sql.SQLException;
 @Controller
 public class ReviewController
 {
-
     private ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService)
@@ -33,8 +32,8 @@ public class ReviewController
     {
         if (isLoggedIn(session))
         {
-
             this.reviewService.addReview((int) session.getAttribute("userId"), hiddenBookId, reviewTitle, 3.0, reviewDescription, "empty");
+
             return "redirect:/bookDetails/" + hiddenBookId;
         }
 

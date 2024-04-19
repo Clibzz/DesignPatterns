@@ -173,6 +173,7 @@ public class BookService
                                                     this.getBookTypeById(bookTypeId).getHasAttribute(),
                                                     description, image);
         }
+
         return null;
     }
 
@@ -185,6 +186,7 @@ public class BookService
         {
             return resultSet.getInt(1);
         }
+
         return 0;
     }
 

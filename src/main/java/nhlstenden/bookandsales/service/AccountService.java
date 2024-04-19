@@ -12,7 +12,6 @@ import java.util.stream.StreamSupport;
 @Service
 public class AccountService
 {
-
     private final Connection sqlConnection;
 
     public AccountService() throws SQLException

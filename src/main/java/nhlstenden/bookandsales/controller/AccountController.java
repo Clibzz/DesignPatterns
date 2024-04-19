@@ -35,12 +35,14 @@ public class AccountController
     public String registerPage(Model model)
     {
         model.addAttribute("page", "register");
+
         return "register";
     }
 
     @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("page", "login");
+
         return "login";
     }
 
@@ -50,6 +52,7 @@ public class AccountController
         Path path = Paths.get(session.getAttribute("username") + ".json");
         Files.deleteIfExists(path);
         session.invalidate();
+
         return "redirect:/login";
     }
 

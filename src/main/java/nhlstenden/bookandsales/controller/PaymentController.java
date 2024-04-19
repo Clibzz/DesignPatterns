@@ -30,7 +30,6 @@ import java.util.ArrayList;
 @Controller
 public class PaymentController
 {
-
         private PaymentService paymentService;
         private BookFactory bookFactory;
 
@@ -49,6 +48,7 @@ public class PaymentController
         {
                 Path path = Paths.get("carts.json");
                 String currentContent = Files.readString(path);
+
                 return new JSONArray(currentContent);
         }
 
@@ -118,6 +118,7 @@ public class PaymentController
         {
                 Path path = Paths.get(session.getAttribute("username") + ".json");
                 String userContent = Files.readString(path);
+
                 return new JSONArray(userContent);
         }
 
@@ -180,6 +181,7 @@ public class PaymentController
 
                         return "cart";
                 }
+
                 return "redirect:/login";
         }
 

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 @Service
 public class BookTypeService
 {
-
     private final Connection sqlConnection;
 
     public BookTypeService() throws SQLException
@@ -26,6 +25,7 @@ public class BookTypeService
         {
             types.add(bookType.getType());
         }
+
         return types;
     }
 
@@ -39,6 +39,7 @@ public class BookTypeService
         {
             bookTypes.add(new BookType(resultSet.getInt("id"), resultSet.getString("type"), resultSet.getString("attribute_type"), resultSet.getBoolean("has_attribute")));
         }
+
         return bookTypes;
     }
 }
