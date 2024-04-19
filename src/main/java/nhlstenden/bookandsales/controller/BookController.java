@@ -3,19 +3,13 @@ package nhlstenden.bookandsales.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-
 import nhlstenden.bookandsales.factory.BookProduct;
 import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.model.PaymentCart;
 import nhlstenden.bookandsales.model.PaymentCartHistory;
 import nhlstenden.bookandsales.service.BookService;
-import nhlstenden.bookandsales.service.ReviewService;
-import org.springframework.stereotype.Controller;
 import nhlstenden.bookandsales.service.BookTypeService;
+import nhlstenden.bookandsales.service.ReviewService;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,17 +22,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 @Controller
 public class BookController
 {
-
     private final BookService bookService;
     private final BookTypeService bookTypeService;
     private final ReviewService reviewService;
@@ -150,6 +145,7 @@ public class BookController
                 model.addAttribute("success", true);
             }
         }
+
         return "addBook";
     }
 
@@ -219,6 +215,7 @@ public class BookController
                 return obj;
             }
         }
+
         return null;
     }
 
@@ -270,15 +267,8 @@ public class BookController
         this.writeDataToFile(path, this.updateItemArray(jsonArray, bookId, session, book));
         this.writeDataToAllCartsFile(this.updateItemArray(fullCartsArray, bookId, session, book));
         this.updateCartState(jsonArray, book);
-        return "overview";
-    }
 
-    @PostMapping("/deleteBook")
-    public String deleteBookFromStore(@RequestParam("bookId") int bookId, Model model) throws SQLException, IOException
-    {
-        this.bookService.deleteBookFromStore(bookId);
-        this.removeBookFolder(bookId, model);
-        return "redirect:/overview";
+        return "overview";
     }
 
     private void removeBookFolder(@RequestParam("bookId") int bookId, Model model) throws IOException, SQLException
@@ -289,5 +279,14 @@ public class BookController
         {
             FileUtils.deleteDirectory(directory);
         }
+    }
+
+    @PostMapping("/deleteBook")
+    public String deleteBookFromStore(@RequestParam("bookId") int bookId, Model model) throws SQLException, IOException
+    {
+        this.bookService.deleteBookFromStore(bookId);
+        this.removeBookFolder(bookId, model);
+
+        return "redirect:/overview";
     }
 }

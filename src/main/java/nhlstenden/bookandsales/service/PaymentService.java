@@ -10,7 +10,6 @@ import java.sql.SQLException;
 @Service
 public class PaymentService
 {
-
     private final Connection sqlConnection;
     private PaymentStrategy paymentStrategy;
 
