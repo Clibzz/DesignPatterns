@@ -258,7 +258,7 @@ public class BookController
         this.writeDataToFile(path, this.updateItemArray(jsonArray, bookId, session, book));
         this.writeDataToAllCartsFile(this.updateItemArray(fullCartsArray, bookId, session, book));
         this.updateCartState(jsonArray, book);
-        return "cart";
+        return "overview";
     }
 
     @PostMapping("/deleteBook")

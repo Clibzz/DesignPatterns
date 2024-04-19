@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Controller
 public class PaymentController
@@ -68,6 +70,29 @@ public class PaymentController
                 history.saveState(new PaymentCartMemento(userSpecificJsonData.toString()));
         }
 
+        private void removeUserItemsFromAllCartsJson(HttpSession session) throws JSONException, IOException
+        {
+                Path path = Paths.get("carts.json");
+                JSONArray jsonData = this.getAllCarts();
+                for (int i = 0; i < jsonData.length(); i++)
+                {
+                        JSONObject jsonObj = jsonData.getJSONObject(i);
+                        if (jsonObj.getInt("userId") == (int)session.getAttribute("userId"))
+                        {
+                               jsonData.remove(i);
+                        }
+                }
+
+                File file = new File(path.toString());
+                if (file.delete())
+                {
+                        try (FileWriter writer = new FileWriter(path.toFile(), false))
+                        {
+                                writer.write(jsonData.toString(4));
+                        }
+                }
+        }
+
         private ArrayList<BookProduct> getBooksInCart(HttpSession session) throws JSONException, IOException
         {
                 ArrayList<BookProduct> booksInCart = new ArrayList<>();
@@ -107,7 +132,7 @@ public class PaymentController
         {
                 if (this.isLoggedIn(session))
                 {
-                        this.createCartJsonOfUser(session);
+                        this.fillCartJsonOfUser(session);
 
                         model.addAttribute("booksFromUser", this.getBooksInCart(session));
 
@@ -137,13 +162,13 @@ public class PaymentController
         {
                 if (this.isLoggedIn(session))
                 {
-                        this.createCartJsonOfUser(session);
-
+                        this.fillCartJsonOfUser(session);
                         model.addAttribute("paymentStrategy", paymentType);
                         model.addAttribute("booksFromUser", this.getBooksInCart(session));
 
                         return "cart";
                 }
+
                 return "redirect:/login";
         }
 
@@ -169,9 +194,12 @@ public class PaymentController
 
                 model.addAttribute("booksFromUser", this.getBooksInCart(session));
                 this.paymentService.setPaymentStrategy(new INGStrategy(bankNumber, username, password));
-                this.paymentService.checkout(this.getTotalPayAmountInCart(session));
+                if (this.paymentService.checkout(this.getTotalPayAmountInCart(session)))
+                {
+                        removeUserItemsFromAllCartsJson(session);
+                }
 
-                return "cart";
+                return "redirect:/cart";
         }
 
         @PostMapping("/paypal-strategy")

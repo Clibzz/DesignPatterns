@@ -3,14 +3,17 @@ package nhlstenden.bookandsales.strategy;
 public class INGStrategy implements PaymentStrategy
 {
     private String bankNumber;
-    private String userName;
+    private String username;
     private String password;
+    private double balance;
 
-    public INGStrategy(String bankNumber, String userName, String password)
+
+    public INGStrategy(String bankNumber, String username, String password)
     {
         this.setBankNumber(bankNumber);
-        this.setUserName(userName);
+        this.setUsername(username);
         this.setPassword(password);
+        this.balance = this.getMoneyAmountINGUser();
     }
 
     public String getBankNumber()
@@ -30,16 +33,16 @@ public class INGStrategy implements PaymentStrategy
         }
     }
 
-    public String getUserName()
+    public String getUsername()
     {
-        return this.userName;
+        return this.username;
     }
 
-    public void setUserName(String userName)
+    public void setUsername(String username)
     {
-        if (!(userName.isEmpty()))
+        if (!(username.isEmpty()))
         {
-            this.userName = userName;
+            this.username = username;
         }
         else
         {
@@ -64,9 +67,19 @@ public class INGStrategy implements PaymentStrategy
         }
     }
 
+    public double getBalance()
+    {
+        return this.balance;
+    }
+
+    public void setBalance(double balance)
+    {
+        this.balance = balance;
+    }
+
     public String[][] getINGList()
     {
-        return new String[][]{{"robin", "test", "NL42INGB4416709382"}, {"voyanda", "scrub", "NL56INGB6733307944"},
+        return new String[][]{{"test", "test", "NL42INGB4416709382"}, {"voyanda", "scrub", "NL56INGB6733307944"},
                                   {"admin", "password", "NL29INGB5082680188"}};
     }
 
@@ -76,25 +89,23 @@ public class INGStrategy implements PaymentStrategy
 
         for (int user = 0; user < this.getINGList().length; user++)
         {
-            for (int pass = 0; pass < this.getINGList()[user].length; pass++)
+            String[] userData = this.getINGList()[user];
+            if (userData[0].equals(this.getUsername()) && userData[1].equals(this.getPassword()) &&
+                    userData[2].equals(this.getBankNumber()))
             {
-                if (this.getINGList()[user][pass].equals(this.getUserName()) && this.getINGList()[user][pass].equals(this.getPassword()) &&
-                    this.getINGList()[user][pass].equals(this.getBankNumber()))
+                if (this.getBankNumber().equals("NL42INGB4416709382"))
                 {
-                    if (this.getBankNumber().equals("NL42INGB4416709382"))
-                    {
-                        amountOnBank = 2700.00;
-                    }
+                    amountOnBank = 2700.00;
+                }
 
-                    if (this.getBankNumber().equals("NL56INGB6733307944"))
-                    {
-                        amountOnBank = 1000.00;
-                    }
+                if (this.getBankNumber().equals("NL56INGB6733307944"))
+                {
+                    amountOnBank = 1000.00;
+                }
 
-                    if (this.getBankNumber().equals("NL29INGB5082680188"))
-                    {
-                        amountOnBank = 10000.00;
-                    }
+                if (this.getBankNumber().equals("NL29INGB5082680188"))
+                {
+                    amountOnBank = 10000.00;
                 }
             }
         }
@@ -103,32 +114,16 @@ public class INGStrategy implements PaymentStrategy
     }
 
     @Override
-    public void paymentMethod(double amount)
+    public boolean payForCurrentCart(double amount)
     {
-        boolean hasPayed = false;
-        double tempAmount;
-
-        if (!(this.getMoneyAmountINGUser() < amount))
+        if (this.balance >= amount)
         {
-            tempAmount = (this.getMoneyAmountINGUser() - amount);
-            if (tempAmount < this.getMoneyAmountINGUser())
-            {
-                hasPayed = true;
-            }
+            this.setBalance(this.getMoneyAmountINGUser() - amount);
+            return true;
         }
         else
         {
-            throw new IllegalArgumentException("transaction failed, not enough saldo on account");
-        }
-
-        if (hasPayed)
-        {
-            amount = 0;
-        }
-
-        if (amount == 0)
-        {
-            System.out.println("successfully made the purchase");
+            throw new IllegalArgumentException("Transaction failed, not enough money on this account");
         }
     }
 }

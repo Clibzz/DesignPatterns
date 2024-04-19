@@ -1,5 +1,5 @@
 package nhlstenden.bookandsales.strategy;
 
 public interface PaymentStrategy {
-    void paymentMethod(double amount);
+    boolean payForCurrentCart(double amount);
 }

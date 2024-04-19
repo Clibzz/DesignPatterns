@@ -24,8 +24,8 @@ public class PaymentService
         this.paymentStrategy = paymentStrategy;
     }
 
-    public void checkout(double amount)
+    public boolean checkout(double amount)
     {
-        this.paymentStrategy.paymentMethod(amount);
+        return this.paymentStrategy.payForCurrentCart(amount);
     }
 }
