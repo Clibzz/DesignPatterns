@@ -18,18 +18,20 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-4">
-            <div class="border border-secondary rounded">
-                <div class="p-3" style="background-color: #f2f2f1;">
-                    <p class="h4 text-left text-dark">Items from Book&Sales</p>
-                </div>
-                <p class="text-left">Title</p>
-                <p class="text-left">Author</p>
-                <div class="row">
-                    <div class="col-sm-6 mb-3">
-                        <img class="img-fluid" style="width: 100px; height: 150px;" src="/images/1/book-covers-big-2019101610.jpg" />
+            <div class="row" th:each="booksUser : ${booksFromUser}">
+                <div class="border border-secondary rounded">
+                    <div class="p-3" style="background-color: #f2f2f1;">
+                        <p class="h4 text-left text-dark">Items from Book&Sales</p>
                     </div>
-                    <div class="col-sm-6">
-                        <p class="h3 text-center">$25.20</p>
+                    <p class="text-left" th:text="${booksUser.title}"></p>
+                    <p class="text-left" th:text="${booksUser.author}"></p>
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <img class="img-fluid" style="width: 100px; height: 150px;" th:src="'/' + images + '/' + ${booksUser.id} + '/' + ${booksUser.image}" />
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="h3 text-center" th:text="@{'$' + ${booksUser.price}}"></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,7 +48,7 @@
             </form>
             <th:block th:switch="${paymentStrategy}">
                 <div th:case="'ING'">
-                    <form th:action="@{'/ing-strategy'}" method="post">
+                    <form th:action="@{'/ing-pay'}" method="post">
                         <label for="username" class="font-weight-bold">Username</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="username" name="username" required>
@@ -65,7 +67,7 @@
                     </form>
                 </div>
                 <div th:case="'PayPal'">
-                    <form th:action="@{'/paypal-strategy'}" method="post">
+                    <form th:action="@{'/paypal-pay'}" method="post">
                         <label for="paypalUser" class="font-weight-bold">Username</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="paypalUser" name="paypalUser" required>
@@ -79,7 +81,7 @@
                     </form>
                 </div>
                 <div th:case="'GiftCard'">
-                    <form th:action="@{'/giftcard-strategy'}" method="post">
+                    <form th:action="@{'/giftcard-pay'}" method="post">
                         <label for="giftCard" class="font-weight-bold">gift code</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="giftCard" name="giftCard" required>

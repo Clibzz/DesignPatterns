@@ -1,8 +1,12 @@
 package nhlstenden.bookandsales.controller;
 
 import jakarta.servlet.http.HttpSession;
+import nhlstenden.bookandsales.factory.*;
+import nhlstenden.bookandsales.model.BookType;
+import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.model.PaymentCartHistory;
 import nhlstenden.bookandsales.model.PaymentCartMemento;
+import nhlstenden.bookandsales.service.BookService;
 import nhlstenden.bookandsales.service.PaymentService;
 import nhlstenden.bookandsales.strategy.GiftCardStrategy;
 import nhlstenden.bookandsales.strategy.INGStrategy;
@@ -21,17 +25,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
+import java.util.ArrayList;
 
 @Controller
 public class PaymentController
 {
 
         private PaymentService paymentService;
+        private BookFactory bookFactory;
 
         public PaymentController(PaymentService paymentService)
         {
                 this.paymentService = paymentService;
+                this.bookFactory = null;
         }
 
         private boolean isLoggedIn(HttpSession session)
@@ -62,12 +68,49 @@ public class PaymentController
                 history.saveState(new PaymentCartMemento(userSpecificJsonData.toString()));
         }
 
+        private ArrayList<BookProduct> getBooksInCart(HttpSession session) throws JSONException, IOException
+        {
+                ArrayList<BookProduct> booksInCart = new ArrayList<>();
+
+                JSONArray jsonData = this.getUserCart(session);
+
+                for (int i = 0; i < jsonData.length(); i++)
+                {
+                        JSONObject jsonObject = jsonData.getJSONObject(i);
+                        if (jsonObject.getInt("userId") == (int)session.getAttribute("userId"))
+                        {
+                                this.setBookFactoryType(jsonObject.getJSONObject("bookType").getInt("id"));
+                                booksInCart.add(this.bookFactory.createBookProduct(
+                                   jsonObject.getInt("id"),
+                                   new BookType(jsonObject.getJSONObject("bookType").getInt("id"),
+                                                jsonObject.getJSONObject("bookType").getString("type"),
+                                                jsonObject.getJSONObject("bookType").getString("attributeType"),
+                                                jsonObject.getJSONObject("bookType").getBoolean("hasAttribute")),
+                                                jsonObject.getString("title"),
+                                                jsonObject.getDouble("price"),
+                                                jsonObject.getString("author"),
+                                                jsonObject.getString("publisher"),
+                                                jsonObject.getInt("pageAmount"),
+                                                Genre.valueOf(jsonObject.getString("genre")),
+                                                jsonObject.getJSONObject("bookType").getBoolean("hasAttribute"),
+                                                jsonObject.getString("description"),
+                                                jsonObject.getString("image")
+                                ));
+                        }
+                }
+
+                return booksInCart;
+        }
+
         @GetMapping("/cart")
-        public String getCartOfUser(HttpSession session) throws JSONException, IOException
+        public String getCartOfUser(HttpSession session, Model model) throws JSONException, IOException
         {
                 if (this.isLoggedIn(session))
                 {
                         this.createCartJsonOfUser(session);
+
+                        model.addAttribute("booksFromUser", this.getBooksInCart(session));
+
                         return "cart";
                 }
                 return "redirect:/login";
@@ -80,50 +123,101 @@ public class PaymentController
                 return new JSONArray(currentContent);
         }
 
-        @PostMapping("/cart")
-        public String choosePaymentStrategy(@RequestParam("paymentType") String paymentType, Model model)
+        private JSONArray getUserCart(HttpSession session) throws IOException, JSONException
         {
-                model.addAttribute("paymentStrategy", paymentType);
-                return "cart";
+                Path path = Paths.get(session.getAttribute("username") + ".json");
+                String userContent = Files.readString(path);
+                return new JSONArray(userContent);
+        }
+
+        @PostMapping("/cart")
+        public String choosePaymentStrategy(@RequestParam("paymentType") String paymentType,
+                                            HttpSession session, Model model) throws JSONException, IOException
+        {
+                if (this.isLoggedIn(session))
+                {
+                        this.createCartJsonOfUser(session);
+
+                        model.addAttribute("paymentStrategy", paymentType);
+                        model.addAttribute("booksFromUser", this.getBooksInCart(session));
+
+                        return "cart";
+                }
+                return "redirect:/login";
         }
 
         @PostMapping("/ing-strategy")
         public String ING(@RequestParam("paymentType") String paymentType,
-                          @RequestParam("username") String username,
-                          @RequestParam("password") String password,
-                          @RequestParam("bankNumber") String bankNumber,
-                          Model model)
+                          HttpSession session,
+                          Model model) throws JSONException, IOException
         {
 
                 model.addAttribute("paymentStrategy", paymentType);
+                model.addAttribute("booksFromUser", this.getBooksInCart(session));
+
+                return "cart";
+        }
+
+        @PostMapping("/ing-pay")
+        public String INGPay(@RequestParam("username") String username,
+                          @RequestParam("password") String password,
+                          @RequestParam("bankNumber") String bankNumber,
+                          HttpSession session,
+                          Model model) throws JSONException, IOException
+        {
+
+                model.addAttribute("booksFromUser", this.getBooksInCart(session));
                 this.paymentService.setPaymentStrategy(new INGStrategy(bankNumber, username, password));
-                this.paymentService.checkout(0);
+                this.paymentService.checkout(this.getTotalPayAmountInCart(session));
 
                 return "cart";
         }
 
         @PostMapping("/paypal-strategy")
         public String paypal(@RequestParam("paymentType") String paymentType,
-                             @RequestParam("paypalUser") String paypalUser,
-                             @RequestParam("paypalPassword") String paypalPassword,
-                             Model model)
+                             HttpSession session,
+                             Model model) throws JSONException, IOException
         {
 
                 model.addAttribute("paymentStrategy", paymentType);
+                model.addAttribute("booksFromUser", this.getBooksInCart(session));
+
+                return "cart";
+        }
+
+        @PostMapping("/paypal-pay")
+        public String paypalPay(@RequestParam("paypalUser") String paypalUser,
+                             @RequestParam("paypalPassword") String paypalPassword,
+                             HttpSession session,
+                             Model model) throws JSONException, IOException
+        {
+
+                model.addAttribute("booksFromUser", this.getBooksInCart(session));
                 this.paymentService.setPaymentStrategy(new PaypalStrategy(paypalUser, paypalPassword));
-                this.paymentService.checkout(0);
+                this.paymentService.checkout(this.getTotalPayAmountInCart(session));
 
                 return "cart";
         }
 
         @PostMapping("/giftcard-strategy")
         public String giftcard(@RequestParam("paymentType") String paymentType,
-                               @RequestParam("giftCard") String giftCard, Model model)
+                               HttpSession session, Model model) throws JSONException, IOException
         {
 
                 model.addAttribute("paymentStrategy", paymentType);
+                model.addAttribute("booksFromUser", this.getBooksInCart(session));
+
+                return "cart";
+        }
+
+        @PostMapping("/giftcard-pay")
+        public String giftcardPay(@RequestParam("giftCard") String giftCard,
+                               HttpSession session, Model model) throws JSONException, IOException
+        {
+
+                model.addAttribute("booksFromUser", this.getBooksInCart(session));
                 this.paymentService.setPaymentStrategy(new GiftCardStrategy(giftCard));
-                this.paymentService.checkout(0);
+                this.paymentService.checkout(this.getTotalPayAmountInCart(session));
 
                 return "cart";
         }
@@ -133,5 +227,33 @@ public class PaymentController
         {
 
                 return "cart";
+        }
+
+        public void setBookFactoryType(int typeId)
+        {
+                switch (typeId)
+                {
+                        case 1:
+                                this.bookFactory = new EBookFactory();
+                                break;
+                        case 2:
+                                this.bookFactory = new AudioBookFactory();
+                                break;
+                        case 3:
+                                this.bookFactory = new NormalBookFactory();
+                                break;
+                }
+        }
+
+        public double getTotalPayAmountInCart(HttpSession session) throws JSONException, IOException
+        {
+                double totalPayAmount = 0;
+
+                for (BookProduct bookProduct : this.getBooksInCart(session))
+                {
+                        totalPayAmount += (bookProduct.getPrice());
+                }
+
+                return totalPayAmount;
         }
 }
