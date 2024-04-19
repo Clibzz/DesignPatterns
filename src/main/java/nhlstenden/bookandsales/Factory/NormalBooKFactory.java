@@ -1,9 +1,17 @@
 package nhlstenden.bookandsales.Factory;
 
-public class NormalBooKFactory {
+import nhlstenden.bookandsales.Model.BookType;
+import nhlstenden.bookandsales.Model.Genre;
+
+public class NormalBooKFactory extends BookFactory
+{
+
     private boolean hasHardCover;
 
-//    public BookProduct createBookProduct(double price, String artist, String publisher, int pageAmount, boolean hasHardCover) {
-//
-//    }
+    @Override
+    public BookProduct createBookProduct(int id, BookType bookType, String title, double price, String author, String publisher,
+                                         int pageAmount, Genre genre, boolean hasHardCover, String description, String image)
+    {
+        return new NormalBook(id, bookType, title, price, author, publisher, pageAmount, genre, hasHardCover, description, image);
+    }
 }

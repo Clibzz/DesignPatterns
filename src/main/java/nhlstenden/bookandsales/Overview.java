@@ -1,6 +1,9 @@
 package nhlstenden.bookandsales;
 
 import java.util.HashSet;
+
+import nhlstenden.bookandsales.Factory.AudioBook;
+import nhlstenden.bookandsales.Factory.EBook;
 import nhlstenden.bookandsales.Model.*;
 
 public class Overview {

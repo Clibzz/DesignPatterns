@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysqldb:3306
--- Generation Time: Mar 27, 2024 at 09:17 PM
+-- Generation Time: Apr 03, 2024 at 11:56 AM
 -- Server version: 8.0.36
 -- PHP Version: 8.2.16
 
@@ -33,16 +33,17 @@ DROP TABLE IF EXISTS `book`;
 CREATE TABLE IF NOT EXISTS `book` (
   `id` int NOT NULL AUTO_INCREMENT,
   `book_type_id` int NOT NULL,
+  `description` longtext NOT NULL,
   `genre` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `price` double NOT NULL,
   `author` varchar(255) NOT NULL,
   `publisher` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
   `page_amount` int NOT NULL,
-  `has_hard_cover` tinyint(1) NOT NULL,
+  `image` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `book_book_type` (`book_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -95,13 +96,13 @@ CREATE TABLE IF NOT EXISTS `review` (
   `user_id` int NOT NULL,
   `book_id` int NOT NULL,
   `title` varchar(150) NOT NULL,
-  `rating` double(1,1) NOT NULL,
+  `rating` double NOT NULL,
   `text` longtext NOT NULL,
   `image` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_review_book` (`book_id`) USING BTREE,
   KEY `fk_review_user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 

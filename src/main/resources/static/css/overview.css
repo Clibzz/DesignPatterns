@@ -1,0 +1,9 @@
+.bookCover
+{
+    background-color: whitesmoke;
+}
+
+.bookCover:hover
+{
+    background-color: #dedede;
+}
