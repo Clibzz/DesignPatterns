@@ -37,17 +37,6 @@ public class ReviewController
         return "redirect:/login";
     }
 
-    @GetMapping("/reviews")
-    public String getReviews(HttpSession session, Model model)
-    {
-        if (isLoggedIn(session))
-        {
-            model.addAttribute("message", "Get reviews");
-            return "reviews";
-        }
-        return "redirect:/login";
-    }
-
     private boolean isLoggedIn(HttpSession session)
     {
         return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");

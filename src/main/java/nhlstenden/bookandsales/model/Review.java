@@ -4,14 +4,18 @@ public class Review {
     private int id;
     private int userId;
     private int bookId;
+    private String userName;
     private String title;
     private double rating;
-    private long text;
+    private String text;
     private String image;
 
-    public Review(int userId, int bookId, String title, double rating, long text, String image) {
+    public Review(int id, int userId, int bookId, String userName, String title, double rating, String text, String image)
+    {
+        this.id = id;
         this.userId = userId;
         this.bookId = bookId;
+        this.userName = userName;
         this.title = title;
         this.rating = rating;
         this.text = text;
@@ -42,6 +46,16 @@ public class Review {
         this.bookId = bookId;
     }
 
+    public String getUserName()
+    {
+        return this.userName;
+    }
+
+    public void setUserName(String userName)
+    {
+        this.userName = userName;
+    }
+
     public String getTitle() {
         return this.title;
     }
@@ -58,11 +72,11 @@ public class Review {
         this.rating = rating;
     }
 
-    public long getText() {
+    public String getText() {
         return this.text;
     }
 
-    public void setText(long text) {
+    public void setText(String text) {
         this.text = text;
     }
 

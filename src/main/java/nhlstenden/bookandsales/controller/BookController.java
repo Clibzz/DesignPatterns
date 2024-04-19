@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import nhlstenden.bookandsales.factory.BookProduct;
 import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.service.BookService;
+import nhlstenden.bookandsales.service.ReviewService;
 import org.springframework.stereotype.Controller;
 import nhlstenden.bookandsales.service.BookTypeService;
 import org.springframework.ui.Model;
@@ -26,10 +27,12 @@ public class BookController
 
     private final BookService bookService;
     private final BookTypeService bookTypeService;
+    private final ReviewService reviewService;
 
-    public BookController(BookService bookService, BookTypeService bookTypeService) {
+    public BookController(BookService bookService, BookTypeService bookTypeService, ReviewService reviewService) {
         this.bookService = bookService;
         this.bookTypeService = bookTypeService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("/addBook")
@@ -133,6 +136,7 @@ public class BookController
         if (isLoggedIn(session))
         {
             BookProduct bookProduct = this.bookService.getBookById(bookId);
+            model.addAttribute("reviewList", this.reviewService.getAllReviewsConnectedToBookDetailsId(bookId));
             model.addAttribute("bookProduct", bookProduct);
 
             return "bookDetails";
