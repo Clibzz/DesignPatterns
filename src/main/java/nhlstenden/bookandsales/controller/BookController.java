@@ -54,10 +54,17 @@ public class BookController
     {
         if (isLoggedIn(session))
         {
-            model.addAttribute("bookTypes", this.getBookTypeTypes());
-            model.addAttribute("enumValues", Genre.values());
+            if (session.getAttribute("roleId").equals(1))
+            {
+                model.addAttribute("bookTypes", this.getBookTypeTypes());
+                model.addAttribute("enumValues", Genre.values());
 
-            return "addBook";
+                return "addBook";
+            }
+            else
+            {
+                return "redirect:/overview";
+            }
         }
 
         return "redirect:/login";
