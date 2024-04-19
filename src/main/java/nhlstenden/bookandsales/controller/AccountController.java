@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Collections;
 
 @Controller
 public class AccountController
@@ -39,9 +44,11 @@ public class AccountController
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session) throws IOException
+    {
+        Path path = Paths.get(session.getAttribute("username") + ".json");
+        Files.deleteIfExists(path);
         session.invalidate();
-
         return "redirect:/login";
     }
 
@@ -64,7 +71,7 @@ public class AccountController
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException
+    public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException, IOException
     {
         User loginInfo = this.accountService.getLoginInfo(userName, userPassword);
 
@@ -73,6 +80,8 @@ public class AccountController
             session.setAttribute("isLoggedIn", true);
             session.setAttribute("roleId", loginInfo.getRoleId());
             session.setAttribute("userId", loginInfo.getId());
+            session.setAttribute("username", loginInfo.getFirstName());
+            this.createUserCart(session);
             return "redirect:/overview";
         }
         else
@@ -82,4 +91,13 @@ public class AccountController
         }
     }
 
+    public void createUserCart(HttpSession session) throws IOException
+    {
+        Path path = Paths.get(session.getAttribute("username") + ".json");
+        if (!Files.exists(path))
+        {
+            Files.createFile(path);
+            Files.write(path, Collections.singletonList("[]"));
+        }
+    }
 }
