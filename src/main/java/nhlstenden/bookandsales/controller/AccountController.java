@@ -81,6 +81,7 @@ public class AccountController
             session.setAttribute("roleId", loginInfo.getRoleId());
             session.setAttribute("userId", loginInfo.getId());
             session.setAttribute("username", loginInfo.getFirstName());
+            this.createCartsJson();
             this.createUserCart(session);
             return "redirect:/overview";
         }
@@ -88,6 +89,16 @@ public class AccountController
         {
             redirectAttributes.addFlashAttribute("error", "The username or password is incorrect, please try again!");
             return "redirect:/login";
+        }
+    }
+
+    public void createCartsJson() throws IOException
+    {
+        Path path = Paths.get("carts.json");
+        if (!Files.exists(path))
+        {
+            Files.createFile(path);
+            Files.write(path, Collections.singletonList("[]"));
         }
     }
 

@@ -67,12 +67,6 @@ public class PaymentController
         {
                 if (this.isLoggedIn(session))
                 {
-                        Path path = Paths.get("carts.json");
-                        if (!Files.exists(path))
-                        {
-                                Files.createFile(path);
-                                Files.write(path, Collections.singletonList("[]"));
-                        }
                         this.createCartJsonOfUser(session);
                         return "cart";
                 }
