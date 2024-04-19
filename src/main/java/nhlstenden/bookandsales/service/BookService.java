@@ -1,9 +1,7 @@
 package nhlstenden.bookandsales.service;
-import nhlstenden.bookandsales.Controller.BookController;
-import nhlstenden.bookandsales.Factory.*;
-import nhlstenden.bookandsales.Model.Book;
-import nhlstenden.bookandsales.Model.BookType;
-import nhlstenden.bookandsales.Model.Genre;
+import nhlstenden.bookandsales.factory.*;
+import nhlstenden.bookandsales.model.BookType;
+import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.util.DatabaseUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -200,7 +198,7 @@ public class BookService
                 this.bookFactory = new AudioBookFactory();
                 break;
             case 3:
-                this.bookFactory = new NormalBooKFactory();
+                this.bookFactory = new NormalBookFactory();
                 break;
         }
     }

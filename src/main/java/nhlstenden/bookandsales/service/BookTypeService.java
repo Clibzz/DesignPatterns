@@ -1,6 +1,6 @@
 package nhlstenden.bookandsales.service;
 
-import nhlstenden.bookandsales.Model.BookType;
+import nhlstenden.bookandsales.model.BookType;
 import nhlstenden.bookandsales.util.DatabaseUtil;
 import org.springframework.stereotype.Service;
 

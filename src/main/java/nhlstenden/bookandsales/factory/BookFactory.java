@@ -1,7 +1,7 @@
-package nhlstenden.bookandsales.Factory;
+package nhlstenden.bookandsales.factory;
 
-import nhlstenden.bookandsales.Model.BookType;
-import nhlstenden.bookandsales.Model.Genre;
+import nhlstenden.bookandsales.model.BookType;
+import nhlstenden.bookandsales.model.Genre;
 
 public abstract class BookFactory
 {

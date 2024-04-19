@@ -7,6 +7,92 @@
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{components/header :: header}"></div>
+<div class="container-fluid">
+    <div th:replace="~{components/header :: header}"></div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <p class="h2 mt-4 mb-2">My Shopping Cart</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+            <div class="border border-secondary rounded">
+                <div class="p-3" style="background-color: #f2f2f1;">
+                    <p class="h4 text-left text-dark">Items from Book&Sales</p>
+                </div>
+                <p class="text-left">Title</p>
+                <p class="text-left">Author</p>
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <img class="img-fluid" style="width: 100px; height: 150px;" src="/images/1/book-covers-big-2019101610.jpg" />
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="h3 text-center">$25.20</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <form th:action="@{'/cart'}" method="post">
+                <label for="payment-type" class="text-secondary font-weight-bold">Select payment type:</label>
+                <select class="form-control mb-3" id="payment-type" name="paymentType" onchange="this.form.submit()">
+                    <option selected>choose payment type:</option>
+                    <option>ING</option>
+                    <option>PayPal</option>
+                    <option>GiftCard</option>
+                </select>
+            </form>
+            <th:block th:switch="${paymentStrategy}">
+                <div th:case="'ING'">
+                    <form th:action="@{'/ing-strategy'}" method="post">
+                        <label for="username" class="font-weight-bold">Username</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+
+                        <label for="password" class="font-weight-bold">Password</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <label for="bankNumber" class="font-weight-bold">IBAN</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="bankNumber" name="bankNumber" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-5 float-right">make purchase</button>
+                    </form>
+                </div>
+                <div th:case="'PayPal'">
+                    <form th:action="@{'/paypal-strategy'}" method="post">
+                        <label for="paypalUser" class="font-weight-bold">Username</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="paypalUser" name="paypalUser" required>
+                        </div>
+
+                        <label for="paypalPassword" class="font-weight-bold">Password</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="paypalPassword" name="paypalPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-5 float-right">make purchase</button>
+                    </form>
+                </div>
+                <div th:case="'GiftCard'">
+                    <form th:action="@{'/giftcard-strategy'}" method="post">
+                        <label for="giftCard" class="font-weight-bold">gift code</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="giftCard" name="giftCard" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-5 float-right">gift code</button>
+                    </form>
+                </div>
+            </th:block>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+
 </body>
 </html>
