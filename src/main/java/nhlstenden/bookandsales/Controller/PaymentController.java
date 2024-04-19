@@ -3,7 +3,6 @@ package nhlstenden.bookandsales.Controller;
 import jakarta.servlet.http.HttpSession;
 import nhlstenden.bookandsales.Model.PaymentCartHistory;
 import nhlstenden.bookandsales.Model.PaymentCartMemento;
-import nhlstenden.bookandsales.service.PaymentService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,15 +14,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 
 @Controller
 public class PaymentController
 {
-        private PaymentService paymentService;
-
-        public PaymentController(PaymentService paymentService)
+        public PaymentController()
         {
-                this.paymentService = paymentService;
+
         }
 
         private boolean isLoggedIn(HttpSession session)
@@ -57,8 +55,18 @@ public class PaymentController
         @GetMapping("/cart")
         public String getCartOfUser(HttpSession session) throws JSONException, IOException
         {
-                this.createCartJsonOfUser(session);
-                return "cart";
+                if (this.isLoggedIn(session))
+                {
+                        Path path = Paths.get("carts.json");
+                        if (!Files.exists(path))
+                        {
+                                Files.createFile(path);
+                                Files.write(path, Collections.singletonList("[]"));
+                        }
+                        this.createCartJsonOfUser(session);
+                        return "cart";
+                }
+                return "redirect:/login";
         }
 
         private JSONArray getAllCarts() throws IOException, JSONException
