@@ -81,7 +81,7 @@ public class AccountController
             session.setAttribute("roleId", loginInfo.getRoleId());
             session.setAttribute("userId", loginInfo.getId());
             session.setAttribute("username", loginInfo.getFirstName());
-            this.createGeneralCart();
+            this.createCartsJson();
             this.createUserCart(session);
             return "redirect:/overview";
         }
@@ -92,7 +92,7 @@ public class AccountController
         }
     }
 
-    public void createGeneralCart() throws IOException
+    public void createCartsJson() throws IOException
     {
         Path path = Paths.get("carts.json");
         if (!Files.exists(path))
