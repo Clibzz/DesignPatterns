@@ -63,11 +63,13 @@ public class AccountController
         {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             this.accountService.registerNewUser(roleId, firstName, lastName, dateOfBirth, address, passwordEncoder.encode(password));
+
             return "redirect:/login";
         }
         else
         {
             model.addAttribute("dateError", "true");
+
             return "register";
         }
     }
@@ -85,11 +87,13 @@ public class AccountController
             session.setAttribute("username", loginInfo.getFirstName());
             this.createCartsJson();
             this.createUserCart(session);
+            
             return "redirect:/overview";
         }
         else
         {
             redirectAttributes.addFlashAttribute("error", "The username or password is incorrect, please try again!");
+
             return "redirect:/login";
         }
     }

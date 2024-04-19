@@ -27,7 +27,7 @@ public class AccountService
 
         PreparedStatement statement = sqlConnection.prepareStatement(query);
         statement.setInt(1, roleId);
-        statement.setString(2, firstName);
+        statement.setString(2, firstName.toLowerCase());
         statement.setString(3, lastName);
         statement.setDate(4, Date.valueOf(dateOfBirth));
         statement.setString(5, address);
@@ -35,14 +35,14 @@ public class AccountService
         statement.executeUpdate();
     }
 
-    public User getLoginInfo(String userName, String password) throws SQLException
+    public User getLoginInfo(String username, String password) throws SQLException
     {
 
         String query = "SELECT * FROM user WHERE first_name = ?";
 
         PreparedStatement statement = this.sqlConnection.prepareStatement(query);
 
-        statement.setString(1, userName);
+        statement.setString(1, username.toLowerCase());
 
         ResultSet resultSet = statement.executeQuery();
 
