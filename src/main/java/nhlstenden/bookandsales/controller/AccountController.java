@@ -74,6 +74,26 @@ public class AccountController
         }
     }
 
+    public void createCartsJson() throws IOException
+    {
+        Path path = Paths.get("carts.json");
+        if (!Files.exists(path))
+        {
+            Files.createFile(path);
+            Files.write(path, Collections.singletonList("[]"));
+        }
+    }
+
+    public void createUserCart(HttpSession session) throws IOException
+    {
+        Path path = Paths.get(session.getAttribute("username") + ".json");
+        if (!Files.exists(path))
+        {
+            Files.createFile(path);
+            Files.write(path, Collections.singletonList("[]"));
+        }
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException, IOException
     {
@@ -95,26 +115,6 @@ public class AccountController
             redirectAttributes.addFlashAttribute("error", "The username or password is incorrect, please try again!");
 
             return "redirect:/login";
-        }
-    }
-
-    public void createCartsJson() throws IOException
-    {
-        Path path = Paths.get("carts.json");
-        if (!Files.exists(path))
-        {
-            Files.createFile(path);
-            Files.write(path, Collections.singletonList("[]"));
-        }
-    }
-
-    public void createUserCart(HttpSession session) throws IOException
-    {
-        Path path = Paths.get(session.getAttribute("username") + ".json");
-        if (!Files.exists(path))
-        {
-            Files.createFile(path);
-            Files.write(path, Collections.singletonList("[]"));
         }
     }
 }

@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import nhlstenden.bookandsales.service.ReviewService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,6 +20,11 @@ public class ReviewController
         this.reviewService = reviewService;
     }
 
+    private boolean isLoggedIn(HttpSession session)
+    {
+        return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
+    }
+
     @PostMapping("/addReview")
     public String addReview(@RequestParam("review_title") String reviewTitle,
                             @RequestParam("review_description") String reviewDescription,
@@ -35,10 +39,5 @@ public class ReviewController
         }
 
         return "redirect:/login";
-    }
-
-    private boolean isLoggedIn(HttpSession session)
-    {
-        return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
     }
 }

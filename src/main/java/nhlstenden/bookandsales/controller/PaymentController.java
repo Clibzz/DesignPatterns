@@ -45,6 +45,13 @@ public class PaymentController
                 return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
         }
 
+        private JSONArray getAllCarts() throws IOException, JSONException
+        {
+                Path path = Paths.get("carts.json");
+                String currentContent = Files.readString(path);
+                return new JSONArray(currentContent);
+        }
+
         private void fillCartJsonOfUser(HttpSession session) throws IOException, JSONException
         {
                 Path path = Paths.get(session.getAttribute("username") + ".json");
@@ -89,6 +96,29 @@ public class PaymentController
                                 writer.write(jsonData.toString(4));
                         }
                 }
+        }
+
+        public void setBookFactoryType(int typeId)
+        {
+                switch (typeId)
+                {
+                        case 1:
+                                this.bookFactory = new EBookFactory();
+                                break;
+                        case 2:
+                                this.bookFactory = new AudioBookFactory();
+                                break;
+                        case 3:
+                                this.bookFactory = new NormalBookFactory();
+                                break;
+                }
+        }
+
+        private JSONArray getUserCart(HttpSession session) throws IOException, JSONException
+        {
+                Path path = Paths.get(session.getAttribute("username") + ".json");
+                String userContent = Files.readString(path);
+                return new JSONArray(userContent);
         }
 
         private ArrayList<BookProduct> getBooksInCart(HttpSession session) throws JSONException, IOException
@@ -153,20 +183,6 @@ public class PaymentController
                 return "redirect:/login";
         }
 
-        private JSONArray getAllCarts() throws IOException, JSONException
-        {
-                Path path = Paths.get("carts.json");
-                String currentContent = Files.readString(path);
-                return new JSONArray(currentContent);
-        }
-
-        private JSONArray getUserCart(HttpSession session) throws IOException, JSONException
-        {
-                Path path = Paths.get(session.getAttribute("username") + ".json");
-                String userContent = Files.readString(path);
-                return new JSONArray(userContent);
-        }
-
         @PostMapping("/cart")
         public String choosePaymentStrategy(@RequestParam("paymentType") String paymentType,
                                             HttpSession session, Model model) throws JSONException, IOException
@@ -182,6 +198,18 @@ public class PaymentController
                 }
 
                 return "redirect:/login";
+        }
+
+        public double getTotalPayAmountInCart(HttpSession session) throws JSONException, IOException
+        {
+                double totalPayAmount = 0;
+
+                for (BookProduct bookProduct : this.getBooksInCart(session))
+                {
+                        totalPayAmount += (bookProduct.getPrice());
+                }
+
+                return totalPayAmount;
         }
 
         @PostMapping("/ing-pay")
@@ -238,33 +266,5 @@ public class PaymentController
         public String paymentComplete(Model model)
         {
                 return "cart";
-        }
-
-        public void setBookFactoryType(int typeId)
-        {
-                switch (typeId)
-                {
-                        case 1:
-                                this.bookFactory = new EBookFactory();
-                                break;
-                        case 2:
-                                this.bookFactory = new AudioBookFactory();
-                                break;
-                        case 3:
-                                this.bookFactory = new NormalBookFactory();
-                                break;
-                }
-        }
-
-        public double getTotalPayAmountInCart(HttpSession session) throws JSONException, IOException
-        {
-                double totalPayAmount = 0;
-
-                for (BookProduct bookProduct : this.getBooksInCart(session))
-                {
-                        totalPayAmount += (bookProduct.getPrice());
-                }
-
-                return totalPayAmount;
         }
 }
