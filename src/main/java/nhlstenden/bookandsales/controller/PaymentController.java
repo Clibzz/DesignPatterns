@@ -36,7 +36,7 @@ public class PaymentController
         public PaymentController(PaymentService paymentService)
         {
                 this.paymentService = paymentService;
-                this.bookFactory = null;
+                this.bookFactory = new BookFactory();
         }
 
         private boolean isLoggedIn(HttpSession session)
@@ -98,22 +98,6 @@ public class PaymentController
                 }
         }
 
-        public void setBookFactoryType(int typeId)
-        {
-                switch (typeId)
-                {
-                        case 1:
-                                this.bookFactory = new EBookFactory();
-                                break;
-                        case 2:
-                                this.bookFactory = new AudioBookFactory();
-                                break;
-                        case 3:
-                                this.bookFactory = new NormalBookFactory();
-                                break;
-                }
-        }
-
         private JSONArray getUserCart(HttpSession session) throws IOException, JSONException
         {
                 Path path = Paths.get(session.getAttribute("username") + ".json");
@@ -133,7 +117,6 @@ public class PaymentController
                         JSONObject jsonObject = jsonData.getJSONObject(i);
                         if (jsonObject.getInt("userId") == (int)session.getAttribute("userId"))
                         {
-                                this.setBookFactoryType(jsonObject.getJSONObject("bookType").getInt("id"));
                                 booksInCart.add(this.bookFactory.createBookProduct(
                                    jsonObject.getInt("id"),
                                    new BookType(jsonObject.getJSONObject("bookType").getInt("id"),

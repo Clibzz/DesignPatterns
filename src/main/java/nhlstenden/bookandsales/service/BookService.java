@@ -21,7 +21,7 @@ public class BookService
     public BookService() throws SQLException
     {
         this.sqlConnection = DatabaseUtil.getConnection();
-        this.bookFactory = null;
+        this.bookFactory = new BookFactory();
     }
 
     public void addNewBook(String bookType, String description, Genre genre, double price, String author, String publisher, String title, int pageAmount, MultipartFile image) throws SQLException
@@ -75,7 +75,6 @@ public class BookService
             int pageAmount = resultSet.getInt(9);
             String image = resultSet.getString(10);
 
-            this.setBookFactoryType(bookTypeId);
             bookListRegardlessOfType.add(this.bookFactory.createBookProduct(id, this.getBookTypeById(bookTypeId),
                                         title, price, author, publisher, pageAmount, genre,
                                         this.getBookTypeById(bookTypeId).getHasAttribute(),
@@ -111,7 +110,6 @@ public class BookService
             int pageAmount = resultSet.getInt(9);
             String image = resultSet.getString(10);
 
-            this.setBookFactoryType(bookTypeId);
             bookList.add(this.bookFactory.createBookProduct(id, getBookTypeById(bookTypeId),
                         title, price, author, publisher, pageAmount, genre, getBookTypeById(bookTypeId).getHasAttribute(),
                         description, image));
@@ -166,8 +164,6 @@ public class BookService
             int pageAmount = resultSet.getInt(9);
             String image = resultSet.getString(10);
 
-            this.setBookFactoryType(bookTypeId);
-
             return this.bookFactory.createBookProduct(id, this.getBookTypeById(bookTypeId), title,
                                                     price, author, publisher, pageAmount, genre,
                                                     this.getBookTypeById(bookTypeId).getHasAttribute(),
@@ -188,22 +184,6 @@ public class BookService
         }
 
         return 0;
-    }
-
-    public void setBookFactoryType(int typeId)
-    {
-        switch (typeId)
-        {
-            case 1:
-                this.bookFactory = new EBookFactory();
-                break;
-            case 2:
-                this.bookFactory = new AudioBookFactory();
-                break;
-            case 3:
-                this.bookFactory = new NormalBookFactory();
-                break;
-        }
     }
 
     public void deleteBookFromStore(int bookId) throws SQLException
