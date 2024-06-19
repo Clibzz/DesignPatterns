@@ -8,25 +8,12 @@ public class INGStrategy implements PaymentStrategy
     private String username;
     private String password;
     private double balance;
-    private String errorMessage;
 
     public INGStrategy(String bankNumber, String username, String password)
     {
         this.setBankNumber(bankNumber);
         this.setUsername(username);
         this.setPassword(password);
-        this.balance = this.getMoneyAmount();
-    }
-
-    public void setErrorMessage(String message)
-    {
-        this.errorMessage = message;
-    }
-
-    @Override
-    public String getErrorMessage()
-    {
-        return this.errorMessage;
     }
 
     public String getBankNumber()
@@ -92,46 +79,38 @@ public class INGStrategy implements PaymentStrategy
         }
         else
         {
-            this.errorMessage = "Invalid payment type for INGPaymentStrategy";
             return null;
         }
     }
 
     @Override
-    public double getMoneyAmount()
-    {
-        double amountOnBank = 0;
+    public double getMoneyAmount() {
+        String[][] ingList = this.getData(PaymentType.ING_LIST);
 
-        for (int user = 0; user < this.getData(PaymentType.ING_LIST).length; user++)
+        for (String[] userData : ingList)
         {
-            String[] userData = this.getData(PaymentType.ING_LIST)[user];
-            if (userData[0].equals(this.getUsername()) && userData[1].equals(this.getPassword()) &&
+            if (userData[0].equals(this.getUsername()) &&
+                    userData[1].equals(this.getPassword()) &&
                     userData[2].equals(this.getBankNumber()))
             {
-                if (this.getBankNumber().equals("NL42INGB4416709382"))
+
+                // Credentials matched, update balance based on bank number
+                String bankNumber = this.getBankNumber();
+                switch (bankNumber)
                 {
-                    amountOnBank = 2700.00;
+                    case "NL42INGB4416709382" -> this.balance = 2.00;
+                    case "NL56INGB6733307944" -> this.balance = 1000.00;
+                    case "NL29INGB5082680188" -> this.balance = 10000.00;
                 }
 
-                if (this.getBankNumber().equals("NL56INGB6733307944"))
-                {
-                    amountOnBank = 1000.00;
-                }
-
-                if (this.getBankNumber().equals("NL29INGB5082680188"))
-                {
-                    amountOnBank = 10000.00;
-                }
-            }
-            else
-            {
-                this.setErrorMessage("Invalid account details, please try again!");
-                return -1;
+                // Return the updated balance
+                return this.balance;
             }
         }
 
-        return amountOnBank;
+        return -1;
     }
+
 
     @Override
     public boolean payForCart(double amount)
@@ -142,6 +121,7 @@ public class INGStrategy implements PaymentStrategy
 
             return true;
         }
+
         return false;
     }
 }

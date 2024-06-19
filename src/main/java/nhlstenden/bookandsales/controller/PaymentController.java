@@ -1,7 +1,8 @@
 package nhlstenden.bookandsales.controller;
 
 import jakarta.servlet.http.HttpSession;
-import nhlstenden.bookandsales.factory.*;
+import nhlstenden.bookandsales.factory.BookFactory;
+import nhlstenden.bookandsales.factory.BookProduct;
 import nhlstenden.bookandsales.model.BookType;
 import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.model.PaymentCartHistory;
@@ -9,6 +10,7 @@ import nhlstenden.bookandsales.model.PaymentCartMemento;
 import nhlstenden.bookandsales.service.PaymentService;
 import nhlstenden.bookandsales.strategy.GiftCardStrategy;
 import nhlstenden.bookandsales.strategy.INGStrategy;
+import nhlstenden.bookandsales.strategy.PaymentStrategy;
 import nhlstenden.bookandsales.strategy.PaypalStrategy;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -199,50 +201,56 @@ public class PaymentController
     }
 
     @PostMapping("/ing-pay")
-    public String INGPay(@RequestParam("username") String username,
-                         @RequestParam("password") String password,
-                         @RequestParam("bankNumber") String bankNumber,
-                         HttpSession session,
-                         Model model) throws JSONException, IOException
+    public String ingPay(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("bankNumber") String bankNumber, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws JSONException, IOException
     {
 
         model.addAttribute("booksFromUser", this.getBooksInCart(session));
+
         this.paymentService.setPaymentStrategy(new INGStrategy(bankNumber, username, password));
-        if (this.paymentService.checkout(this.getTotalPrice(session)))
-        {
-            this.removeUserItemsFromAllCartsJson(session);
-        }
+        PaymentStrategy paymentStrategy = this.paymentService.getPaymentStrategy();
+
+        handlePayment(paymentStrategy, redirectAttributes, session);
 
         return "redirect:/cart";
     }
 
     @PostMapping("/paypal-pay")
-    public String paypalPay(@RequestParam("paypalUser") String paypalUser,
-                            @RequestParam("paypalPassword") String paypalPassword,
-                            HttpSession session,
-                            Model model, RedirectAttributes redirectAttributes) throws JSONException, IOException
+    public String paypalPay(@RequestParam("paypalUser") String paypalUser, @RequestParam("paypalPassword") String paypalPassword, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws JSONException, IOException
     {
-        model.addAttribute("booksFromUser", this.getBooksInCart(session));
-        this.paymentService.setPaymentStrategy(new PaypalStrategy(paypalUser, paypalPassword));
 
-        PaypalStrategy paypalStrategy = (PaypalStrategy) this.paymentService.getPaymentStrategy();
-        if (paypalStrategy.getMoneyAmount() == -1)
+        model.addAttribute("booksFromUser", this.getBooksInCart(session));
+
+        this.paymentService.setPaymentStrategy(new PaypalStrategy(paypalUser, paypalPassword));
+        PaymentStrategy paymentStrategy = this.paymentService.getPaymentStrategy();
+        handlePayment(paymentStrategy, redirectAttributes, session);
+
+        return "redirect:/cart";
+    }
+
+    private void handlePayment(PaymentStrategy paymentStrategy, RedirectAttributes redirectAttributes, HttpSession session) throws JSONException, IOException
+    {
+        if (paymentStrategy == null)
         {
-            redirectAttributes.addFlashAttribute("errorMessage", "The login credentials are invalid, please try again!");
-            return "redirect:/cart";
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid payment strategy selected!");
+            return;
         }
 
+        // Check if login credentials are invalid
+        if (paymentStrategy.getMoneyAmount() == -1)
+        {
+            redirectAttributes.addFlashAttribute("errorMessage", "The login credentials are invalid, please try again!");
+            return;
+        }
+
+        // Check if payment is successful
         if (this.paymentService.checkout(this.getTotalPrice(session)))
         {
             redirectAttributes.addFlashAttribute("successMessage", "Payment successful!");
             this.removeUserItemsFromAllCartsJson(session);
-        }
-        else
+        } else
         {
             redirectAttributes.addFlashAttribute("errorMessage", "The account does not have the required balance to pay for these products, please try again!");
         }
-
-        return "redirect:/cart";
     }
 
     @PostMapping("/giftcard-pay")
