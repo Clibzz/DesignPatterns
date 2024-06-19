@@ -12,7 +12,7 @@ import java.sql.SQLException;
 @Controller
 public class ReviewController
 {
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService)
     {
@@ -28,7 +28,7 @@ public class ReviewController
     public String addReview(@RequestParam("review_title") String reviewTitle,
                             @RequestParam("review_description") String reviewDescription,
                             @RequestParam("hiddenBookId") int hiddenBookId,
-                            HttpSession session, Model model) throws SQLException
+                            HttpSession session) throws SQLException
     {
         if (isLoggedIn(session))
         {
