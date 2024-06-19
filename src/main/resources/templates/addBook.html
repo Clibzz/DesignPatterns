@@ -98,7 +98,7 @@
 
                     <label for="image" class="text-light font-weight-bold">Image</label>
                     <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="image" th:field="*{image}">
+                        <input type="file" class="form-control" id="image" name="image" accept="image/jpeg, image/png" th:field="*{image}">
                         <div th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="text-danger ml-2"></div>
                     </div>
 

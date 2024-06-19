@@ -22,9 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -114,28 +112,70 @@ public class BookController
     }
 
     @PostMapping(path = "/post-new-book")
-    public String postNewBook(@Valid @ModelAttribute("bookForm") BookForm bookForm, BindingResult bindingResult,
+    public String postNewBook(@Valid @ModelAttribute("bookForm") BookForm bookForm,
+                              BindingResult bindingResult,
                               Model model) throws SQLException, IOException {
+
+        // Add model attributes for book types and genre values
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
 
+        // Check for validation errors
         if (bindingResult.hasErrors()) {
             // Return the form with validation errors
             return "addBook";
         }
 
-        // Proceed with processing the valid form data
-        this.bookService.addNewBook(bookForm.getBookType(), bookForm.getDescription(), bookForm.getGenre(), bookForm.getPrice(), bookForm.getAuthor(), bookForm.getPublisher(), bookForm.getTitle(), bookForm.getPageAmount(), bookForm.getImage());
+        // Get last inserted ID
+        int lastInsertedId = this.bookService.getLastInsertedId() + 1;
 
-        String uploadDirectory = getBaseImagePath(model) + this.bookService.getLastInsertedId() + File.separator;
-        File targetFile = new File(uploadDirectory + bookForm.getImage().getOriginalFilename());
+        // Determine upload directory and target file
+        String uploadDirectory = getBaseImagePath(model) + lastInsertedId + File.separator;
+        File targetDirectory = new File(uploadDirectory);
 
-        if (!targetFile.exists()) {
-            if (targetFile.mkdirs()) {
-                bookForm.getImage().transferTo(targetFile);
-                model.addAttribute("success", true);
+        // Create directory if it doesn't exist
+        if (!targetDirectory.exists()) {
+            if (!targetDirectory.mkdirs()) {
+                bindingResult.reject("image", "Failed to create directory for image upload");
+                return "addBook";
             }
         }
+
+        // Handle image upload or default image setting
+        String imageName;
+        if (bookForm.getImage() != null && !bookForm.getImage().isEmpty()) {
+            // If an image is uploaded, save it to the upload directory
+            File targetFile = new File(uploadDirectory + bookForm.getImage().getOriginalFilename());
+            bookForm.getImage().transferTo(targetFile);
+            imageName = bookForm.getImage().getOriginalFilename();
+        } else {
+            // If no image is uploaded, use the default image
+            String defaultImagePath = getBaseImagePath(model) + "default" + File.separator + "default.jpeg";
+            File defaultImage = new File(defaultImagePath);
+            File targetFile = new File(uploadDirectory + "default.jpeg");
+
+            try (InputStream is = new FileInputStream(defaultImage);
+                 OutputStream os = new FileOutputStream(targetFile)) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+            } catch (IOException e) {
+                bindingResult.reject("image", "Failed to copy default image");
+                return "addBook";
+            }
+
+            imageName = "default.jpeg";
+        }
+
+        // Add new book using service method
+        this.bookService.addNewBook(bookForm.getBookType(), bookForm.getDescription(), bookForm.getGenre(),
+                bookForm.getPrice(), bookForm.getAuthor(), bookForm.getPublisher(),
+                bookForm.getTitle(), bookForm.getPageAmount(), imageName);
+
+        // Add success attribute to indicate successful book addition
+        model.addAttribute("success", true);
 
         return "addBook";
     }

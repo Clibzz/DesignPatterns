@@ -24,7 +24,7 @@ public class BookService
         this.bookFactory = new BookFactory();
     }
 
-    public void addNewBook(String bookType, String description, Genre genre, double price, String author, String publisher, String title, int pageAmount, MultipartFile image) throws SQLException
+    public void addNewBook(String bookType, String description, Genre genre, double price, String author, String publisher, String title, int pageAmount, String imageName) throws SQLException
     {
         String selectQuery = "SELECT * FROM `book_type` WHERE `type` = '" + bookType + "'";
         Statement selectStatement = sqlConnection.createStatement();
@@ -45,7 +45,7 @@ public class BookService
             statement.setString(6, publisher);
             statement.setString(7, title);
             statement.setInt(8, pageAmount);
-            statement.setString(9, image.getOriginalFilename());
+            statement.setString(9, imageName);
 
             statement.executeUpdate();
         }
