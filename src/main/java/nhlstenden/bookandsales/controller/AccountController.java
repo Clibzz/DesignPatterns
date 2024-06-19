@@ -59,7 +59,8 @@ public class AccountController
     @PostMapping("/post-new-user")
     public String postNewUser(@RequestParam("first_name") String firstName, @RequestParam("last_name") String lastName
             , @RequestParam("date_of_birth") LocalDate dateOfBirth, @RequestParam("address") String address,
-                              @RequestParam("password") String password, Model model) throws SQLException
+                              @RequestParam("password") String password, Model model,
+                              RedirectAttributes redirectAttributes) throws SQLException
     {
         int roleId = 2;
         if (dateOfBirth.isBefore(LocalDate.now()))
@@ -71,9 +72,9 @@ public class AccountController
         }
         else
         {
-            model.addAttribute("dateError", "true");
+            redirectAttributes.addFlashAttribute("dateError", "true");
 
-            return "register";
+            return "redirect:/register";
         }
     }
 
@@ -98,7 +99,9 @@ public class AccountController
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword, Model model, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException, IOException
+    public String login(@RequestParam("first_name") String userName, @RequestParam("password") String userPassword,
+                        Model model, HttpSession session, RedirectAttributes redirectAttributes)
+            throws SQLException, IOException
     {
         User loginInfo = this.accountService.getLoginInfo(userName, userPassword);
 
