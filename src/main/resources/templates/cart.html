@@ -17,6 +17,13 @@
     </div>
     <div class="row">
         <div class="col-md-1"></div>
+        <div class="col-md-10 alert alert-success" role="alert" th:if="${successMessage != null and successMessage != ''}">
+            <p class="mb-0" th:text="${successMessage}"></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
         <div class="col-md-10 alert alert-danger" role="alert" th:if="${errorMessage != null and errorMessage != ''}">
             <p class="mb-0" th:text="${errorMessage}"></p>
         </div>

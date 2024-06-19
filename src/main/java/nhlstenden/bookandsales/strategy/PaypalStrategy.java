@@ -8,34 +8,21 @@ public class PaypalStrategy implements PaymentStrategy<HashMap<String, String>>
 {
     private String username;
     private String password;
-    private HashMap<String, String> paypalUserList = new HashMap<>();
+    private final HashMap<String, String> paypalUserList = new HashMap<>();
     private double balance;
-    private String errorMessage = "";
 
     public PaypalStrategy(String username, String password)
     {
         this.setUsername(username);
         this.setPassword(password);
-        this.balance = this.getMoneyAmount();
+        this.initializeUserList();
+    }
+
+    public void initializeUserList()
+    {
         paypalUserList.put("robin", "test");
         paypalUserList.put("voyanda", "scrub");
         paypalUserList.put("admin", "password");
-    }
-
-    public void setErrorMessage(String message)
-    {
-        this.errorMessage = message;
-    }
-
-    @Override
-    public String getErrorMessage()
-    {
-        return this.errorMessage;
-    }
-
-    public String getUsername()
-    {
-        return this.username;
     }
 
     public void setUsername(String username)
@@ -79,48 +66,33 @@ public class PaypalStrategy implements PaymentStrategy<HashMap<String, String>>
     }
 
     @Override
-    public double getMoneyAmount()
-    {
-        this.errorMessage = "";
-        double amountOnPaypal = 0;
-
-        if (this.getData(PaymentType.PAYPAL_USER_LIST).containsKey(this.getUsername()) &&
-            this.getData(PaymentType.PAYPAL_USER_LIST).get(this.getUsername()).equals(this.getPassword()))
-        {
-            if (this.getUsername().equals("robin") && this.getPassword().equals("test"))
-            {
-                amountOnPaypal = 2;
+    public double getMoneyAmount() {
+        if (this.paypalUserList.containsKey(this.username) && this.paypalUserList.get(this.username).equals(this.password)) {
+            if (this.username.equals("robin") && this.password.equals("test")) {
+                this.balance = 2.00;
+            } else if (this.username.equals("voyanda") && this.password.equals("scrub")) {
+                this.balance = 2000.00;
+            } else if (this.username.equals("admin") && this.password.equals("password")) {
+                this.balance = 10000.00;
             }
-
-            if (this.getUsername().equals("voyanda") && this.getPassword().equals("scrub"))
-            {
-                amountOnPaypal = 2000.00;
-            }
-
-            if (this.getUsername().equals("admin") && this.getPassword().equals("password"))
-            {
-                amountOnPaypal = 10000.00;
-            }
+        } else {
+            return -1;
         }
-        else
-        {
-            this.setErrorMessage("Invalid account details, please try again!");
-        }
-        return amountOnPaypal;
+
+        return this.balance;
     }
+
 
     @Override
     public boolean payForCart(double amount)
     {
-        System.out.println(amount + " A " + this.balance);
-        this.errorMessage = "";
         if (this.balance >= amount)
         {
             this.setBalance(this.balance - amount);
 
             return true;
         }
-        this.setErrorMessage("Transaction failed, not enough money on this account");
+
         return false;
     }
 }

@@ -9,5 +9,4 @@ public interface PaymentStrategy<T> {
     T getData(PaymentType paymentType);
     String getPassword();
     double getMoneyAmount();
-    String getErrorMessage();
 }
