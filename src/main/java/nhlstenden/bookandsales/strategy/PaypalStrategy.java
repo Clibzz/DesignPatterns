@@ -1,20 +1,36 @@
 package nhlstenden.bookandsales.strategy;
 
+import nhlstenden.bookandsales.model.PaymentType;
+
 import java.util.HashMap;
 
-public class PaypalStrategy implements PaymentStrategy
+public class PaypalStrategy implements PaymentStrategy<HashMap<String, String>>
 {
     private String username;
     private String password;
-    private final HashMap<String, String> paypalUserList;
+    private HashMap<String, String> paypalUserList = new HashMap<>();
     private double balance;
+    private String errorMessage = "";
 
     public PaypalStrategy(String username, String password)
     {
         this.setUsername(username);
         this.setPassword(password);
-        this.paypalUserList = new HashMap<>();
-        this.balance = this.getMoneyAmountPaypalUser();
+        this.balance = this.getMoneyAmount();
+        paypalUserList.put("robin", "test");
+        paypalUserList.put("voyanda", "scrub");
+        paypalUserList.put("admin", "password");
+    }
+
+    public void setErrorMessage(String message)
+    {
+        this.errorMessage = message;
+    }
+
+    @Override
+    public String getErrorMessage()
+    {
+        return this.errorMessage;
     }
 
     public String getUsername()
@@ -28,12 +44,9 @@ public class PaypalStrategy implements PaymentStrategy
         {
             this.username = username;
         }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
     }
 
+    @Override
     public String getPassword()
     {
         return this.password;
@@ -45,41 +58,38 @@ public class PaypalStrategy implements PaymentStrategy
         {
             this.password = password;
         }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
     }
 
-    public HashMap<String, String> getPaypalUserList()
+    @Override
+    public HashMap<String, String> getData(PaymentType paymentType)
     {
-        this.paypalUserList.put("robin", "test");
-        this.paypalUserList.put("voyanda", "scrub");
-        this.paypalUserList.put("admin", "password");
-
-        return this.paypalUserList;
+        return new HashMap<>(paypalUserList);
     }
 
+    @Override
     public double getBalance()
     {
         return this.balance;
     }
 
+    @Override
     public void setBalance(double balance)
     {
         this.balance = balance;
     }
 
-    public double getMoneyAmountPaypalUser()
+    @Override
+    public double getMoneyAmount()
     {
+        this.errorMessage = "";
         double amountOnPaypal = 0;
 
-        if (this.getPaypalUserList().containsKey(this.getUsername()) &&
-            this.getPaypalUserList().get(this.getUsername()).equals(this.getPassword()))
+        if (this.getData(PaymentType.PAYPAL_USER_LIST).containsKey(this.getUsername()) &&
+            this.getData(PaymentType.PAYPAL_USER_LIST).get(this.getUsername()).equals(this.getPassword()))
         {
             if (this.getUsername().equals("robin") && this.getPassword().equals("test"))
             {
-                amountOnPaypal = 1500.00;
+                amountOnPaypal = 2;
             }
 
             if (this.getUsername().equals("voyanda") && this.getPassword().equals("scrub"))
@@ -94,24 +104,23 @@ public class PaypalStrategy implements PaymentStrategy
         }
         else
         {
-            throw new IllegalArgumentException("The login details are incorrect, please try again!");
+            this.setErrorMessage("Invalid account details, please try again!");
         }
-
         return amountOnPaypal;
     }
 
     @Override
-    public boolean payForCurrentCart(double amount)
+    public boolean payForCart(double amount)
     {
+        System.out.println(amount + " A " + this.balance);
+        this.errorMessage = "";
         if (this.balance >= amount)
         {
             this.setBalance(this.balance - amount);
 
             return true;
         }
-        else
-        {
-            throw new IllegalArgumentException("Transaction failed, not enough money on this account");
-        }
+        this.setErrorMessage("Transaction failed, not enough money on this account");
+        return false;
     }
 }

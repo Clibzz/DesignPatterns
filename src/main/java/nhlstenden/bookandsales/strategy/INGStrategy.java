@@ -1,19 +1,32 @@
 package nhlstenden.bookandsales.strategy;
 
+import nhlstenden.bookandsales.model.PaymentType;
+
 public class INGStrategy implements PaymentStrategy
 {
     private String bankNumber;
     private String username;
     private String password;
     private double balance;
-
+    private String errorMessage;
 
     public INGStrategy(String bankNumber, String username, String password)
     {
         this.setBankNumber(bankNumber);
         this.setUsername(username);
         this.setPassword(password);
-        this.balance = this.getMoneyAmountINGUser();
+        this.balance = this.getMoneyAmount();
+    }
+
+    public void setErrorMessage(String message)
+    {
+        this.errorMessage = message;
+    }
+
+    @Override
+    public String getErrorMessage()
+    {
+        return this.errorMessage;
     }
 
     public String getBankNumber()
@@ -26,10 +39,6 @@ public class INGStrategy implements PaymentStrategy
         if (!(bankNumber.isEmpty()))
         {
             this.bankNumber = bankNumber;
-        }
-        else
-        {
-            throw new IllegalArgumentException();
         }
     }
 
@@ -44,12 +53,9 @@ public class INGStrategy implements PaymentStrategy
         {
             this.username = username;
         }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
     }
 
+    @Override
     public String getPassword()
     {
         return this.password;
@@ -61,35 +67,44 @@ public class INGStrategy implements PaymentStrategy
         {
             this.password = password;
         }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
     }
 
+    @Override
     public double getBalance()
     {
         return this.balance;
     }
 
+    @Override
     public void setBalance(double balance)
     {
         this.balance = balance;
     }
 
-    public String[][] getINGList()
-    {
-        return new String[][]{{"test", "test", "NL42INGB4416709382"}, {"voyanda", "scrub", "NL56INGB6733307944"},
-                                  {"admin", "password", "NL29INGB5082680188"}};
+    @Override
+    public String[][] getData(PaymentType paymentType) {
+        if (paymentType == PaymentType.ING_LIST) {
+            return new String[][]{
+                    {"test", "test", "NL42INGB4416709382"},
+                    {"voyanda", "scrub", "NL56INGB6733307944"},
+                    {"admin", "password", "NL29INGB5082680188"}
+            };
+        }
+        else
+        {
+            this.errorMessage = "Invalid payment type for INGPaymentStrategy";
+            return null;
+        }
     }
 
-    public double getMoneyAmountINGUser()
+    @Override
+    public double getMoneyAmount()
     {
         double amountOnBank = 0;
 
-        for (int user = 0; user < this.getINGList().length; user++)
+        for (int user = 0; user < this.getData(PaymentType.ING_LIST).length; user++)
         {
-            String[] userData = this.getINGList()[user];
+            String[] userData = this.getData(PaymentType.ING_LIST)[user];
             if (userData[0].equals(this.getUsername()) && userData[1].equals(this.getPassword()) &&
                     userData[2].equals(this.getBankNumber()))
             {
@@ -108,23 +123,25 @@ public class INGStrategy implements PaymentStrategy
                     amountOnBank = 10000.00;
                 }
             }
+            else
+            {
+                this.setErrorMessage("Invalid account details, please try again!");
+                return -1;
+            }
         }
 
         return amountOnBank;
     }
 
     @Override
-    public boolean payForCurrentCart(double amount)
+    public boolean payForCart(double amount)
     {
         if (this.balance >= amount)
         {
-            this.setBalance(this.getMoneyAmountINGUser() - amount);
+            this.setBalance(this.getMoneyAmount() - amount);
 
             return true;
         }
-        else
-        {
-            throw new IllegalArgumentException("Transaction failed, not enough money on this account");
-        }
+        return false;
     }
 }

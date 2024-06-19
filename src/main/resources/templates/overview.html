@@ -12,10 +12,10 @@
             <div th:replace="~{components/header :: header}"></div>
             <div class="row">
                 <div class="col-md-1"></div>
-                <div class="col-md-8 pt-3">
+                <div class="col-md-8 mt-3">
                     <h1 class="font-weight-bold">Overview</h1>
                 </div>
-                <div class="col-md-2 pt-3">
+                <div class="col-md-2 mt-3">
                     <form th:action="@{'/overview'}" method="post">
                         <label for="book-type" class="text-secondary font-weight-bold">Select book type:</label>
                         <select class="form-control mb-3" id="book-type" name="bookTypeId" onchange="this.form.submit()">

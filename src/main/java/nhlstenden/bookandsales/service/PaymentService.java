@@ -18,6 +18,11 @@ public class PaymentService
         this.sqlConnection = DatabaseUtil.getConnection();
     }
 
+    public PaymentStrategy getPaymentStrategy()
+    {
+        return this.paymentStrategy;
+    }
+
     public void setPaymentStrategy(PaymentStrategy paymentStrategy)
     {
         this.paymentStrategy = paymentStrategy;
@@ -25,6 +30,6 @@ public class PaymentService
 
     public boolean checkout(double amount)
     {
-        return this.paymentStrategy.payForCurrentCart(amount);
+        return this.paymentStrategy.payForCart(amount);
     }
 }
