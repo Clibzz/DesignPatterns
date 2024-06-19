@@ -2,7 +2,7 @@ package nhlstenden.bookandsales.strategy;
 
 import nhlstenden.bookandsales.model.PaymentType;
 
-public class INGStrategy implements PaymentStrategy
+public class INGStrategy implements PaymentStrategy<String[][]>
 {
     private String bankNumber;
     private String username;

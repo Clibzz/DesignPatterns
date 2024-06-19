@@ -33,8 +33,8 @@ import java.util.ArrayList;
 @Controller
 public class PaymentController
 {
-    private PaymentService paymentService;
-    private BookFactory bookFactory;
+    private final PaymentService paymentService;
+    private final BookFactory bookFactory;
 
     public PaymentController(PaymentService paymentService)
     {
@@ -200,34 +200,8 @@ public class PaymentController
         return totalPayAmount;
     }
 
-    @PostMapping("/ing-pay")
-    public String ingPay(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("bankNumber") String bankNumber, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws JSONException, IOException
-    {
-
-        model.addAttribute("booksFromUser", this.getBooksInCart(session));
-
-        this.paymentService.setPaymentStrategy(new INGStrategy(bankNumber, username, password));
-        PaymentStrategy paymentStrategy = this.paymentService.getPaymentStrategy();
-
-        handlePayment(paymentStrategy, redirectAttributes, session);
-
-        return "redirect:/cart";
-    }
-
-    @PostMapping("/paypal-pay")
-    public String paypalPay(@RequestParam("paypalUser") String paypalUser, @RequestParam("paypalPassword") String paypalPassword, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws JSONException, IOException
-    {
-
-        model.addAttribute("booksFromUser", this.getBooksInCart(session));
-
-        this.paymentService.setPaymentStrategy(new PaypalStrategy(paypalUser, paypalPassword));
-        PaymentStrategy paymentStrategy = this.paymentService.getPaymentStrategy();
-        handlePayment(paymentStrategy, redirectAttributes, session);
-
-        return "redirect:/cart";
-    }
-
-    private void handlePayment(PaymentStrategy paymentStrategy, RedirectAttributes redirectAttributes, HttpSession session) throws JSONException, IOException
+    private void handlePayment(PaymentStrategy paymentStrategy, RedirectAttributes redirectAttributes,
+                               HttpSession session) throws JSONException, IOException
     {
         if (paymentStrategy == null)
         {
@@ -249,21 +223,53 @@ public class PaymentController
             this.removeUserItemsFromAllCartsJson(session);
         } else
         {
-            redirectAttributes.addFlashAttribute("errorMessage", "The account does not have the required balance to pay for these products, please try again!");
+            if (paymentStrategy instanceof GiftCardStrategy)
+            {
+                redirectAttributes.addFlashAttribute("errorMessage", "The gift card does not have the required balance to pay for these products, please try again!");
+            } else
+            {
+                redirectAttributes.addFlashAttribute("errorMessage", "The account does not have the required balance to pay for these products, please try again!");
+            }
         }
     }
 
-    @PostMapping("/giftcard-pay")
-    public String giftcardPay(@RequestParam("giftCard") String giftCard,
-                              HttpSession session, Model model) throws JSONException, IOException
+    @PostMapping("/ing-pay")
+    public String ingPay(@RequestParam("username") String username, @RequestParam("password") String password,
+                         @RequestParam("bankNumber") String bankNumber, HttpSession session, Model model,
+                         RedirectAttributes redirectAttributes) throws JSONException, IOException
     {
+        model.addAttribute("booksFromUser", this.getBooksInCart(session));
 
+        this.paymentService.setPaymentStrategy(new INGStrategy(bankNumber, username, password));
+        PaymentStrategy paymentStrategy = this.paymentService.getPaymentStrategy();
+
+        handlePayment(paymentStrategy, redirectAttributes, session);
+
+        return "redirect:/cart";
+    }
+
+    @PostMapping("/paypal-pay")
+    public String paypalPay(@RequestParam("paypalUser") String paypalUser,
+                            @RequestParam("paypalPassword") String paypalPassword, HttpSession session,
+                            Model model, RedirectAttributes redirectAttributes) throws JSONException, IOException
+    {
+        model.addAttribute("booksFromUser", this.getBooksInCart(session));
+
+        this.paymentService.setPaymentStrategy(new PaypalStrategy(paypalUser, paypalPassword));
+        PaymentStrategy paymentStrategy = this.paymentService.getPaymentStrategy();
+        handlePayment(paymentStrategy, redirectAttributes, session);
+
+        return "redirect:/cart";
+    }
+
+    @PostMapping("/giftcard-pay")
+    public String giftcardPay(@RequestParam("giftCard") String giftCard, HttpSession session, Model model,
+                              RedirectAttributes redirectAttributes) throws JSONException, IOException
+    {
         model.addAttribute("booksFromUser", this.getBooksInCart(session));
         this.paymentService.setPaymentStrategy(new GiftCardStrategy(giftCard));
-        if (this.paymentService.checkout(this.getTotalPrice(session)))
-        {
-            this.removeUserItemsFromAllCartsJson(session);
-        }
+        PaymentStrategy paymentStrategy = this.paymentService.getPaymentStrategy();
+        handlePayment(paymentStrategy, redirectAttributes, session);
 
         return "redirect:/cart";
     }

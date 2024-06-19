@@ -5,7 +5,7 @@ import nhlstenden.bookandsales.model.PaymentType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GiftCardStrategy implements PaymentStrategy
+public class GiftCardStrategy implements PaymentStrategy<HashMap<String, Double>>
 {
 
     private String giftCode;
@@ -16,7 +16,7 @@ public class GiftCardStrategy implements PaymentStrategy
     {
         this.setGiftCode(giftCode);
         this.setGiftCardBalance();
-        giftCodeList.put("lyiqEcFzFjT1", 25.0);
+        giftCodeList.put("lyiqEcFzFjT1", 100.0);
         giftCodeList.put("dWWlPRhUYjo2", 25.0);
         giftCodeList.put("jDEyexZs7u40", 20.0);
         giftCodeList.put("bcfIZK8Wycfy", 20.0);
@@ -36,21 +36,11 @@ public class GiftCardStrategy implements PaymentStrategy
         return 0;
     }
 
-    @Override
-    public String getErrorMessage()
-    {
-        return null;
-    }
-
     public void setGiftCode(String giftCode)
     {
         if (!(giftCode.isEmpty()))
         {
             this.giftCode = giftCode;
-        }
-        else
-        {
-            throw new IllegalArgumentException();
         }
     }
 
@@ -109,6 +99,7 @@ public class GiftCardStrategy implements PaymentStrategy
             
             return true;
         }
+
         return false;
     }
 }
