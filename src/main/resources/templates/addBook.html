@@ -23,64 +23,88 @@
                     </div>
                 </div>
 
-                <form th:action="@{/post-new-book}" method="post" enctype="multipart/form-data">
-                    <label for="book_type_id" class="text-light font-weight-bold">BookType</label>
+                <form th:action="@{/post-new-book}" method="post" th:object="${bookForm}" enctype="multipart/form-data">
+                    <div class="d-flex">
+                        <label for="book_type_id" class="text-light font-weight-bold">BookType</label>
+                        <div th:if="${#fields.hasErrors('bookType')}" th:errors="*{bookType}" class="text-danger ml-2"></div>
+                    </div>
                     <div class="input-group mb-3">
-                        <select id="book_type_id" name="book_type_id" class="form-control">
+                        <select id="book_type_id" th:field="*{bookType}" class="form-control">
                             <option th:each="bookTypeOption : ${bookTypes}"
                                     th:value="${bookTypeOption}"
-                                    th:text="${bookTypeOption}"
-                                    th:selected="${bookType == bookTypeOption}"></option>
+                                    th:text="${bookTypeOption}"></option>
                         </select>
                     </div>
 
-                    <label for="description" class="text-light font-weight-bold">Description</label>
+                    <div class="d-flex">
+                        <label for="description" class="text-light font-weight-bold">Description</label>
+                        <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger ml-2"></div>
+                    </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="description" name="description" th:value="${description}">
+                        <input type="text" class="form-control" id="description" th:field="*{description}">
                     </div>
 
-                    <label for="genre" class="text-light font-weight-bold">Genre</label>
+                    <div class="d-flex">
+                        <label for="genre" class="text-light font-weight-bold">Genre</label>
+                        <div th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}" class="text-danger ml-2"></div>
+                    </div>
                     <div class="input-group mb-3">
-                        <select id="genre" name="genre" class="form-control">
+                        <select id="genre" th:field="*{genre}" class="form-control">
                             <option th:each="genreOption : ${enumValues}"
                                     th:value="${genreOption}"
-                                    th:text="${#strings.capitalize(genreOption.name().toLowerCase())}"
-                                    th:selected="${genre == genreOption}"></option>
+                                    th:text="${#strings.capitalize(genreOption.name().toLowerCase())}"></option>
                         </select>
                     </div>
 
-                    <label for="price" class="text-light font-weight-bold">Price</label>
+                    <div class="d-flex">
+                        <label for="price" class="text-light font-weight-bold">Price</label>
+                        <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger ml-2"></div>
+                    </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="price" name="price" th:value="${price}">
+                        <input type="text" class="form-control" id="price" th:field="*{price}">
                     </div>
 
-                    <label for="author" class="text-light font-weight-bold">Author</label>
+                    <div class="d-flex">
+                        <label for="author" class="text-light font-weight-bold">Author</label>
+                        <div th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="text-danger ml-2"></div>
+                    </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="author" name="author" th:value="${author}">
+                        <input type="text" class="form-control" id="author" th:field="*{author}">
                     </div>
 
-                    <label for="publisher" class="text-light font-weight-bold">Publisher</label>
+                    <div class="d-flex">
+                        <label for="publisher" class="text-light font-weight-bold">Publisher</label>
+                        <div th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}" class="text-danger ml-2"></div>
+                    </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="publisher" name="publisher" th:value="${publisher}">
+                        <input type="text" class="form-control" id="publisher" th:field="*{publisher}">
                     </div>
 
-                    <label for="title" class="text-light font-weight-bold">Title</label>
+                    <div class="d-flex">
+                        <label for="title" class="text-light font-weight-bold">Title</label>
+                        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger ml-2"></div>
+                    </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="title" name="title" th:value="${title}">
+                        <input type="text" class="form-control" id="title" th:field="*{title}">
                     </div>
 
-                    <label for="page_amount" class="text-light font-weight-bold">Amount of pages</label>
+                    <div class="d-flex">
+                        <label for="page_amount" class="text-light font-weight-bold">Amount of pages</label>
+                        <div th:if="${#fields.hasErrors('pageAmount')}" th:errors="*{pageAmount}" class="text-danger ml-2"></div>
+                    </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="page_amount" name="page_amount" th:value="${pageAmount}">
+                        <input type="text" class="form-control" id="page_amount" th:field="*{pageAmount}">
                     </div>
 
                     <label for="image" class="text-light font-weight-bold">Image</label>
                     <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="image" name="image" th:value="${image}">
+                        <input type="file" class="form-control" id="image" th:field="*{image}">
+                        <div th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="text-danger ml-2"></div>
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-5 float-right">Add book</button>
                 </form>
+
             </div>
             <div class="col-md-4"></div>
         </div>

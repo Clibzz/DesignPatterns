@@ -3,7 +3,9 @@ package nhlstenden.bookandsales.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import nhlstenden.bookandsales.factory.BookProduct;
+import nhlstenden.bookandsales.model.BookForm;
 import nhlstenden.bookandsales.model.Genre;
 import nhlstenden.bookandsales.model.PaymentCart;
 import nhlstenden.bookandsales.model.PaymentCartHistory;
@@ -16,10 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -45,25 +45,25 @@ public class BookController
     }
 
     @GetMapping("/addBook")
-    public String addBook(Model model, HttpSession session) throws SQLException
-    {
-        if (isLoggedIn(session))
-        {
-            if (session.getAttribute("roleId").equals(1))
-            {
+    public String addBook(Model model, HttpSession session) throws SQLException {
+        if (isLoggedIn(session)) {
+            if (session.getAttribute("roleId").equals(1)) {
                 model.addAttribute("bookTypes", this.getBookTypeTypes());
                 model.addAttribute("enumValues", Genre.values());
 
+                // Initialize and add the bookForm object to the model
+                model.addAttribute("bookForm", new BookForm());
+
                 return "addBook";
-            }
-            else
-            {
+            } else {
                 return "redirect:/overview";
             }
         }
 
         return "redirect:/login";
     }
+
+
 
     private ArrayList<String> getBookTypeTypes() throws SQLException
     {
@@ -114,34 +114,25 @@ public class BookController
     }
 
     @PostMapping(path = "/post-new-book")
-    public String postNewBook(@RequestParam("book_type_id") String bookType, @RequestParam("description") String description,
-                              @RequestParam("genre") Genre genre, @RequestParam("price") double price,
-                              @RequestParam("author") String author, @RequestParam("publisher") String publisher,
-                              @RequestParam("title") String title, @RequestParam("page_amount") Integer pageAmount,
-                              @RequestParam("image") MultipartFile image, Model model) throws SQLException, IOException
-    {
+    public String postNewBook(@Valid @ModelAttribute("bookForm") BookForm bookForm, BindingResult bindingResult,
+                              Model model) throws SQLException, IOException {
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
 
-        model.addAttribute("bookType", bookType);
-        model.addAttribute("description", description);
-        model.addAttribute("genre", genre);
-        model.addAttribute("price", price);
-        model.addAttribute("author", author);
-        model.addAttribute("publisher", publisher);
-        model.addAttribute("title", title);
-        model.addAttribute("pageAmount", pageAmount);
+        if (bindingResult.hasErrors()) {
+            // Return the form with validation errors
+            return "addBook";
+        }
 
-        this.bookService.addNewBook(bookType, description, genre, price, author, publisher, title, pageAmount, image);
+        // Proceed with processing the valid form data
+        this.bookService.addNewBook(bookForm.getBookType(), bookForm.getDescription(), bookForm.getGenre(), bookForm.getPrice(), bookForm.getAuthor(), bookForm.getPublisher(), bookForm.getTitle(), bookForm.getPageAmount(), bookForm.getImage());
 
         String uploadDirectory = getBaseImagePath(model) + this.bookService.getLastInsertedId() + File.separator;
-        File targetFile = new File(uploadDirectory + image.getOriginalFilename());
+        File targetFile = new File(uploadDirectory + bookForm.getImage().getOriginalFilename());
 
-        if (!targetFile.exists())
-        {
-            if (targetFile.mkdirs())
-            {
-                image.transferTo(targetFile);
+        if (!targetFile.exists()) {
+            if (targetFile.mkdirs()) {
+                bookForm.getImage().transferTo(targetFile);
                 model.addAttribute("success", true);
             }
         }
