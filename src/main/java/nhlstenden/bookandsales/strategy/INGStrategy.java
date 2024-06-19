@@ -57,12 +57,6 @@ public class INGStrategy implements PaymentStrategy<String[][]>
     }
 
     @Override
-    public double getBalance()
-    {
-        return this.balance;
-    }
-
-    @Override
     public void setBalance(double balance)
     {
         this.balance = balance;
@@ -77,10 +71,8 @@ public class INGStrategy implements PaymentStrategy<String[][]>
                     {"admin", "password", "NL29INGB5082680188"}
             };
         }
-        else
-        {
-            return null;
-        }
+        
+        return null;
     }
 
     @Override

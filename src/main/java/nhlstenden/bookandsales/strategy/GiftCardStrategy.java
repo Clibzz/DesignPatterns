@@ -10,12 +10,17 @@ public class GiftCardStrategy implements PaymentStrategy<HashMap<String, Double>
 
     private String giftCode;
     private final HashMap<String, Double> giftCodeList = new HashMap<>();
-    private double balance;
+    private double balance = -1;
 
     public GiftCardStrategy(String giftCode)
     {
+        this.initializeGiftCodeList();
         this.setGiftCode(giftCode);
         this.setGiftCardBalance();
+    }
+
+    public void initializeGiftCodeList()
+    {
         giftCodeList.put("lyiqEcFzFjT1", 100.0);
         giftCodeList.put("dWWlPRhUYjo2", 25.0);
         giftCodeList.put("jDEyexZs7u40", 20.0);
@@ -33,7 +38,7 @@ public class GiftCardStrategy implements PaymentStrategy<HashMap<String, Double>
     @Override
     public double getMoneyAmount()
     {
-        return 0;
+        return this.balance;
     }
 
     public void setGiftCode(String giftCode)
@@ -56,12 +61,6 @@ public class GiftCardStrategy implements PaymentStrategy<HashMap<String, Double>
     }
 
     @Override
-    public double getBalance()
-    {
-        return this.balance;
-    }
-
-    @Override
     public void setBalance(double balance)
     {
         this.balance = balance;
@@ -72,8 +71,10 @@ public class GiftCardStrategy implements PaymentStrategy<HashMap<String, Double>
         if (paymentType == PaymentType.GIFT_CODE_LIST) {
             return new HashMap<>(giftCodeList);
         }
-        throw new IllegalArgumentException("Invalid payment type for GiftCodePaymentStrategy");
+        
+        return null;
     }
+
 
     public boolean hasEnoughBalance(double giftCardAmount, double amount)
     {

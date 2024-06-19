@@ -50,13 +50,12 @@ public class PaypalStrategy implements PaymentStrategy<HashMap<String, String>>
     @Override
     public HashMap<String, String> getData(PaymentType paymentType)
     {
-        return new HashMap<>(paypalUserList);
-    }
+        if (paymentType == PaymentType.PAYPAL_USER_LIST)
+        {
+            return new HashMap<>(paypalUserList);
+        }
 
-    @Override
-    public double getBalance()
-    {
-        return this.balance;
+        return null;
     }
 
     @Override

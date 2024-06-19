@@ -212,7 +212,7 @@ public class PaymentController
         // Check if login credentials are invalid
         if (paymentStrategy.getMoneyAmount() == -1)
         {
-            redirectAttributes.addFlashAttribute("errorMessage", "The login credentials are invalid, please try again!");
+            redirectAttributes.addFlashAttribute("errorMessage", "The (login) credentials are invalid, please try again!");
             return;
         }
 
