@@ -149,23 +149,6 @@ public class BookController
             bookForm.getImage().transferTo(targetFile);
             imageName = bookForm.getImage().getOriginalFilename();
         } else {
-            // If no image is uploaded, use the default image
-            String defaultImagePath = getBaseImagePath(model) + "default" + File.separator + "default.jpeg";
-            File defaultImage = new File(defaultImagePath);
-            File targetFile = new File(uploadDirectory + "default.jpeg");
-
-            try (InputStream is = new FileInputStream(defaultImage);
-                 OutputStream os = new FileOutputStream(targetFile)) {
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = is.read(buffer)) > 0) {
-                    os.write(buffer, 0, length);
-                }
-            } catch (IOException e) {
-                bindingResult.reject("image", "Failed to copy default image");
-                return "addBook";
-            }
-
             imageName = "default.jpeg";
         }
 

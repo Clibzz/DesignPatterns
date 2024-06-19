@@ -37,19 +37,32 @@
                             There currently are no books available
                         </div>
 
+                        <!-- Displaying books regardless of type -->
                         <div class="row" th:unless="${isEmptyStore}">
-                            <div th:each="allBooks : ${bookRegardlessOfTypeList}" th:if="${!hasBookTypeBeenChosen}" onclick="loadBookDetails()" class="m-2 rounded bookCover" th:value="${allBooks.getId()}">
-                                <img class="img-fluid m-2" style="width: 200px; height: 200px;" th:src="'/' + images + '/' + ${allBooks.getId()} + '/' + ${allBooks.getImage()}" />
-                                <p th:text="${allBooks.getTitle()}" class="text-dark text-center"></p>
-                                <p th:text="${allBooks.getAuthor()}" class="text-dark text-center"></p>
+                            <div th:each="allBooks : ${bookRegardlessOfTypeList}" th:if="${!hasBookTypeBeenChosen}"
+                                 onclick="loadBookDetails()" class="m-2 r   ounded bookCover" th:value="${allBooks.id}">
+                                <img class="img-fluid m-2" style="width: 200px; height: 200px;"
+                                     th:src="${allBooks.image == 'default.jpeg'? '/images/default/default.jpeg' : '/images/' + allBooks.id + '/' + allBooks.image}"
+                                     alt="Book"/>
+                                <p th:text="${allBooks.title}" class="text-dark text-center"
+                                   style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;"></p>
+                                <p th:text="${allBooks.author}" class="text-dark text-center"
+                                   style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;"></p>
                             </div>
                         </div>
 
-                        <div th:each="book : ${bookList}" onclick="loadBookDetails()" class="m-2 rounded bookCover" th:value="${book.getId()}">
-                            <img class="img-fluid m-2" style="width: 200px; height: 200px;" th:src="'/' + images + '/' + ${book.getId()} + '/' + ${book.getImage()}" />
-                            <p th:text="${book.getTitle()}" class="text-dark text-center"></p>
-                            <p th:text="${book.getAuthor()}" class="text-dark text-center"></p>
+                        <!-- Displaying books based on chosen type -->
+                        <div th:each="book : ${bookList}" onclick="loadBookDetails()" class="m-2 rounded bookCover"
+                             th:value="${book.id}">
+                            <img class="img-fluid m-2" style="width: 200px; height: 200px;"
+                                 th:src="${book.image == 'default.jpeg'? '/images/default/default.jpeg' : '/images/' + book.id + '/' + book.image}"
+                                 alt="Book"/>
+                            <p th:text="${book.title}" class="text-dark text-center"
+                               style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;"></p>
+                            <p th:text="${book.author}" class="text-dark text-center"
+                               style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;"></p>
                         </div>
+
                     </div>
                 </div>
                 <div class="col-md-1"></div>
