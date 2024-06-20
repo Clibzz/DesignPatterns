@@ -177,7 +177,7 @@ public class EBook implements BookProduct
     }
 
     @Override
-    public boolean getBookCondition()
+    public boolean getHasBookCondition()
     {
         return this.hasAutomaticReading;
     }

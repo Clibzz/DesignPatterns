@@ -13,7 +13,7 @@ public interface BookProduct
     String getPublisher();
     int getPageAmount();
     Genre getGenre();
-    boolean getBookCondition();
+    boolean getHasBookCondition();
     String getDescription();
     String getImage();
 }

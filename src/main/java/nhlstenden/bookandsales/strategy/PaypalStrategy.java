@@ -83,7 +83,7 @@ public class PaypalStrategy implements PaymentStrategy<HashMap<String, String>>
 
 
     @Override
-    public boolean payForCart(double amount)
+    public boolean isPayingForCart(double amount)
     {
         if (this.balance >= amount)
         {

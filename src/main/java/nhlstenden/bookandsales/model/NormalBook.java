@@ -177,7 +177,7 @@ public class NormalBook implements BookProduct
     }
 
     @Override
-    public boolean getBookCondition()
+    public boolean getHasBookCondition()
     {
         return this.hasHardCover;
     }

@@ -178,7 +178,7 @@ public class AudioBook implements BookProduct
     }
 
     @Override
-    public boolean getBookCondition()
+    public boolean getHasBookCondition()
     {
         return this.hasVoiceActor;
     }

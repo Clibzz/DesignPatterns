@@ -65,7 +65,9 @@ public class AccountController
     @GetMapping("/logout")
     public String logout(HttpSession session) throws IOException
     {
+        //Get the path of the loggedIn user and their cart
         Path path = Paths.get(session.getAttribute("username") + ".json");
+        //Delete the file once the user logs out
         Files.deleteIfExists(path);
         session.invalidate();
 
@@ -88,9 +90,11 @@ public class AccountController
                               @RequestParam("date_of_birth") LocalDate dateOfBirth, @RequestParam("address") String address,
                               @RequestParam("password") String password, RedirectAttributes redirectAttributes) throws SQLException
     {
+        //set roleId to 2 cause that's the roleId of a regular user
         int roleId = 2;
         if (dateOfBirth.isBefore(LocalDate.now()))
         {
+            //encrypting the password
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             this.accountService.registerNewUser(roleId, firstName, lastName, dateOfBirth, address, passwordEncoder.encode(password));
             redirectAttributes.addFlashAttribute("success", "User has been successfully registered");

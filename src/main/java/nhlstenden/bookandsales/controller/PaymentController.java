@@ -74,10 +74,12 @@ public class PaymentController
      */
     private void fillCartJsonOfUser(HttpSession session) throws IOException, JSONException
     {
+        //Retrieving the chosen user
         Path path = Paths.get(session.getAttribute("username") + ".json");
         JSONArray jsonData = this.getAllCarts();
         JSONArray userSpecificJsonData = new JSONArray();
 
+        //looping through the data and comparing to see if the user exists inside the carts.json
         for (int i = 0; i < jsonData.length(); i++)
         {
             JSONObject jsonObj = jsonData.getJSONObject(i);
@@ -101,28 +103,28 @@ public class PaymentController
      * @throws JSONException Throws a JSONException when something goes wrong related to the JSON
      * @throws IOException Throws an IOException when something goes wrong removing the data from the file
      */
-    private void removeUserItemsFromAllCartsJson(HttpSession session) throws JSONException, IOException
-    {
+    private void removeUserItemsFromAllCartsJson(HttpSession session) throws JSONException, IOException {
+        //Getting the cart.json file path
         Path path = Paths.get("carts.json");
         JSONArray jsonData = this.getAllCarts();
-        for (int i = 0; i < jsonData.length(); i++)
-        {
+        int userId = (int) session.getAttribute("userId");
+
+        //Loop through all the created carts in reverse order
+        for (int i = jsonData.length() - 1; i >= 0; i--) {
             JSONObject jsonObj = jsonData.getJSONObject(i);
-            if (jsonObj.getInt("userId") == (int) session.getAttribute("userId"))
-            {
+            //Check if the user is present in the cart.json
+            if (jsonObj.getInt("userId") == userId) {
+                //Remove if found
                 jsonData.remove(i);
             }
         }
 
-        File file = new File(path.toString());
-        if (file.delete())
-        {
-            try (FileWriter writer = new FileWriter(path.toFile(), false))
-            {
-                writer.write(jsonData.toString(4));
-            }
+        // Write the updated JSON data back to the file
+        try (FileWriter writer = new FileWriter(path.toFile(), false)) {
+            writer.write(jsonData.toString(4));
         }
     }
+
 
     /**
      * Get the data from the user's personal cart file
@@ -300,7 +302,7 @@ public class PaymentController
         }
 
         // Check if payment is successful
-        if (this.paymentService.checkout(this.getTotalPrice(session)))
+        if (this.paymentService.hasCheckedOut(this.getTotalPrice(session)))
         {
             redirectAttributes.addFlashAttribute("successMessage", "Payment successful!");
             this.removeUserItemsFromAllCartsJson(session);

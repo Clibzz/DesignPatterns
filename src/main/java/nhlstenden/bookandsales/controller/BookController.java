@@ -161,14 +161,16 @@ public class BookController
     @PostMapping(path = "/post-new-book")
     public String postNewBook(@Valid @ModelAttribute("bookForm") BookForm bookForm,
                               BindingResult bindingResult,
-                              Model model) throws SQLException, IOException {
+                              Model model) throws SQLException, IOException
+    {
 
         // Add model attributes for book types and genre values
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
 
         // Check for validation errors
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors())
+        {
             // Return the form with validation errors
             return "addBook";
         }
@@ -181,8 +183,10 @@ public class BookController
         File targetDirectory = new File(uploadDirectory);
 
         // Create directory if it doesn't exist
-        if (!targetDirectory.exists()) {
-            if (!targetDirectory.mkdirs()) {
+        if (!targetDirectory.exists())
+        {
+            if (!targetDirectory.mkdirs())
+            {
                 bindingResult.reject("image", "Failed to create directory for image upload");
                 return "addBook";
             }
@@ -190,12 +194,15 @@ public class BookController
 
         // Handle image upload or default image setting
         String imageName;
-        if (bookForm.getImage() != null && !bookForm.getImage().isEmpty()) {
+        if (bookForm.getImage() != null && !bookForm.getImage().isEmpty())
+        {
             // If an image is uploaded, save it to the upload directory
             File targetFile = new File(uploadDirectory + bookForm.getImage().getOriginalFilename());
             bookForm.getImage().transferTo(targetFile);
             imageName = bookForm.getImage().getOriginalFilename();
-        } else {
+        }
+        else
+        {
             imageName = "default.jpeg";
         }
 
