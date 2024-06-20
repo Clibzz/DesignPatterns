@@ -79,5 +79,5 @@ ___
 ---
 ## Class Diagram
 
-![Class Diagram](astah_images/DesignPatternsFinalChangeClass.png "Class diagram!")
+![Class Diagram](astah_images/Class_diagram_design_pattern_3.0.png "Class diagram!")
 

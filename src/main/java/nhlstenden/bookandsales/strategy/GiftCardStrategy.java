@@ -75,14 +75,13 @@ public class GiftCardStrategy implements PaymentStrategy<HashMap<String, Double>
         return null;
     }
 
-
     public boolean hasEnoughBalance(double giftCardAmount, double amount)
     {
         return (giftCardAmount - amount) >= 0;
     }
 
     @Override
-    public boolean payForCart(double amount)
+    public boolean isPayingForCart(double amount)
     {
         double giftcardAmount = 0;
 

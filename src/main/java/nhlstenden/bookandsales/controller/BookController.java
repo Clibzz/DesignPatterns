@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -60,8 +59,6 @@ public class BookController
 
         return "redirect:/login";
     }
-
-
 
     private ArrayList<String> getBookTypeTypes() throws SQLException
     {
@@ -114,14 +111,16 @@ public class BookController
     @PostMapping(path = "/post-new-book")
     public String postNewBook(@Valid @ModelAttribute("bookForm") BookForm bookForm,
                               BindingResult bindingResult,
-                              Model model) throws SQLException, IOException {
+                              Model model) throws SQLException, IOException
+    {
 
         // Add model attributes for book types and genre values
         model.addAttribute("bookTypes", this.getBookTypeTypes());
         model.addAttribute("enumValues", Genre.values());
 
         // Check for validation errors
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors())
+        {
             // Return the form with validation errors
             return "addBook";
         }
@@ -134,8 +133,10 @@ public class BookController
         File targetDirectory = new File(uploadDirectory);
 
         // Create directory if it doesn't exist
-        if (!targetDirectory.exists()) {
-            if (!targetDirectory.mkdirs()) {
+        if (!targetDirectory.exists())
+        {
+            if (!targetDirectory.mkdirs())
+            {
                 bindingResult.reject("image", "Failed to create directory for image upload");
                 return "addBook";
             }
@@ -143,12 +144,15 @@ public class BookController
 
         // Handle image upload or default image setting
         String imageName;
-        if (bookForm.getImage() != null && !bookForm.getImage().isEmpty()) {
+        if (bookForm.getImage() != null && !bookForm.getImage().isEmpty())
+        {
             // If an image is uploaded, save it to the upload directory
             File targetFile = new File(uploadDirectory + bookForm.getImage().getOriginalFilename());
             bookForm.getImage().transferTo(targetFile);
             imageName = bookForm.getImage().getOriginalFilename();
-        } else {
+        }
+        else
+        {
             imageName = "default.jpeg";
         }
 
@@ -178,6 +182,7 @@ public class BookController
         return "redirect:/login";
     }
 
+    //Get the base image path, in a specific folder delivered by spring boot
     private String getBaseImagePath(Model model)
     {
         String basePath = System.getProperty("user.dir") + File.separator + "src" +
@@ -188,6 +193,7 @@ public class BookController
         return basePath;
     }
 
+    //Read the json inside the user cart
     private JSONArray readJsonFromCart(HttpSession session) throws IOException, JSONException
     {
         Path path = Paths.get(session.getAttribute("username") + ".json");
@@ -196,6 +202,7 @@ public class BookController
         return new JSONArray(content);
     }
 
+    //Read the json from the general carts.json
     private JSONArray readJsonFromAllCarts() throws IOException, JSONException
     {
         Path path = Paths.get("carts.json");
@@ -204,6 +211,7 @@ public class BookController
         return new JSONArray(content);
     }
 
+    //Write the actual data to the chosen file, specifically for the user
     private void writeDataToFile(Path path, JSONArray data)
     {
         try (FileWriter writer = new FileWriter(path.toFile(), false)) {
@@ -213,12 +221,15 @@ public class BookController
         }
     }
 
+    //write the data to the carts.json file
     private void writeDataToAllCartsFile(JSONArray jsonArray)
     {
         Path path = Paths.get("carts.json");
         this.writeDataToFile(path, jsonArray);
     }
 
+    //Getting the necessary data from the user who is going to buy something or get the data from the user inside
+    //The general carts.json
     private JSONObject getMatchingObjectNumber(JSONArray array, int bookId, HttpSession session) throws JSONException
     {
         for (int i = 0; i < array.length(); i++)
@@ -233,6 +244,7 @@ public class BookController
         return null;
     }
 
+    //Actually updating the necessary file and array, if needed
     private JSONArray updateItemArray(JSONArray array, int bookId, HttpSession session, BookProduct book) throws JSONException, JsonProcessingException
     {
         JSONObject obj = this.getMatchingObjectNumber(array, bookId, session);
@@ -262,6 +274,7 @@ public class BookController
         return array;
     }
 
+    //updating the state of the cart, if a user logs out or wants to go back
     private void updateCartState(JSONArray jsonArray, BookProduct book)
     {
         PaymentCart paymentCart = new PaymentCart();
@@ -271,6 +284,7 @@ public class BookController
         history.saveState(paymentCart.save());
     }
 
+    //add the chosen book to the actual cart and create every single step before this accordingly
     @PostMapping("/addToCart")
     public String addToCart(@RequestParam("bookId") int bookId, HttpSession session) throws SQLException, IOException, JSONException
     {

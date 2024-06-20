@@ -28,8 +28,8 @@ public class PaymentService
         this.paymentStrategy = paymentStrategy;
     }
 
-    public boolean checkout(double amount)
+    public boolean hasCheckedOut(double amount)
     {
-        return this.paymentStrategy.payForCart(amount);
+        return this.paymentStrategy.isPayingForCart(amount);
     }
 }

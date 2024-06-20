@@ -55,12 +55,15 @@ public class PaymentController
         return new JSONArray(currentContent);
     }
 
+    //Fill the cart with the userdata, once a user has chosen to buy something
     private void fillCartJsonOfUser(HttpSession session) throws IOException, JSONException
     {
+        //Retrieving the chosen user
         Path path = Paths.get(session.getAttribute("username") + ".json");
         JSONArray jsonData = this.getAllCarts();
         JSONArray userSpecificJsonData = new JSONArray();
 
+        //looping through the data and comparing to see if the user exists inside the carts.json
         for (int i = 0; i < jsonData.length(); i++)
         {
             JSONObject jsonObj = jsonData.getJSONObject(i);
@@ -80,13 +83,17 @@ public class PaymentController
 
     private void removeUserItemsFromAllCartsJson(HttpSession session) throws JSONException, IOException
     {
+        //Getting the cart.json file path
         Path path = Paths.get("carts.json");
         JSONArray jsonData = this.getAllCarts();
+        //Loop through all the created carts
         for (int i = 0; i < jsonData.length(); i++)
         {
             JSONObject jsonObj = jsonData.getJSONObject(i);
+            //check if the user is present in the cart.json
             if (jsonObj.getInt("userId") == (int) session.getAttribute("userId"))
             {
+                //remove if found
                 jsonData.remove(i);
             }
         }
@@ -217,7 +224,7 @@ public class PaymentController
         }
 
         // Check if payment is successful
-        if (this.paymentService.checkout(this.getTotalPrice(session)))
+        if (this.paymentService.hasCheckedOut(this.getTotalPrice(session)))
         {
             redirectAttributes.addFlashAttribute("successMessage", "Payment successful!");
             this.removeUserItemsFromAllCartsJson(session);
