@@ -20,9 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,6 +44,13 @@ public class BookController
         this.reviewService = reviewService;
     }
 
+    /**
+     * Retrieve the addBook page
+     * @param model The model of the page
+     * @param session The current session
+     * @return The addBook page or redirect to overview
+     * @throws SQLException Throws a SQLException if retrieving the data from the database for the page fails
+     */
     @GetMapping("/addBook")
     public String addBook(Model model, HttpSession session) throws SQLException {
         if (isLoggedIn(session)) {
@@ -62,22 +71,43 @@ public class BookController
     }
 
 
-
+    /**
+     * Get a list of all the available book types
+     * @return The list of book types
+     * @throws SQLException Throws a SQLException if retrieving the data from the database fails
+     */
     private ArrayList<String> getBookTypeTypes() throws SQLException
     {
         return this.bookTypeService.getBookTypeTypes();
     }
 
+    /**
+     * Check if a user is logged in or not
+     * @param session The current session
+     * @return True if logged in, false if not logged in
+     */
     private boolean isLoggedIn(HttpSession session)
     {
         return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
     }
 
+    /**
+     * Check if the store has any books to offer
+     * @param products The list of products
+     * @return True if empty, false if filled
+     */
     private boolean isEmptyStore(ArrayList<BookProduct> products)
     {
         return products.isEmpty();
     }
 
+    /**
+     * Get the overview page with all books of the store
+     * @param model The model of the page
+     * @param session The current session
+     * @return The overview page
+     * @throws SQLException Throws a SQLException if retrieving the data from the database fails
+     */
     @GetMapping("/overview")
     public String overview(Model model, HttpSession session) throws SQLException
     {
@@ -94,6 +124,14 @@ public class BookController
         return "redirect:/login";
     }
 
+    /**
+     * Choose an overview of books with a certain book type
+     * @param bookTypeId The ID of the book type
+     * @param model The model of the page
+     * @param session The current session
+     * @return The overview page
+     * @throws SQLException Throws a SQLException if retrieving the data from the database fails
+     */
     @PostMapping("/overview")
     public String chooseOverview(@RequestParam("bookTypeId") int bookTypeId, Model model, HttpSession session) throws SQLException
     {
@@ -111,6 +149,15 @@ public class BookController
         return "redirect:/login";
     }
 
+    /**
+     * Post a new book to the database
+     * @param bookForm A custom book class which contains all the necessary fields of a book
+     * @param bindingResult Contains potential errors of image processing
+     * @param model The model of the page
+     * @return The add book page
+     * @throws SQLException Throws a SQLException if inserting the book fails
+     * @throws IOException Throws an IOException when the image processing fails
+     */
     @PostMapping(path = "/post-new-book")
     public String postNewBook(@Valid @ModelAttribute("bookForm") BookForm bookForm,
                               BindingResult bindingResult,
@@ -163,6 +210,14 @@ public class BookController
         return "addBook";
     }
 
+    /**
+     * Get the details of a specific bok
+     * @param bookId The id of the book
+     * @param model The model of the page
+     * @param session The current session
+     * @return The bookDetails page
+     * @throws SQLException Throws a SQLException if retrieving the data from the database fails
+     */
     @GetMapping("/bookDetails/{bookId}")
     public String getBookById(@PathVariable int bookId, Model model, HttpSession session) throws SQLException
     {
@@ -178,6 +233,11 @@ public class BookController
         return "redirect:/login";
     }
 
+    /**
+     * Get the base image path in the static folder
+     * @param model The model of the page
+     * @return The base image path
+     */
     private String getBaseImagePath(Model model)
     {
         String basePath = System.getProperty("user.dir") + File.separator + "src" +
@@ -188,6 +248,13 @@ public class BookController
         return basePath;
     }
 
+    /**
+     * Read the cart information of a specific user from the user's personal .json file
+     * @param session The current session
+     * @return The cart of the specific user in a JSONArray
+     * @throws IOException Throws an IOException when reading the file fails
+     * @throws JSONException Throws a JSONException when something related to the JSON fails
+     */
     private JSONArray readJsonFromCart(HttpSession session) throws IOException, JSONException
     {
         Path path = Paths.get(session.getAttribute("username") + ".json");
@@ -196,6 +263,12 @@ public class BookController
         return new JSONArray(content);
     }
 
+    /**
+     * Read the cart information of all carts from the carts.json file
+     * @return The cart information of all users in a JSONArray
+     * @throws IOException Throws an IOException when reading the file fails
+     * @throws JSONException Throws a JSONException when something related to the JSON fails
+     */
     private JSONArray readJsonFromAllCarts() throws IOException, JSONException
     {
         Path path = Paths.get("carts.json");
@@ -204,6 +277,11 @@ public class BookController
         return new JSONArray(content);
     }
 
+    /**
+     * Write data to a .json file
+     * @param path The path of the file
+     * @param data The data that has to be written to the file
+     */
     private void writeDataToFile(Path path, JSONArray data)
     {
         try (FileWriter writer = new FileWriter(path.toFile(), false)) {
@@ -213,12 +291,24 @@ public class BookController
         }
     }
 
+    /**
+     * Write data to the carts.json file
+     * @param jsonArray The data to be written to the file
+     */
     private void writeDataToAllCartsFile(JSONArray jsonArray)
     {
         Path path = Paths.get("carts.json");
         this.writeDataToFile(path, jsonArray);
     }
 
+    /**
+     * Searches the JSONArray for an object that matches the book's id and the user's id
+     * @param array The array to be searched in
+     * @param bookId The id of the book
+     * @param session The current session
+     * @return The matching JSONObject
+     * @throws JSONException Throws a JSONException when something related to the JSON fails
+     */
     private JSONObject getMatchingObjectNumber(JSONArray array, int bookId, HttpSession session) throws JSONException
     {
         for (int i = 0; i < array.length(); i++)
@@ -233,6 +323,16 @@ public class BookController
         return null;
     }
 
+    /**
+     * Update a JSONArray
+     * @param array The array
+     * @param bookId The book id
+     * @param session The current session
+     * @param book The book product
+     * @return The updated JSONArray
+     * @throws JSONException Throws a JSONException when something related to the JSON fails
+     * @throws JsonProcessingException Throws a JSONException when processing the JSON fails
+     */
     private JSONArray updateItemArray(JSONArray array, int bookId, HttpSession session, BookProduct book) throws JSONException, JsonProcessingException
     {
         JSONObject obj = this.getMatchingObjectNumber(array, bookId, session);
@@ -262,6 +362,11 @@ public class BookController
         return array;
     }
 
+    /**
+     * Update the state of a cart
+     * @param jsonArray The jsonArray
+     * @param book The book product
+     */
     private void updateCartState(JSONArray jsonArray, BookProduct book)
     {
         PaymentCart paymentCart = new PaymentCart();
@@ -271,8 +376,19 @@ public class BookController
         history.saveState(paymentCart.save());
     }
 
+    /**
+     * Add a book to cart
+     * @param bookId The id of the book
+     * @param session The current session
+     * @param redirectAttributes RedirectAttributes to show error / success messages
+     * @return The overview page
+     * @throws SQLException Throws when something goes wrong related to the database actions
+     * @throws IOException Throws an IOException when writing to the file fails
+     * @throws JSONException Throws a JSONException when something related to the JSON fails
+     */
     @PostMapping("/addToCart")
-    public String addToCart(@RequestParam("bookId") int bookId, HttpSession session) throws SQLException, IOException, JSONException
+    public String addToCart(@RequestParam("bookId") int bookId, HttpSession session,
+                            RedirectAttributes redirectAttributes) throws SQLException, IOException, JSONException
     {
         BookProduct book = this.bookService.getBookById(bookId);
         Path path = Paths.get(session.getAttribute("username") + ".json");
@@ -282,10 +398,17 @@ public class BookController
         this.writeDataToAllCartsFile(this.updateItemArray(fullCartsArray, bookId, session, book));
         this.updateCartState(jsonArray, book);
 
+        redirectAttributes.addFlashAttribute("success", "Book has been added to the cart successfully");
         return "redirect:/overview";
     }
 
-    private void removeBookFolder(@RequestParam("bookId") int bookId, Model model) throws IOException, SQLException
+    /**
+     * Remove an image folder of a book
+     * @param bookId The id of the book
+     * @param model The model of the page
+     * @throws IOException Throws an IOException when removing the folder fails
+     */
+    private void removeBookFolder(@RequestParam("bookId") int bookId, Model model) throws IOException
     {
         String uploadDirectory = getBaseImagePath(model) + bookId + File.separator;
         File directory = new File(uploadDirectory);
@@ -295,6 +418,14 @@ public class BookController
         }
     }
 
+    /**
+     * Delete a book from the database
+     * @param bookId The id of the book
+     * @param model The model of the page
+     * @return The overview page
+     * @throws SQLException Throws when something goes wrong while deleting the book from the database
+     * @throws IOException Throws an IOException when removing the folder fails
+     */
     @PostMapping("/deleteBook")
     public String deleteBookFromStore(@RequestParam("bookId") int bookId, Model model) throws SQLException, IOException
     {
