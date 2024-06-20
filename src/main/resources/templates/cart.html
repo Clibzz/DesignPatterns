@@ -44,7 +44,8 @@
                     <div class="row">
                         <div class="col-sm-6 mb-3">
                             <img class="img-fluid" style="width: 100px; height: 150px;"
-                                 th:src="'/' + images + '/' + ${booksUser.id} + '/' + ${booksUser.image}"/>
+                                 th:src="${booksUser.image == 'default.jpeg' ? '/images/default/default.jpeg' : '/images/' + booksUser.id + '/' + booksUser.image}"
+                                 alt="Book"/>
                         </div>
                         <div class="col-sm-6">
                             <p class="h3 text-center" th:text="@{'$' + ${booksUser.price}}"></p>
@@ -100,7 +101,7 @@
                 </div>
                 <div th:case="'GiftCard'">
                     <form th:action="@{'/giftcard-pay'}" method="post">
-                        <label for="giftCard" class="font-weight-bold">gift code</label>
+                        <label for="giftCard" class="font-weight-bold">Gift code</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="giftCard" name="giftCard" required>
                         </div>

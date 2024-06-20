@@ -33,6 +33,9 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-10 pt-3 pl-3 bg-secondary text-light">
                     <div class="row p-5">
+                        <div th:if="${success}" class="alert alert-success col-12">
+                            <p th:text="${success}"></p>
+                        </div>
                         <div class="alert alert-danger" role="alert" th:if="${isEmptyStore}">
                             There currently are no books available
                         </div>

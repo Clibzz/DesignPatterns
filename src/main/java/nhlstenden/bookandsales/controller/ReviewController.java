@@ -24,6 +24,15 @@ public class ReviewController
         return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
     }
 
+    /**
+     * Add a review to a book
+     * @param reviewTitle The title of the review
+     * @param reviewDescription The description of the review / The actual review
+     * @param hiddenBookId The id of the book
+     * @param session The current session
+     * @return The bookDetails page of the book that has just been reviewed
+     * @throws SQLException Throws a SQLException if anything goes wrong inserting the review into the database
+     */
     @PostMapping("/addReview")
     public String addReview(@RequestParam("review_title") String reviewTitle,
                             @RequestParam("review_description") String reviewDescription,
